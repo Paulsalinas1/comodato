@@ -5,7 +5,9 @@ import { ArticulosComponent } from './articulos/articulos.component';
 
 const routes: Routes = [
   {path: 'dashboard', component: DashboardComponent},
-  {path: 'articulos', component: ArticulosComponent},
+  {path: 'articulos',
+    loadChildren: () => import('./articulos/articulos.module').then(m => m.ArticulosModule) 
+  },
   {path: '', redirectTo: 'dashboard', pathMatch: 'full'},
 ];
 
