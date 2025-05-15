@@ -1,10 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ArticulosComponent } from './articulos.component';
+import { ListaComponent } from './lista/lista.component';
 
 const routes: Routes = [
-  {path:'articulos', component: ArticulosComponent}, 
-  {path: '', redirectTo: 'articulos', pathMatch: 'full'},
+  {path:'', component: ArticulosComponent}, 
+  {path:'lista',component: ListaComponent},
 ];
 
 @NgModule({
