@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashboardComponent } from './dashboard.component';
-import { BaseChartDirective } from 'ng2-charts';
+import { GoogleChartsModule } from 'angular-google-charts';
 
 @NgModule({
   declarations: [
@@ -12,7 +12,8 @@ import { BaseChartDirective } from 'ng2-charts';
   imports: [
     CommonModule,
     DashboardRoutingModule,
-    BaseChartDirective
+    GoogleChartsModule
+    
   ]
 })
 export class DashboardModule { }

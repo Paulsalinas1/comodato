@@ -1,11 +1,9 @@
-<div class="dashboard-container">
-  <h1>Bienvenido al Dashboard</h1>
-  <div class="dashboard-content">
-    <!-- Aquí puedes agregar widgets, gráficos, tablas, etc. -->
-    <canvas baseChart
-      [data]="chartData"
-      [options]="chartOptions"
-      [type]="'bar'">
-    </canvas>
-  </div>
-</div>
+<h1>hola mundo</h1>
+<!-- dashboard.component.html -->
+<google-chart
+  [title]="chartTitle"
+  [data]="chartData"
+  [options]="chartOptions"
+  style="width: 100%; height: 400px;">
+</google-chart>
+

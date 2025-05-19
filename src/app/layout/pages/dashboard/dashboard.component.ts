@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { ChartConfiguration } from 'chart.js';
 
 @Component({
   selector: 'app-dashboard',
@@ -8,15 +7,14 @@ import { ChartConfiguration } from 'chart.js';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent {
-  
-chartData: ChartConfiguration<'bar'>['data'] = {
-  labels: ['Enero', 'Febrero', 'Marzo'],
-  datasets: [
-    { data: [10, 20, 30], label: 'Ventas' }
-  ]
-};
-
-chartOptions: ChartConfiguration<'bar'>['options'] = {
-  responsive: true,
-};
+  chartTitle = 'Ventas Mensuales';
+  chartType = 'BarChart';
+  chartData = [
+    ['Mes', 'Ventas'],
+    ['Enero', 1000],
+    ['Febrero', 1170],
+    ['Marzo', 660]
+  ];
+  chartColumnNames = ['Mes', 'Ventas'];
+  chartOptions = { legend: { position: 'bottom' } };
 }
