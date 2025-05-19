@@ -5,6 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { PageNotFoundComponent } from './layout/pages/page-not-found/page-not-found.component';
 import { LayoutModule } from './layout/layout.module';
+import { DashboardModule } from './layout/pages/dashboard/dashboard.module';
 
 
 @NgModule({
@@ -16,6 +17,7 @@ import { LayoutModule } from './layout/layout.module';
     BrowserModule,
     AppRoutingModule,
     LayoutModule,
+    DashboardModule
     
   ],
   providers: [],
