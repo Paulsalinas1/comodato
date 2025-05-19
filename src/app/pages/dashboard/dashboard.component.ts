@@ -8,7 +8,7 @@ import { ChartType } from 'angular-google-charts';
   styleUrl: './dashboard.component.css'
 })
 export class DashboardComponent {
-  
+  today = new Date();
   chartTitle = 'Ventas Mensuales';
   chartType = ChartType.PieChart;
   chartData = [
@@ -16,5 +16,8 @@ export class DashboardComponent {
   ['Febrero', 1170],
   ['Marzo', 660]
 ];
-  chartOptions = { legend: true };
+  chartOptions = { legend:{ position: 'bottom' },
+  chartArea: { width: '90%', height: '80%' }
+
+};
 }

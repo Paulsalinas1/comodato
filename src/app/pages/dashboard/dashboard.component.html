@@ -1,13 +1,56 @@
-<div class="dashboard-container">
-  <h1>Bienvenido al Dashboard</h1>
-  <div class="dashboard-content">
-    <!-- Aquí puedes agregar widgets, gráficos, tablas, etc. -->
-    <google-chart
-  [title]="chartTitle"
-  [type]="chartType"
-  [data]="chartData"
-  [options]="chartOptions"
-  style="width: 100%; height: 400px;">
-</google-chart>
-</div>
+<div class="dashboard-container container py-4">
+  <div class="row mb-4">
+    <div class="col-12 text-center">
+      <h2 class="fw-bold mb-1">Bienvenido al Dashboard</h2>
+      <p class="text-muted">Resumen general de tu actividad</p>
+    </div>
+  </div>
+  
+  <div class="row justify-content-center">
+    <div class="col-1"></div>
+    <!-- ejemplo de grafico -->
+    
+    <div class="col-md-5 col-lg-4">
+      <div class="card shadow-sm">
+        <div class="card-header bg-light text-white">
+          <h4 class="mb-0">Resumen de Ventas</h4>
+        </div>
+        <div class="card-body">
+          <google-chart
+            [type]="chartType"
+            [data]="chartData"
+            [options]="chartOptions"
+            style="width: 100%; height: 300px;">
+          </google-chart>
+        </div>
+
+        <div class="card-footer d-flex flex-column flex-md-row justify-content-between align-items-center text-muted small">
+          <span>Actualizado: {{ today | date:'shortDate' }}</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-md-5 col-lg-4">
+      <div class="card shadow-sm">
+        <div class="card-header bg-light text-white">
+          <h4 class="mb-0">Resumen de Ventas</h4>
+        </div>
+        <div class="card-body">
+          <google-chart
+            [type]="chartType"
+            [data]="chartData"
+            [options]="chartOptions"
+            style="width: 100%; height: 300px;">
+          </google-chart>
+        </div>
+
+        <div class="card-footer d-flex flex-column flex-md-row justify-content-between align-items-center text-muted small">
+          <span>Actualizado: {{ today | date:'shortDate' }}</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-1"></div>
+  </div>
+  
 </div>
