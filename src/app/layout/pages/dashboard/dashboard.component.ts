@@ -11,6 +11,8 @@ export class DashboardComponent {
   today = new Date();
   chartTitle = 'Ventas Mensuales';
   chartType = ChartType.PieChart;
+  chartType2 = ChartType.ColumnChart;
+  chartType3 = ChartType.ComboChart;  
   chartData = [
   ['Enero', 1000],
   ['Febrero', 1170],
