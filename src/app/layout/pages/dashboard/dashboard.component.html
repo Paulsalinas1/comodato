@@ -2,5 +2,11 @@
   <h1>Bienvenido al Dashboard</h1>
   <div class="dashboard-content">
     <!-- Aquí puedes agregar widgets, gráficos, tablas, etc. -->
+    <canvas baseChart
+      [data]="chartData"
+      [options]="chartOptions"
+      [type]="'bar'">
+    </canvas>
     
+  </div>
 </div>

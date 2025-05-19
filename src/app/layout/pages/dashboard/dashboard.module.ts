@@ -3,15 +3,15 @@ import { CommonModule } from '@angular/common';
 
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashboardComponent } from './dashboard.component';
-import { ChartConfiguration, ChartOptions } from 'chart.js';
-
+import { BaseChartDirective } from 'ng2-charts';
 @NgModule({
   declarations: [
     DashboardComponent
   ],
   imports: [
     CommonModule,
-    DashboardRoutingModule
+    DashboardRoutingModule,
+    BaseChartDirective
   ]
 })
 export class DashboardModule { }
