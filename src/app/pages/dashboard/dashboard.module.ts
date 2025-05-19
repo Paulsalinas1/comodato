@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashboardComponent } from './dashboard.component';
-
+import { ChartConfiguration, ChartOptions } from 'chart.js';
 
 @NgModule({
   declarations: [
