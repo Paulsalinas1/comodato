@@ -12,6 +12,7 @@ import { LayoutModule } from './layout/layout.module';
   ],
   imports: [
     BrowserModule,
+    LayoutModule,
     AppRoutingModule
   ],
   providers: [],
