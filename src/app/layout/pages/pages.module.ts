@@ -13,7 +13,6 @@ import { PagesRoutingModule } from './pages-routing.module';
     PagesRoutingModule,
   ],
   exports: [
-    // Export any components, directives, or pipes that should be accessible in other modules
   ],
 })
 export class PagesModule { }

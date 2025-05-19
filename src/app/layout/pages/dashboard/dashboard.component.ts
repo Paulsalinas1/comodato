@@ -11,7 +11,6 @@ export class DashboardComponent {
   chartTitle = 'Ventas Mensuales';
   chartType = ChartType.PieChart;
   chartData = [
-    ['Mes', 'Ventas'],
     ['Enero', 1000],
     ['Febrero', 1170],
     ['Marzo', 660]

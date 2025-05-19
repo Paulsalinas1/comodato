@@ -4,13 +4,8 @@
 <google-chart
   [title]="'Ventas Mensuales'"
   [type]="chartType"
-  [data]="[
-    ['Mes', 'Ventas'],
-    ['Enero', 1000],
-    ['Febrero', 1170],
-    ['Marzo', 660]
-  ]"
-  [options]="{ legend: { position: 'bottom' } }"
+  [data]="chartData"
+  [options]="chartOptions"
   style="width: 100%; height: 400px;"
 >
 </google-chart>
