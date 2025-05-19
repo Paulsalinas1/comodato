@@ -5,8 +5,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { PageNotFoundComponent } from './layout/pages/page-not-found/page-not-found.component';
 import { LayoutModule } from './layout/layout.module';
-import { DashboardModule } from './layout/pages/dashboard/dashboard.module';
-
 
 @NgModule({
   declarations: [
@@ -16,8 +14,7 @@ import { DashboardModule } from './layout/pages/dashboard/dashboard.module';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    LayoutModule,
-    DashboardModule
+    LayoutModule
     
   ],
   providers: [],
