@@ -2,5 +2,12 @@
   <h1>Bienvenido al Dashboard</h1>
   <div class="dashboard-content">
     <!-- Aquí puedes agregar widgets, gráficos, tablas, etc. -->
-    
+    <google-chart
+  [title]="chartTitle"
+  [type]="chartType"
+  [data]="chartData"
+  [options]="chartOptions"
+  style="width: 100%; height: 400px;">
+</google-chart>
+</div>
 </div>
