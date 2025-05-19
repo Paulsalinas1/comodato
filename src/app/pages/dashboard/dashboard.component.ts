@@ -17,7 +17,7 @@ export class DashboardComponent {
   ['Marzo', 660]
 ];
   chartOptions = { legend:{ position: 'bottom' },
-  chartArea: { width: '90%', height: '80%' }
+  chartArea: { width: '100%', height: '80%' }
 
 };
 }
