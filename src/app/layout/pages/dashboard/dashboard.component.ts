@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ChartType } from 'angular-google-charts';
 
 @Component({
   selector: 'app-dashboard',
@@ -8,13 +9,12 @@ import { Component } from '@angular/core';
 })
 export class DashboardComponent {
   chartTitle = 'Ventas Mensuales';
-  chartType = 'BarChart';
+  chartType = ChartType.PieChart;
   chartData = [
     ['Mes', 'Ventas'],
     ['Enero', 1000],
     ['Febrero', 1170],
     ['Marzo', 660]
   ];
-  chartColumnNames = ['Mes', 'Ventas'];
   chartOptions = { legend: { position: 'bottom' } };
 }

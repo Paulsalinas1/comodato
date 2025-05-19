@@ -14,6 +14,9 @@ import { GoogleChartsModule } from 'angular-google-charts';
     CommonModule,
     DashboardRoutingModule,
     GoogleChartsModule
-  ]
+  ],
+  exports: [
+    DashboardComponent
+  ],
 })
 export class DashboardModule { }

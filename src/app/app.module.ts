@@ -4,7 +4,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { PageNotFoundComponent } from './layout/pages/page-not-found/page-not-found.component';
-import { GoogleChartsModule } from 'angular-google-charts';
+import { LayoutModule } from './layout/layout.module';
+
 
 @NgModule({
   declarations: [
@@ -14,7 +15,7 @@ import { GoogleChartsModule } from 'angular-google-charts';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    GoogleChartsModule
+    LayoutModule,
     
   ],
   providers: [],

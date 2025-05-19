@@ -2,17 +2,18 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { PagesRoutingModule } from './pages-routing.module';
-import { GoogleChartsModule } from 'angular-google-charts';
+
 
 
 @NgModule({
-  declarations: [
-    
+  declarations: [ 
   ],
   imports: [
     CommonModule,
     PagesRoutingModule,
-    GoogleChartsModule
-  ]
+  ],
+  exports: [
+    // Export any components, directives, or pipes that should be accessible in other modules
+  ],
 })
 export class PagesModule { }
