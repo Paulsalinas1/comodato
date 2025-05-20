@@ -29155,4 +29155,9 @@ pre[class*=language-] {
 
 html, body {
   overflow-x: hidden; /* Cuidado: esto desactiva todo scroll */
+  overflow-y: scroll;         /* Permite scroll vertical */
+  scrollbar-width: none;      /* Firefox */
+  -ms-overflow-style: none;   /* IE y Edge antiguo */
 }
+
+

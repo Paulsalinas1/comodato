@@ -1,6 +1,5 @@
 <div class="container-fluid py-2">
   <!-- segcion de presentacion  -->
-
   <div class="row">
     <div class="ms-3">
       <h3 class="mb-0 h4 font-weight-bolder">Bienvenido al Dashboard</h3>
@@ -17,7 +16,7 @@
               <h4 class="mb-0">20</h4>
             </div>
             <div class="icon icon-md icon-shape bg-gradient bg-danger shadow-dark shadow text-center border-radius-lg">
-              <i class="material-symbols-rounded opacity-50">weekend</i>
+              <i class="material-symbols-rounded opacity-10">weekend</i>
             </div>
           </div>
         </div>
@@ -35,7 +34,7 @@
               <p class="text-sm mb-0 text-capitalize">Usuarios totales</p>
               <h4 class="mb-0">200</h4>
             </div>
-            <div class="icon icon-md icon-shape bg-gradient-dark shadow-dark shadow text-center border-radius-lg">
+            <div class="icon icon-md icon-shape bg-gradient bg-primary shadow-dark shadow text-center border-radius-lg">
               <i class="material-symbols-rounded opacity-10">person</i>
             </div>
           </div>
@@ -54,7 +53,7 @@
               <p class="text-sm mb-0 text-capitalize">Articulos Totales</p>
               <h4 class="mb-0">3,462</h4>
             </div>
-            <div class="icon icon-md icon-shape bg-gradient-dark shadow-dark shadow text-center border-radius-lg">
+            <div class="icon icon-md icon-shape bg-gradient bg-secondary shadow-dark shadow text-center border-radius-lg">
               <i class="material-symbols-rounded opacity-10">leaderboard</i>
             </div>
           </div>
@@ -73,7 +72,7 @@
               <p class="text-sm mb-0 text-capitalize">Otros</p>
               <h4 class="mb-0">X</h4>
             </div>
-            <div class="icon icon-md icon-shape bg-gradient-dark shadow-dark shadow text-center border-radius-lg">
+            <div class="icon icon-md icon-shape bg-gradient bg-success shadow-dark shadow text-center border-radius-lg">
               <i class="material-symbols-rounded opacity-10">weekend</i>
             </div>
           </div>
@@ -91,19 +90,22 @@
 
   <div class="row">
       <!-- primer grafico -->
-    <div class="col-lg-4 col-md-6 mt-4 mb-4">
+    <div class="col-lg-6 col-md-6 mt-4 mb-4">
       <div class="card">
-        <div class="card-header pb-0 bg-light">
-          <h6>Comodatos Mensuales</h6>
-            <p class="text-sm ">descripcion</p>
-        </div>
+        <!-- <div class="card-header pb-0 bg-light">
+          <h6>{{pieChart2D.title}}</h6>
+          <p class="text-sm ">{{pieChart2D.description}}</p>
+        </div> -->
         <div class="card-body">
+          <h6 class="mb-0">{{pieChart2D.title}}</h6>
+          <p class="text-sm ">{{pieChart2D.description}}</p>
           <div class="pe-2">
             <google-chart
-            [type]="chartType"
-            [data]="chartData"
-            [options]="chartOptions"
-            style="width: 100%; height: 300px;">
+            [type]="pieChart2D.type"
+            [data]="pieChart2D.data"
+            [columns]="pieChart2D.columns"
+            [options]="pieChart2D.options"
+            [style]="{ width: '100%', height: '300px' }">
             </google-chart>
           </div>
           <hr class="dark horizontal">
@@ -115,42 +117,21 @@
       </div>
     </div>
     <!-- segundo grafico -->
-    <div class="col-lg-4 col-md-6 mt-4 mb-4">
+    <div class="col-lg-6 col-md-6 mt-4 mb-4">
       <div class="card ">
-        <div class="card-header pb-0 bg-light">
-          <h6>Comodatos Pedidos</h6>
-            <p class="text-sm ">descripcion</p>
-        </div>
+        <!-- <div class="card-header pb-0 bg-light">
+          <h6>{{lineChart.title}}</h6>
+          <p class="text-sm ">{{lineChart.description}}</p>
+        </div> -->
         <div class="card-body">
+          <h6 class="mb-0">{{lineChart.title}}</h6>
+          <p class="text-sm ">{{lineChart.description}}</p>
           <div class="pe-2">
             <google-chart
-            [type]="chartType2"
-            [data]="chartData"
-            [options]="chartOptions"
-            style="width: 100%; height: 300px;">
-            </google-chart>
-          </div>
-          <hr class="dark horizontal">
-          <div class="d-flex ">
-            <i class="material-symbols-rounded text-sm my-auto me-1">schedule</i>
-             <span>Actualizado: {{ today | date:'shortDate' }}</span>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- tercer grafico -->
-    <div class="col-lg-4 mt-4 mb-3">
-      <div class="card">
-        <div class="card-header pb-0 bg-light">
-          <h6>Comodatos Entregados</h6>
-            <p class="text-sm ">descripcion</p>
-        </div>
-        <div class="card-body">
-          <div class="pe-2">
-            <google-chart
-            [type]="chartType3"
-            [data]="chartData"
-            [options]="chartOptions"
+            [type]="lineChart.type"
+            [data]="lineChart.data"
+            [columns]="lineChart.columns"
+            [options]="lineChart.options"
             style="width: 100%; height: 300px;">
             </google-chart>
           </div>
@@ -164,8 +145,247 @@
     </div>
   </div>
 
+  <div class="row">  
+
+    <!-- tercer grafico -->
+    <div class="col-lg-4 mt-4 mb-3">
+      <div class="card">
+        <div class="card-header pb-0 bg-light">
+          <h6>{{barChart.title}}</h6>
+            <p class="text-sm ">{{barChart.description}}</p>
+        </div>
+        <div class="card-body">
+          <div class="pe-2">
+            <google-chart
+            [type]="barChart.type"
+            [data]="barChart.data"
+            [columns]="barChart.columns"
+            [options]="barChart.options"
+            style="width: 100%; height: 300px;">
+            </google-chart>
+          </div>
+          <hr class="dark horizontal">
+          <div class="d-flex ">
+            <i class="material-symbols-rounded text-sm my-auto me-1">schedule</i>
+             <span>Actualizado: {{ today | date:'shortDate' }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- cuarto grafico -->
+    <div class="col-lg-4 col-md-6 mt-4 mb-4">
+      <div class="card">
+        <div class="card-header pb-0 bg-light">
+          <h6>{{pieChart2D.title}}</h6>
+          <p class="text-sm ">{{pieChart2D.description}}</p>
+        </div>
+        <div class="card-body">
+          <div class="pe-2 pt-0">
+            <google-chart
+            [type]="pieChart2D.type"
+            [data]="pieChart2D.data"
+            [columns]="pieChart2D.columns"
+            [options]="pieChart2D.options"
+            [style]="{ width: '100%', height: '300px' }">
+            </google-chart>
+          </div>
+          <hr class="dark horizontal">
+          <div class="d-flex ">
+            <i class="material-symbols-rounded text-sm my-auto me-1">schedule</i>
+             <span>Actualizado: {{ today | date:'shortDate' }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- quinto grafico -->
+    <div class="col-lg-4 mt-4 mb-3">
+      <div class="card">
+        <div class="card-header pb-0 bg-light">
+          <h6>{{pieChart3D.title}}</h6>
+            <p class="text-sm ">{{pieChart3D.description}}</p>
+        </div>
+        <div class="card-body">
+          <div class="pe-2">
+            <google-chart
+            [type]="pieChart3D.type"
+            [data]="pieChart3D.data"
+            [options]="pieChart3D.options"
+            style="width: 100%; height: 300px;">
+            </google-chart>
+          </div>
+          <hr class="dark horizontal">
+          <div class="d-flex ">
+            <i class="material-symbols-rounded text-sm my-auto me-1">schedule</i>
+             <span>Actualizado: {{ today | date:'shortDate' }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="row">  
+
+    <!-- sexto grafico -->
+    <div class="col-lg-9 mt-4 mb-3">
+      <div class="card">
+        <div class="card-header pb-0 bg-light">
+          <h6>{{treeMapChart.title}}</h6>
+            <p class="text-sm ">{{treeMapChart.description}}</p>
+        </div>
+        <div class="card-body">
+          <div class="pe-2">
+            <google-chart
+              [type]="treeMapChart.type"
+              [data]="treeMapChart.data"
+              [columns]="treeMapChart.columns"
+              [options]="treeMapChart.options"
+              style="width: 100%; height: 300px;">
+            </google-chart>
+          </div>
+          <hr class="dark horizontal">
+          <div class="d-flex ">
+            <i class="material-symbols-rounded text-sm my-auto me-1">schedule</i>
+             <span>Actualizado: {{ today | date:'shortDate' }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- septimo grafico -->
+    
+    <!-- octabo grafico -->
+    <div class="col-lg-3 mt-4 mb-3">
+      <div class="card">
+        <div class="card-header pb-0 bg-light">
+          <h6>{{comboChart.title}}</h6>
+          <p class="text-sm ">{{comboChart.description}}</p>
+        </div>
+        <div class="card-body">
+          <div class="pe-2">
+            <google-chart
+            [type]="comboChart.type"
+            [data]="comboChart.data"
+            [columns]="comboChart.columns"
+            [options]="comboChart.options"
+            style="width: 100%; height: 300px;">
+            </google-chart>
+          </div>
+          <hr class="dark horizontal">
+          <div class="d-flex ">
+            <i class="material-symbols-rounded text-sm my-auto me-1">schedule</i>
+             <span>Actualizado: {{ today | date:'shortDate' }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- noveno grafico -->
+    <div class="col-lg-6 mt-4 mb-3">
+      <div class="card">
+        <div class="card-header pb-0 bg-light">
+          <h6>{{stackedColumnChart.title}}</h6>
+          <p class="text-sm ">{{stackedColumnChart.description}}</p>
+        </div>
+        <div class="card-body">
+          <div class="pe-2">
+            <google-chart
+            [type]="stackedColumnChart.type"
+            [data]="stackedColumnChart.data"
+            [columns]="stackedColumnChart.columns"
+            [options]="stackedColumnChart.options"
+            style="width: 100%; height: 300px;">
+            </google-chart>
+          </div>
+          <hr class="dark horizontal">
+          <div class="d-flex ">
+            <i class="material-symbols-rounded text-sm my-auto me-1">schedule</i>
+             <span>Actualizado: {{ today | date:'shortDate' }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- mas graficos -->
+    <div class="col-lg-6 mt-4 mb-3">
+      <div class="card">
+        <div class="card-header pb-0 bg-light">
+          <h6>{{comboChart2.title}}</h6>
+            <p class="text-sm ">{{comboChart2.description}}</p>
+        </div>
+        <div class="card-body">
+          <div class="pe-2">
+            <google-chart
+            [type]="comboChart2.type"
+            [data]="comboChart2.data"
+            [options]="comboChart2.options"
+            [columns]="comboChart2.columns"
+            style="width: 100%; height: 300px;">
+            </google-chart>
+          </div>
+          <hr class="dark horizontal">
+          <div class="d-flex ">
+            <i class="material-symbols-rounded text-sm my-auto me-1">schedule</i>
+             <span>Actualizado: {{ today | date:'shortDate' }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-12 mt-4 mb-3">
+      <div class="card">
+        <div class="card-header pb-0 bg-light">
+          <h6>{{waterfallChart.title}}</h6>
+            <p class="text-sm ">{{waterfallChart.description}}</p>
+        </div>
+        <div class="card-body">
+          <div class="pe-2">
+            <google-chart
+            [type]="waterfallChart.type"
+            [data]="waterfallChart.data"
+            [options]="waterfallChart.options"
+            [columns]="waterfallChart.columns"
+            style="width: 100%; height: 300px;">
+            </google-chart>
+          </div>
+          <hr class="dark horizontal">
+          <div class="d-flex ">
+            <i class="material-symbols-rounded text-sm my-auto me-1">schedule</i>
+             <span>Actualizado: {{ today | date:'shortDate' }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-12 mt-4 mb-3">
+      <div class="card">
+        <div class="card-header pb-0 bg-light">
+          <h6>{{ganttChart.title}}</h6>
+            <p class="text-sm ">{{ganttChart.description}}</p>
+        </div>
+        <div class="card-body">
+          <div class="pe-2">
+            <google-chart
+            [type]="ganttChart.type"
+            [data]="ganttChart.data"
+            [options]="ganttChart.options"
+            [columns]="ganttChart.columns"
+            style="width: 100%; height: 150px;">
+            </google-chart>
+          </div>
+          <hr class="dark horizontal">
+          <div class="d-flex ">
+            <i class="material-symbols-rounded text-sm my-auto me-1">schedule</i>
+             <span>Actualizado: {{ today | date:'shortDate' }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
   <!-- fin de la seccion de graficos -->
   <!-- seccion de lista usuarios -->
+
   <div class="row mb-4">
     <div class="col-lg-8 col-md-6 mb-md-0 mb-4">
       <div class="card">
@@ -319,3 +539,4 @@
       </div>
     </div>
   </footer>
+</div>
