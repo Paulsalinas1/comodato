@@ -29152,3 +29152,7 @@ pre[class*=language-] {
 }
 
 /*# sourceMappingURL=dashboard-free.css.map */
+
+html, body {
+  overflow-x: hidden; /* Cuidado: esto desactiva todo scroll */
+}
