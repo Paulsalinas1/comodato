@@ -4939,7 +4939,7 @@ fieldset:disabled .btn {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: space-between;
+  justify-content: start space-between;
   padding: var(--bs-navbar-padding-y) var(--bs-navbar-padding-x);
 }
 
@@ -29159,5 +29159,6 @@ html, body {
   scrollbar-width: none;      /* Firefox */
   -ms-overflow-style: none;   /* IE y Edge antiguo */
 }
+
 
 
