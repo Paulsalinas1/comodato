@@ -9,6 +9,11 @@ const routes: Routes = [
   {path: 'articulos',
     loadChildren: () => import('./articulos/articulos.module').then(m => m.ArticulosModule) 
   },
+  {path: 'comodatos',
+    loadChildren: () => import('./comodatos/comodatos.module').then(m => m.ComodatosModule) 
+  },
+  {path: 'usuarios',
+    loadChildren: () => import('./usuarios/usuarios.module').then(m => m.UsuariosModule)},
   {path: '', redirectTo: 'dashboard', pathMatch: 'full'},
   
 ];
