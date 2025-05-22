@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { ChartType } from 'angular-google-charts';
-import { ChartOptions, ChartData, Colors } from 'chart.js';
-import { color } from 'chart.js/helpers';
+
 
 @Component({
   selector: 'app-dashboard',
