@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ChartType } from 'angular-google-charts';
-import { Legend } from 'chart.js';
+import { ChartOptions, ChartData } from 'chart.js';
 
 @Component({
   selector: 'app-dashboard',
@@ -37,7 +37,7 @@ export class DashboardComponent {
       ['Mayo', 5],
     ],
     columns: ['Mes', 'Cantidad'],
-    options: { legend: { position: 'bottom'  } ,responsive: true},
+    options: { legend: { position: 'bottom' }, responsive: true },
   };
 
   // Gráfico de barras
@@ -210,22 +210,36 @@ export class DashboardComponent {
 
   barChatNg2 = {
     chartType: "'bar'",
-    chartData:  {
+    chartData: {
       labels: ['Label 1', 'Label 2', 'Label 3'],
       datasets: [{ data: [10, 20, 30], label: 'Series A' }],
     },
     chartOptions: {
+      
     },
   };
 
-  barChat2Ng2 = {
-    chartType: "'bar'",
-    chartData:  {
+  barChart2Ng2 = {
+    chartType: ChartType.Bar,
+    chartData: {
       labels: ['Label 1', 'Label 2', 'Label 3'],
       datasets: [{ data: [10, 20, 30], label: 'Series A' }],
     },
-    chartOptions: {
-        
-      },
-  }
+    options: {
+        plugins: {
+            filler: {
+                propagate: true
+            },
+            legend: {
+                display: true,
+                position: 'bottom' as const,
+            },
+            title: {
+                display: true,
+                text: 'Título del gráfico',
+            },
+            
+        }
+    }
+  };
 }
