@@ -25,9 +25,9 @@ export class UsuariosComponent {
     };
 
   usuarios = [
-    { nombre: 'John Michael', rut: '19.836.213-1', estamento: 'Docente', telefono: '912345678' },
-    { nombre: 'Alexa Liras', rut: '18.345.678-k', estamento: 'Directora', telefono: '901237561' },
-    { nombre: 'Laurent Perrier', rut: '21.345.345-1', estamento: 'Estudiante', telefono: '956371941' },
+    { nombre: 'John Michael',nom:'xxa' ,rut: '19.836.213-1', estamento: 'Docente', telefono: '912345678' },
+    { nombre: 'Alexa Liras', nom:'xax' ,rut: '18.345.678-k', estamento: 'Directora', telefono: '901237561' },
+    { nombre: 'Laurent Perrier', nom:'axx' ,rut: '21.345.345-1', estamento: 'Estudiante', telefono: '956371941' },
     // agrega más usuarios si quieres
   ];
 
