@@ -195,5 +195,57 @@
                 </div>
             </div>
         </div>
+
+        <div class="col-6">
+            <div class="card my-5">
+                <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                    <div class="bg-gradient-dark shadow-dark border-radius-lg pt-4 pb-3">
+                        <h6 class="text-white text-capitalize ps-3">Articulos Registrados</h6>
+                    </div>
+                </div>
+                <div class="card-body px-0 pb-2">
+                    <input type="text" [(ngModel)]="filtro" (ngModelChange)="aplicarFiltro()"
+                        class="form-control mb-3 w-25 mx-3" placeholder="Buscar...">
+
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Nombre</th>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Numero Serial</th>
+                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Categoria</th>
+                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Modelo</th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class=" text-capitalize" *ngFor="let u of usuariosFiltrados | paginate: { itemsPerPage: 5, currentPage: pagina }">
+                                <td>
+                                    <div class="d-flex px-2 py-1">
+                                        <div class="d-flex flex-column justify-content-center me-3">
+                                            <h6 class="mb-0 text-sm">{{u.nombre}}</h6>
+                                            <p class="text-xs text-secondary mb-0">{{u.nom}}</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <p class="text-xs font-weight-bold mb-0">{{u.NumeroS}}</p>
+                                    <p class="text-xs text-secondary mb-0"></p>
+                                </td>
+                                <td class="align-middle text-center text-sm">
+                                    <p class="text-xs font-weight-bold mb-0">{{u.Categoria}}</p>
+                                </td>
+                                <td class="align-middle text-center">
+                                    <span class="text-secondary text-xs font-weight-bold">{{u.Modelo}}</span>
+                                </td>
+                                
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <pagination-controls (pageChange)="pagina = $event"></pagination-controls>
+
+                </div>
+            </div>
+        </div>
     </div>
 </div>
