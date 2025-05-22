@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ChartType } from 'angular-google-charts';
+import { Legend } from 'chart.js';
 
 @Component({
   selector: 'app-dashboard',
@@ -36,7 +37,7 @@ export class DashboardComponent {
       ['Mayo', 5],
     ],
     columns: ['Mes', 'Cantidad'],
-    options: { legend: { position: 'bottom' }},
+    options: { legend: { position: 'bottom'  } ,responsive: true},
   };
 
   // Gráfico de barras
@@ -167,12 +168,64 @@ export class DashboardComponent {
     type: ChartType.Gantt,
     description: 'Seguimiento de tareas y dependencias del proyecto',
     data: [
-      ['T1', 'Diseño', new Date(2025, 4, 1), new Date(2025, 4, 5), 0, 100, null],
-      ['T2', 'Desarrollo', new Date(2025, 4, 6), new Date(2025, 4, 20), 0, 60, 'T1'],
-      ['T3', 'Pruebas', new Date(2025, 4, 21), new Date(2025, 4, 25), 0, 20, 'T2']
+      [
+        'T1',
+        'Diseño',
+        new Date(2025, 4, 1),
+        new Date(2025, 4, 5),
+        0,
+        100,
+        null,
+      ],
+      [
+        'T2',
+        'Desarrollo',
+        new Date(2025, 4, 6),
+        new Date(2025, 4, 20),
+        0,
+        60,
+        'T1',
+      ],
+      [
+        'T3',
+        'Pruebas',
+        new Date(2025, 4, 21),
+        new Date(2025, 4, 25),
+        0,
+        20,
+        'T2',
+      ],
     ],
-    columns: ['ID', 'Tarea', 'Inicio', 'Fin', 'Duración', 'Porcentaje', 'Dependencias'],
-    options: {
-    }
+    columns: [
+      'ID',
+      'Tarea',
+      'Inicio',
+      'Fin',
+      'Duración',
+      'Porcentaje',
+      'Dependencias',
+    ],
+    options: {},
   };
+
+  barChatNg2 = {
+    chartType: "'bar'",
+    chartData:  {
+      labels: ['Label 1', 'Label 2', 'Label 3'],
+      datasets: [{ data: [10, 20, 30], label: 'Series A' }],
+    },
+    chartOptions: {
+    },
+  };
+
+  barChat2Ng2 = {
+    chartType: "'bar'",
+    chartData:  {
+      labels: ['Label 1', 'Label 2', 'Label 3'],
+      datasets: [{ data: [10, 20, 30], label: 'Series A' }],
+    },
+    chartOptions: {
+        
+      },
+  }
 }

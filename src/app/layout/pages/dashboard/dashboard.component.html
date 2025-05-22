@@ -85,6 +85,7 @@
     </div>
   </div>
 
+
   <!-- fin de la seccion de presentacion -->
   <!-- seccion de graficos -->
 
@@ -96,7 +97,7 @@
           <h6>{{pieChart2D.title}}</h6>
           <p class="text-sm ">{{pieChart2D.description}}</p>
         </div> -->
-        <div class="card-body">
+        <div class="card-body" style="width: 100%; height: 300px;">
           <h6 class="mb-0">{{pieChart2D.title}}</h6>
           <p class="text-sm ">{{pieChart2D.description}}</p>
           <div class="pe-2">
@@ -105,7 +106,7 @@
             [data]="pieChart2D.data"
             [columns]="pieChart2D.columns"
             [options]="pieChart2D.options"
-            [style]="{ width: '100%', height: '300px' }">
+            >
             </google-chart>
           </div>
           <hr class="dark horizontal">
@@ -132,7 +133,7 @@
             [data]="lineChart.data"
             [columns]="lineChart.columns"
             [options]="lineChart.options"
-            style="width: 100%; height: 300px;">
+            style="width: 100%; height: 300px; margin: 0 auto;">
             </google-chart>
           </div>
           <hr class="dark horizontal">
@@ -142,6 +143,66 @@
           </div>
         </div>
       </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-4 mt-4 mb-3">
+      <div class="card">
+        <div class="card-header pb-0 bg-light">
+          <h6>{{barChart.title}}</h6>
+            <p class="text-sm ">{{barChart.description}}</p>
+        </div>
+        <div class="card-body">
+          <div class="pe-2">
+            <canvas baseChart [data]="barChatNg2.chartData" [options]="barChatNg2.chartOptions" [type]="'doughnut'" style="width: 100%; height: 300px;"></canvas>
+          </div>
+          <hr class="dark horizontal">
+          <div class="d-flex ">
+            <i class="material-symbols-rounded text-sm my-auto me-1">schedule</i>
+             <span>Actualizado: {{ today | date:'shortDate' }}</span>
+          </div>
+        </div>
+      </div>
+        
+    </div>
+    <div class="col-lg-4 mt-4 mb-3">
+      <div class="card">
+        <div class="card-header pb-0 bg-light">
+          <h6>{{barChart.title}}</h6>
+            <p class="text-sm ">{{barChart.description}}</p>
+        </div>
+        <div class="card-body">
+          <div class="pe-2">
+            <canvas baseChart [data]="barChatNg2.chartData" [options]="barChatNg2.chartOptions" [type]="'polarArea'" style="width: 100%; height: 300px;"></canvas>
+          </div>
+          <hr class="dark horizontal">
+          <div class="d-flex ">
+            <i class="material-symbols-rounded text-sm my-auto me-1">schedule</i>
+             <span>Actualizado: {{ today | date:'shortDate' }}</span>
+          </div>
+        </div>
+      </div>
+        
+    </div>
+    <div class="col-lg-4 mt-4 mb-3">
+      <div class="card">
+        <div class="card-header pb-0 bg-light">
+          <h6>{{barChart.title}}</h6>
+            <p class="text-sm ">{{barChart.description}}</p>
+        </div>
+        <div class="card-body">
+          <div class="pe-2">
+            <canvas baseChart [data]="barChat2Ng2.chartData" [options]="barChat2Ng2.chartOptions" [type]="'bar'" style="width: 100%; height: 300px;"></canvas>
+          </div>
+          <hr class="dark horizontal">
+          <div class="d-flex ">
+            <i class="material-symbols-rounded text-sm my-auto me-1">schedule</i>
+             <span>Actualizado: {{ today | date:'shortDate' }}</span>
+          </div>
+        </div>
+      </div>
+        
     </div>
   </div>
 
