@@ -7,16 +7,17 @@ import { PageNotFoundComponent } from './layout/pages/page-not-found/page-not-fo
 import { LayoutModule } from './layout/layout.module';
 import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 
+
 @NgModule({
   declarations: [
     AppComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     LayoutModule
-    
   ],
   providers: [provideCharts(withDefaultRegisterables())],
   bootstrap: [AppComponent]

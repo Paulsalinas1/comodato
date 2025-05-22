@@ -4,7 +4,9 @@ import { CommonModule } from '@angular/common';
 import { UsuariosRoutingModule } from './usuarios-routing.module';
 import { UsuariosComponent } from './usuarios.component';
 import { LayoutModule } from '../../layout.module';
-
+import { GoogleChartsModule } from 'angular-google-charts';
+import { NgxPaginationModule } from 'ngx-pagination';
+import { FormsModule } from '@angular/forms';
 
 
 
@@ -15,7 +17,10 @@ import { LayoutModule } from '../../layout.module';
   imports: [
     CommonModule,
     UsuariosRoutingModule,
-    LayoutModule
+    LayoutModule,
+    GoogleChartsModule,
+    NgxPaginationModule,
+    FormsModule
   ]
 })
 export class UsuariosModule { }
