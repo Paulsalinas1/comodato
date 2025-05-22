@@ -238,8 +238,9 @@ export class DashboardComponent {
             title: {
                 display: true,
                 text: 'Título del gráfico',
-            },   
+            },
         }
-    },
+    }
   };
+
 }
