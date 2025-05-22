@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ChartType } from 'angular-google-charts';
-import { ChartOptions, ChartData } from 'chart.js';
+import { ChartOptions, ChartData, Colors } from 'chart.js';
+import { color } from 'chart.js/helpers';
 
 @Component({
   selector: 'app-dashboard',
@@ -208,22 +209,25 @@ export class DashboardComponent {
     options: {},
   };
 
-  barChatNg2 = {
+  barChat3Ng2 = {
     chartType: "'bar'",
     chartData: {
       labels: ['Label 1', 'Label 2', 'Label 3'],
       datasets: [{ data: [10, 20, 30], label: 'Series A' }],
     },
-    chartOptions: {
-      
-    },
   };
 
-  barChart2Ng2 = {
-    chartType: ChartType.Bar,
+  barChat2Ng2 = {
     chartData: {
       labels: ['Label 1', 'Label 2', 'Label 3'],
-      datasets: [{ data: [10, 20, 30], label: 'Series A' }],
+      datasets: [{ data: [10, 20, 30], label: 'Series A',backgroundColor: [
+      'rgb(255, 99, 132)',
+      'rgb(54, 162, 235)',
+      'rgb(255, 205, 86)'] 
+    }
+    ],
+      
+    
     },
     options: {
         plugins: {
@@ -239,7 +243,10 @@ export class DashboardComponent {
                 text: 'Título del gráfico',
             },
             
+            
         }
-    }
+    },
+    
+
   };
 }
