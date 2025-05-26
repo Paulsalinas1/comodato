@@ -31,25 +31,24 @@ export class ComodatosComponent {
 
   usuarios = [
     {
-      nombre: 'Computador lg',
-      nom: 'Lg',
-      NumeroS: 'sqwr3',
-      Categoria: 'notebook',
-      Modelo: 'lg-240',
+      nombre: 'paul salinas',
+      nom: '19.836.213-1',
+      NumeroS: 'Computador ASUS, Mouse',
+      Categoria: 'Entregado',
     },
     {
-      nombre: 'Computador hp',
-      nom: 'hp',
-      NumeroS: 'sqwr34',
-      Categoria: 'notebook',
-      Modelo: 'hp-360',
+      nombre: 'vito vozano',
+      nom: '20.142.456-1',
+      NumeroS: 'Monitor Samsung, Teclado',
+      Categoria: 'Entregado',
+      
     },
     {
-      nombre: 'Computador lenobo',
-      nom: 'lenobo',
-      NumeroS: 'lnQW5',
-      Categoria: 'notebook',
-      Modelo: 'L-150',
+      nombre: 'mario gomez',
+      nom: '15.236.253-k',
+      NumeroS: 'Cable HDMI',
+      Categoria: 'Devuelto',
+      
     },
     // agrega más usuarios si quieres
   ];
