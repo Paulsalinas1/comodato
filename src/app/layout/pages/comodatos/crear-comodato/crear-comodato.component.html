@@ -1,0 +1,42 @@
+<div class="d-flex">
+  <!-- Barra lateral de pasos -->
+  <div class="me-4" style="width: 220px;">
+    <div *ngFor="let paso of pasos; let i = index" class="mb-4 position-relative">
+      
+      <!-- Línea vertical -->
+      <div
+        class="position-absolute top-0 start-50 translate-middle-x"
+        [ngStyle]="{ height: '100%', width: '2px', background: i < pasos.length - 1 ? '#ccc' : 'transparent', top: '30px' }"
+      ></div>
+
+      <!-- Círculo del paso -->
+      <div
+        class="d-flex justify-content-center align-items-center rounded-circle mb-2"
+        [ngClass]="{
+          'bg-success text-white': paso.estado === 'completado',
+          'bg-primary text-white': paso.estado === 'activo',
+          'bg-light text-secondary': paso.estado === 'pendiente'
+        }"
+        style="width: 40px; height: 40px; margin-left: 85px; z-index: 1; position: relative;"
+      >
+        <mat-icon>{{ paso.icono }}</mat-icon>
+      </div>
+
+      <!-- Contenido del paso -->
+      <div class="text-center" style="margin-top: -10px;">
+        <div class="fw-bold">{{ paso.titulo }}</div>
+        <div class="text-muted small">{{ paso.descripcion }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contenido del paso actual -->
+  <div class="flex-grow-1">
+    <h5>{{ pasos[pasoActual].titulo }}</h5>
+    <p>Aquí va el contenido del paso: {{ pasos[pasoActual].descripcion }}</p>
+    <div class="mt-4">
+      <button mat-stroked-button color="primary" (click)="anteriorPaso()" [disabled]="pasoActual === 0">Anterior</button>
+      <button mat-raised-button color="primary" (click)="siguientePaso()" [disabled]="pasoActual === pasos.length - 1">Siguiente</button>
+    </div>
+  </div>
+</div>
