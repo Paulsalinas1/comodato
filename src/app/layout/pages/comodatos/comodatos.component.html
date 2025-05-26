@@ -1,3 +1,139 @@
-<div class="container-fluid py-2 vh-100">
-    <h1>Comodatos </h1>
+<div class="container-fluid py-2">
+    <!-- segcion de presentacion  -->
+    <div class="row">
+        <div class="ms-3">
+            <h2 class="mb-0 h2 font-weight-bolder">Bienvenido a los Comodatos</h2>
+            <p class="mb-4">
+            </p>
+        </div>
+        <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+            <div class="card">
+                <div class="card-header p-2 ps-3">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <p class="text-sm mb-0 text-capitalize">Comodatos Totales</p>
+                            <h4 class="mb-0">200</h4>
+                        </div>
+                        <div
+                            class="icon icon-md icon-shape bg-gradient bg-danger shadow-dark shadow text-center border-radius-lg">
+                            <i class="material-symbols-rounded opacity-10">weekend</i>
+                        </div>
+                    </div>
+                </div>
+                <hr class="dark horizontal my-0">
+                <div class="card-footer p-2 ps-3">
+                    <p class="mb-0 text-sm">Aumento de: <span class="text-success font-weight-bolder">+55% </span></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+            <div class="card">
+                <div class="card-header p-2 ps-3">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <p class="text-sm mb-0 text-capitalize">Comodatos A</p>
+                            <h4 class="mb-0">100</h4>
+                        </div>
+                        <div
+                            class="icon icon-md icon-shape bg-gradient bg-primary shadow-dark shadow text-center border-radius-lg">
+                            <i class="material-symbols-rounded opacity-10">person</i>
+                        </div>
+                    </div>
+                </div>
+                <hr class="dark horizontal my-0">
+                <div class="card-footer p-2 ps-3">
+                    <p class="mb-0 text-sm">Mes pasado:<span class="text-success font-weight-bolder"> +3% </span></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+            <div class="card">
+                <div class="card-header p-2 ps-3">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <p class="text-sm mb-0 text-capitalize">Comodatos B</p>
+                            <h4 class="mb-0">67</h4>
+                        </div>
+                        <div
+                            class="icon icon-md icon-shape bg-gradient bg-secondary shadow-dark shadow text-center border-radius-lg">
+                            <i class="material-symbols-rounded opacity-10">leaderboard</i>
+                        </div>
+                    </div>
+                </div>
+                <hr class="dark horizontal my-0">
+                <div class="card-footer p-2 ps-3">
+                    <p class="mb-0 text-sm">Año pasado: <span class="text-danger font-weight-bolder">-2% </span></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-sm-6">
+            <div class="card">
+                <div class="card-header p-2 ps-3">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <p class="text-sm mb-0 text-capitalize">Comodatos C</p>
+                            <h4 class="mb-0">33</h4>
+                        </div>
+                        <div
+                            class="icon icon-md icon-shape bg-gradient bg-success shadow-dark shadow text-center border-radius-lg">
+                            <i class="material-symbols-rounded opacity-10">weekend</i>
+                        </div>
+                    </div>
+                </div>
+                <hr class="dark horizontal my-0">
+                <div class="card-footer p-2 ps-3">
+                    <p class="mb-0 text-sm">Actual <span class="text-success font-weight-bolder">0% </span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- segcion de tabla de Articulos  -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card my-5">
+                <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                    <div class="bg-gradient-dark shadow-dark border-radius-lg pt-4 pb-3">
+                        <h6 class="text-white text-capitalize ps-3">Comodatos Registrados</h6>
+                    </div>
+                </div>
+                <div class="card-body px-0 pb-2">
+                    <input type="text" [(ngModel)]="filtro" (ngModelChange)="aplicarFiltro()"
+                        class="form-control mb-3 w-25 mx-3" placeholder="Buscar...">
+
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Usuario</th>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Articulos</th>
+                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Estado</th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class=" text-capitalize" *ngFor="let u of usuariosFiltrados | paginate: { itemsPerPage: 5, currentPage: pagina }">
+                                <td>
+                                    <div class="d-flex px-2 py-1">
+                                        <div class="d-flex flex-column justify-content-center me-3">
+                                            <h6 class="mb-0 text-sm">{{u.nombre}}</h6>
+                                            <p class="text-xs text-secondary mb-0">{{u.nom}}</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <p class="text-xs font-weight-bold mb-0">{{u.NumeroS}}</p>
+                                    <p class="text-xs text-secondary mb-0"></p>
+                                </td>
+                                <td class="align-middle text-center text-sm">
+                                    <p class="text-xs font-weight-bold mb-0">{{u.Categoria}}</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <pagination-controls (pageChange)="pagina = $event"></pagination-controls>
+
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
