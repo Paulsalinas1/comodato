@@ -103,14 +103,18 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Usuario</th>
-                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Articulos</th>
-                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Estado</th>
-                                
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Usuario
+                                </th>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                    Articulos</th>
+                                <th
+                                    class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                    Estado</th>
+
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class=" text-capitalize" *ngFor="let u of usuariosFiltrados | paginate: { itemsPerPage: 5, currentPage: pagina }">
+                            <tr class=" text-capitalize" *ngFor="let u of usuariosPaginados">
                                 <td>
                                     <div class="d-flex px-2 py-1">
                                         <div class="d-flex flex-column justify-content-center me-3">
@@ -130,8 +134,19 @@
                         </tbody>
                     </table>
 
-                    <pagination-controls (pageChange)="pagina = $event"></pagination-controls>
-
+                </div>
+                <div class="card-footer p-3 bg-white">
+                    <div class="row">
+                        <div class="col-12 d-flex justify-content-start">
+                            <mat-paginator class="bg-white"
+                                [length]="usuariosFiltrados.length" 
+                                [pageSize]="5"
+                                [pageSizeOptions]="[1, 5, 10, 20]" 
+                                showFirstLastButtons 
+                                (page)="onPageChange($event)">
+                            </mat-paginator>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

@@ -7,6 +7,7 @@ import { LayoutModule } from '../../layout.module';
 import { GoogleChartsModule } from 'angular-google-charts';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { FormsModule } from '@angular/forms';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 
 @NgModule({
@@ -19,7 +20,9 @@ import { FormsModule } from '@angular/forms';
     LayoutModule,
     GoogleChartsModule,
     NgxPaginationModule,
-    FormsModule
+    FormsModule,
+    MatPaginatorModule,
+    
   ]
 })
 export class ComodatosModule { }

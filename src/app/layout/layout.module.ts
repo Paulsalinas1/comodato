@@ -11,7 +11,8 @@ import { HeaderComponent } from './components/header/header.component';
   declarations: [
     LayoutComponent,
     SidebarComponent,
-    HeaderComponent
+    HeaderComponent,
+    
   ],
   imports: [
     CommonModule,
@@ -21,6 +22,7 @@ import { HeaderComponent } from './components/header/header.component';
     LayoutComponent,
     SidebarComponent,
     HeaderComponent
+    
     
   ],
 })

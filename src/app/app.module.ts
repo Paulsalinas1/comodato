@@ -6,6 +6,8 @@ import { AppComponent } from './app.component';
 import { PageNotFoundComponent } from './layout/pages/page-not-found/page-not-found.component';
 import { LayoutModule } from './layout/layout.module';
 import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
+import { MatPaginatorIntl } from '@angular/material/paginator';
+import { CustomPaginator } from './layout/components/paginator/paginator.component';
 
 
 @NgModule({
@@ -19,7 +21,7 @@ import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
     AppRoutingModule,
     LayoutModule
   ],
-  providers: [provideCharts(withDefaultRegisterables())],
+  providers: [provideCharts(withDefaultRegisterables()), { provide: MatPaginatorIntl, useValue: CustomPaginator() }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
