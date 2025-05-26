@@ -10,6 +10,7 @@ import { MatPaginatorIntl } from '@angular/material/paginator';
 import { CustomPaginator } from './layout/components/paginator/paginator.component';
 
 
+
 @NgModule({
   declarations: [
     AppComponent,
