@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { PageEvent } from '@angular/material/paginator';
 import { ChartType } from 'angular-google-charts';
 
 @Component({
@@ -9,6 +10,9 @@ import { ChartType } from 'angular-google-charts';
 })
 export class ArticulosComponent {
   today = new Date();
+  paginaActual = 0;
+  tamanioPagina = 5;
+
     pieChart2D = {
         title: 'Comodatos Por Mes',
         description: 'descripcion',
@@ -30,7 +34,6 @@ export class ArticulosComponent {
       { nombre: 'Computador lenobo', nom:'lenobo' ,NumeroS: 'lnQW5', Categoria: 'notebook', Modelo: 'L-150' },
       // agrega más usuarios si quieres
     ];
-  
     filtro: string = '';
     usuariosFiltrados = [...this.usuarios]; // copia inicial
     pagina: number = 1;
@@ -50,4 +53,15 @@ export class ArticulosComponent {
   
       this.pagina = 1; // reiniciar a la primera página
     }
+
+  get usuariosPaginados() {
+    const inicio = this.paginaActual * this.tamanioPagina;
+    const fin = inicio + this.tamanioPagina;
+    return this.usuariosFiltrados.slice(inicio, fin);
+  }
+
+  onPageChange(event: PageEvent) {
+    this.paginaActual = event.pageIndex;
+    this.tamanioPagina = event.pageSize;
+  }
 }

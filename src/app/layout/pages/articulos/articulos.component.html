@@ -103,15 +103,22 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Nombre</th>
-                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Numero Serial</th>
-                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Categoria</th>
-                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Modelo</th>
-                                
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Nombre
+                                </th>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                    Numero Serial</th>
+                                <th
+                                    class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                    Categoria</th>
+                                <th
+                                    class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                    Modelo</th>
+
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class=" text-capitalize" *ngFor="let u of usuariosFiltrados | paginate: { itemsPerPage: 5, currentPage: pagina }">
+                            <tr class=" text-capitalize"
+                                *ngFor="let u of usuariosFiltrados | paginate: { itemsPerPage: 5, currentPage: pagina }">
                                 <td>
                                     <div class="d-flex px-2 py-1">
                                         <div class="d-flex flex-column justify-content-center me-3">
@@ -130,7 +137,7 @@
                                 <td class="align-middle text-center">
                                     <span class="text-secondary text-xs font-weight-bold">{{u.Modelo}}</span>
                                 </td>
-                                
+
                             </tr>
                         </tbody>
                     </table>
@@ -142,12 +149,12 @@
         </div>
     </div>
     <!-- segcion de tabla complementos de articulos   -->
-     <div class="ms-3">
-            <h2 class="mb-0 h3 font-weight-bolder text-center">Complementos de los Articulos</h2>
-            <p class="mb-4">
-            </p>
-        </div>
-     <div class="row">
+    <div class="ms-3">
+        <h2 class="mb-0 h3 font-weight-bolder text-center">Complementos de los Articulos</h2>
+        <p class="mb-4">
+        </p>
+    </div>
+    <div class="row">
         <div class="col-4">
             <div class="card my-5">
                 <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
@@ -162,12 +169,15 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Nombre</th>
-                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Categoria</th>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Nombre
+                                </th>
+                                <th
+                                    class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                    Categoria</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class=" text-capitalize" *ngFor="let u of usuariosFiltrados | paginate: { itemsPerPage: 5, currentPage: pagina }">
+                            <tr class=" text-capitalize" *ngFor="let u of usuariosPaginados">
                                 <td>
                                     <div class="d-flex px-2 py-1">
                                         <div class="d-flex flex-column justify-content-center me-3">
@@ -183,8 +193,14 @@
                         </tbody>
                     </table>
 
-                    <pagination-controls (pageChange)="pagina = $event"></pagination-controls>
 
+                </div>
+                <div class="card-footer bg-white">
+                    <div class="row">
+                        <div class="col-12 d-flex justify-content-start px-0">
+                            
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -203,13 +219,16 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Nombre</th>
-                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Categoria</th>
-                                
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Nombre
+                                </th>
+                                <th
+                                    class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                    Categoria</th>
+
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class=" text-capitalize" *ngFor="let u of usuariosFiltrados | paginate: { itemsPerPage: 5, currentPage: pagina }">
+                            <tr class=" text-capitalize" *ngFor="let u of usuariosPaginados">
                                 <td>
                                     <div class="d-flex px-2 py-1">
                                         <div class="d-flex flex-column justify-content-center me-3">
@@ -225,8 +244,15 @@
                         </tbody>
                     </table>
 
-                    <pagination-controls (pageChange)="pagina = $event"></pagination-controls>
 
+
+                </div>
+                <div class="card-footer bg-white">
+                    <div class="row">
+                        <div class="col-12 d-flex justify-content-start px-0">
+                            
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -245,13 +271,15 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Nombre</th>
-                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">descripcion</th>
-                                
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Nombre
+                                </th>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                    descripcion</th>
+
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class=" text-capitalize" *ngFor="let u of usuariosFiltrados | paginate: { itemsPerPage: 5, currentPage: pagina }">
+                            <tr class=" text-capitalize" *ngFor="let u of usuariosPaginados">
                                 <td>
                                     <div class="d-flex px-2 py-1">
                                         <div class="d-flex flex-column justify-content-center me-3">
@@ -264,13 +292,20 @@
                                     <p class="text-xs font-weight-bold mb-0">{{u.nom}}</p>
                                     <p class="text-xs text-secondary mb-0"></p>
                                 </td>
-                                
+
                             </tr>
                         </tbody>
                     </table>
 
-                    <pagination-controls (pageChange)="pagina = $event"></pagination-controls>
 
+
+                </div>
+                <div class="card-footer bg-white">
+                    <div class="row">
+                        <div class="col-12 d-flex justify-content-start px-0">
+                            
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
