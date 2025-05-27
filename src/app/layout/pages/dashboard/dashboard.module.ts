@@ -5,6 +5,7 @@ import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashboardComponent } from './dashboard.component';
 import { GoogleChartsModule } from 'angular-google-charts';
 import {BaseChartDirective} from 'ng2-charts';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -14,6 +15,7 @@ import {BaseChartDirective} from 'ng2-charts';
     CommonModule,
     DashboardRoutingModule,
     GoogleChartsModule,
+    FormsModule,
     BaseChartDirective
   ]
 })

@@ -8,6 +8,7 @@ import { LayoutModule } from './layout/layout.module';
 import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 import { MatPaginatorIntl } from '@angular/material/paginator';
 import { CustomPaginator } from './layout/components/paginator/paginator.component';
+import { HttpClientModule } from '@angular/common/http';
 
 
 
@@ -20,7 +21,8 @@ import { CustomPaginator } from './layout/components/paginator/paginator.compone
   imports: [
     BrowserModule,
     AppRoutingModule,
-    LayoutModule
+    LayoutModule,
+    HttpClientModule  
   ],
   providers: [provideCharts(withDefaultRegisterables()), { provide: MatPaginatorIntl, useValue: CustomPaginator() }],
   bootstrap: [AppComponent]

@@ -6,7 +6,7 @@ import { ComodatosComponent } from './comodatos.component';
 import { LayoutModule } from '../../layout.module';
 import { GoogleChartsModule } from 'angular-google-charts';
 import { NgxPaginationModule } from 'ngx-pagination';
-import { FormsModule } from '@angular/forms';
+import { FormsModule , ReactiveFormsModule} from '@angular/forms';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { CrearComodatoComponent } from './crear-comodato/crear-comodato.component';
 import { VerComodatoComponent } from './ver-comodato/ver-comodato.component';
@@ -17,6 +17,8 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatOptionModule , MatNativeDateModule} from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatStepperModule } from '@angular/material/stepper';
+import {MatTabsModule} from '@angular/material/tabs';
 
 @NgModule({
   declarations: [
@@ -39,7 +41,10 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
     MatOptionModule,
     MatIconModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatStepperModule,
+    ReactiveFormsModule,
+    MatTabsModule
 
   ]
 })

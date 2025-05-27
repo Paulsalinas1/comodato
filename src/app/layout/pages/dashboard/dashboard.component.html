@@ -50,7 +50,7 @@
         <div class="card-header p-2 ps-3">
           <div class="d-flex justify-content-between">
             <div>
-              <p class="text-sm mb-0 text-capitalize">Articulos Totales</p>
+              <p class="text-sm mb-0 text-capitalize">categorias Totales</p>
               <h4 class="mb-0">3,462</h4>
             </div>
             <div class="icon icon-md icon-shape bg-gradient bg-secondary shadow-dark shadow text-center border-radius-lg">
@@ -580,6 +580,26 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <div class="bg-white">
+    <h1>hola</h1>
+    <div *ngFor="let cat of categorias">
+      <h3>{{ cat.nombreCategoria }}</h3>
+      <p>{{ cat.descaripCategoria }}</p>
+    </div>
+<form (ngSubmit)="onSubmit()" #categoriaForm="ngForm">
+
+  <label for="nombreCategoria">Nombre:</label>
+  <input type="text" id="nombreCategoria" name="nombreCategoria" [(ngModel)]="categoria.nombreCategoria" required>
+
+  <label for="descripCategoria">Descripción:</label>
+  <textarea id="descripCategoria" name="descripCategoria" [(ngModel)]="categoria.descaripCategoria"></textarea>
+
+  <button type="submit" [disabled]="categoriaForm.invalid">Crear Categoría</button>
+</form>
+
+<p *ngIf="mensaje">{{ mensaje }}</p>
   </div>
   
   <!-- seccion de footer -->

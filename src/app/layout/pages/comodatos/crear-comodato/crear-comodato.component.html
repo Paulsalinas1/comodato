@@ -1,42 +1,214 @@
-<div class="d-flex">
-  <!-- Barra lateral de pasos -->
-  <div class="me-4" style="width: 220px;">
-    <div *ngFor="let paso of pasos; let i = index" class="mb-4 position-relative">
-      
-      <!-- Línea vertical -->
-      <div
-        class="position-absolute top-0 start-50 translate-middle-x"
-        [ngStyle]="{ height: '100%', width: '2px', background: i < pasos.length - 1 ? '#ccc' : 'transparent', top: '30px' }"
-      ></div>
-
-      <!-- Círculo del paso -->
-      <div
-        class="d-flex justify-content-center align-items-center rounded-circle mb-2"
-        [ngClass]="{
-          'bg-success text-white': paso.estado === 'completado',
-          'bg-primary text-white': paso.estado === 'activo',
-          'bg-light text-secondary': paso.estado === 'pendiente'
-        }"
-        style="width: 40px; height: 40px; margin-left: 85px; z-index: 1; position: relative;"
-      >
-        <mat-icon>{{ paso.icono }}</mat-icon>
-      </div>
-
-      <!-- Contenido del paso -->
-      <div class="text-center" style="margin-top: -10px;">
-        <div class="fw-bold">{{ paso.titulo }}</div>
-        <div class="text-muted small">{{ paso.descripcion }}</div>
-      </div>
-    </div>
+<div class="container-fluid py-3">
+  <!-- Título principal -->
+  <div class="px-3 pt-2">
+    <h2 class="mb-0 font-weight-bolder text-start">Creación de Comodato</h2>
   </div>
 
-  <!-- Contenido del paso actual -->
-  <div class="flex-grow-1">
-    <h5>{{ pasos[pasoActual].titulo }}</h5>
-    <p>Aquí va el contenido del paso: {{ pasos[pasoActual].descripcion }}</p>
-    <div class="mt-4">
-      <button mat-stroked-button color="primary" (click)="anteriorPaso()" [disabled]="pasoActual === 0">Anterior</button>
-      <button mat-raised-button color="primary" (click)="siguientePaso()" [disabled]="pasoActual === pasos.length - 1">Siguiente</button>
+  <div class="row mt-4">
+    <!-- Menú lateral -->
+    <div class="col-md-3">
+      <div class="card shadow border-radius-lg">
+        <div class="card-body p-0">
+          <div class="nav flex-column nav-pills" id="tabMenu" role="tablist">
+            <button class="nav-link text-start px-4 py-3 active  rounded-0" data-bs-toggle="pill"
+              data-bs-target="#impacto" type="button" role="tab">Paso 1</button>
+            <button class="nav-link text-start px-4 py-3 rounded-0" data-bs-toggle="pill" data-bs-target="#sistemas"
+              type="button" role="tab">Paso 2</button>
+            <button class="nav-link text-start px-4 py-3 rounded-0" data-bs-toggle="pill" data-bs-target="#componentes"
+              type="button" role="tab">Paso 3</button>
+            <button class="nav-link text-start px-4 py-3 rounded-0" data-bs-toggle="pill" data-bs-target="#volumenes"
+              type="button" role="tab">Confirmación</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contenido de los pasos -->
+    <div class="col-md-9">
+      <div class="tab-content" id="tabContent">
+        <!-- Paso 1 -->
+        <div class="tab-pane fade show active" id="impacto" role="tabpanel">
+          <div class="row">
+            <div class="col-12">
+              <div class="card mt-4">
+                <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                  <div class="bg-gradient-dark shadow-dark border-radius-lg pt-4 pb-3">
+                    <h6 class="text-white text-capitalize ps-3">Selecionar Usuario</h6>
+                  </div>
+                </div>
+                <div class="card-body pb-2">
+                  <div class="text-center">
+                    <p>Aqui se seleciona al usurio o crea el usuario que solicita el comodato </p>
+                  </div>
+                  
+                  <div class="row">
+                    
+                    <div class="col-xl-4 col-sm-6  mb-4">
+                      
+                      <div class="card">
+                        <div class="d-flex justify-content-between">
+                          <div class="d-flex px-2 py-1">
+                            <div class="d-flex flex-column justify-content-center me-3">
+                              <button class="mb-0 text-sm btn"> Crear usuario </button>
+                              
+                            </div>
+                          </div>
+                        </div>
+
+                        
+                        <div class="card-footer p-2 ps-3">
+                    
+                        </div>
+                      </div>
+
+                    </div>
+
+                    <div class="col-xl-4 col-sm-6  mb-4">
+                      <div class="card">
+
+                        <div class="d-flex justify-content-between">
+                          <div class="d-flex px-2 py-1">
+                            <div class="d-flex flex-column justify-content-center me-3">
+                              <h6 class="mb-0 text-sm">Nombre: Paul salinas </h6>
+                            </div>
+                          </div>
+                        </div>
+
+                        <hr class="dark horizontal my-0">
+                        <div class="card-footer p-2 ps-3">
+                          <p class="text-xs text-secondary mb-0">Rut: 19.836.213-1</p>
+                          <p class="text-xs text-secondary mb-0">Estamento: Practicante</p>
+                        </div>
+                      </div>
+
+                    </div>
+
+                    <div class="col-xl-4 col-sm-6  mb-4">
+                      <div class="card">
+
+                        <div class="d-flex justify-content-between">
+                          <div class="d-flex px-2 py-1">
+                            <div class="d-flex flex-column justify-content-center me-3">
+                              <h6 class="mb-0 text-sm">Nombre: Paul salinas </h6>
+                            </div>
+                          </div>
+                        </div>
+
+                        <hr class="dark horizontal my-0">
+                        <div class="card-footer p-2 ps-3">
+                          <p class="text-xs text-secondary mb-0">Rut: 19.836.213-1</p>
+                          <p class="text-xs text-secondary mb-0">Estamento: Practicante</p>
+                        </div>
+                      </div>
+
+                    </div>
+
+                    <div class="col-xl-4 col-sm-6  mb-4">
+                      <div class="card">
+                        <div class="d-flex justify-content-between">
+                          <div class="d-flex px-2 py-1">
+                            <div class="d-flex flex-column justify-content-center me-3">
+                              <h6 class="mb-0 text-sm">Nombre: Paul salinas </h6>
+                            </div>
+                          </div>
+                        </div>
+
+                        <hr class="dark horizontal my-0">
+                        <div class="card-footer p-2 ps-3">
+                          <p class="text-xs text-secondary mb-0">Rut: 19.836.213-1</p>
+                          <p class="text-xs text-secondary mb-0">Estamento: Practicante</p>
+                        </div>
+                      </div>
+
+                    </div>
+
+                    <div class="col-xl-4 col-sm-6  mb-4">
+                      <div class="card">
+
+                        <div class="d-flex justify-content-between">
+                          <div class="d-flex px-2 py-1">
+                            <div class="d-flex flex-column justify-content-center me-3">
+                              <h6 class="mb-0 text-sm">Nombre: Paul salinas </h6>
+                            </div>
+                          </div>
+                        </div>
+
+                        <hr class="dark horizontal my-0">
+                        <div class="card-footer p-2 ps-3">
+                          <p class="text-xs text-secondary mb-0">Rut: 19.836.213-1</p>
+                          <p class="text-xs text-secondary mb-0">Estamento: Practicante</p>
+                        </div>
+                      </div>
+
+                    </div>
+
+                    <div class="col-xl-4 col-sm-6  mb-4">
+                      <div class="card">
+
+                        <div class="d-flex justify-content-between">
+                          <div class="d-flex px-2 py-1">
+                            <div class="d-flex flex-column justify-content-center me-3">
+                              <h6 class="mb-0 text-sm">Nombre: Paul salinas </h6>
+                            </div>
+                          </div>
+                        </div>
+
+                        <hr class="dark horizontal my-0">
+                        <div class="card-footer p-2 ps-3">
+                          <p class="text-xs text-secondary mb-0">Rut: 19.836.213-1</p>
+                          <p class="text-xs text-secondary mb-0">Estamento: Practicante</p>
+                        </div>
+                      </div>
+
+                    </div>
+                    
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Paso 2 -->
+        <div class="tab-pane fade" id="sistemas" role="tabpanel">
+          <div class="card shadow border-radius-lg mb-4">
+            <div class="card-header bg-gradient-primary text-white text-center py-3">
+              <h5 class="mb-0">Paso 2: Agregar Artículos</h5>
+            </div>
+            <div class="card-body">
+              <!-- Contenido del paso 2 -->
+              <p class="text-sm text-muted">Aquí va la sección para agregar artículos.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Paso 3 -->
+        <div class="tab-pane fade" id="componentes" role="tabpanel">
+          <div class="card shadow border-radius-lg mb-4">
+            <div class="card-header bg-gradient-secondary text-white text-center py-3">
+              <h5 class="mb-0">Paso 3: Seleccionar Fechas</h5>
+            </div>
+            <div class="card-body">
+              <!-- Contenido del paso 3 -->
+              <p class="text-sm text-muted">Aquí va la selección de fechas.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Confirmación -->
+        <div class="tab-pane fade" id="volumenes" role="tabpanel">
+          <div class="card shadow border-radius-lg mb-4">
+            <div class="card-header bg-gradient-success text-white text-center py-3">
+              <h5 class="mb-0">Paso 4: Vista Preliminar y Confirmación</h5>
+            </div>
+            <div class="card-body">
+              <!-- Contenido del paso 4 -->
+              <p class="text-sm text-muted">Aquí va el resumen y la acción de confirmar.</p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

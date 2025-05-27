@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { ChartType } from 'angular-google-charts';
+import { Categoria } from '../../../core/models/categoria';
+import { CategoriaService } from '../../../core/services/categoria.service';
 
 
 @Component({
@@ -242,4 +244,46 @@ export class DashboardComponent {
     }
   };
 
+
+  
+  constructor(private categoriaService: CategoriaService ) {}
+
+  categorias: Categoria[] = [];
+  categoria: Categoria = {
+    idCategoria :'',
+    nombreCategoria: '',
+    descaripCategoria: ''
+  };
+
+  mensaje: string = '';
+  ngOnInit(): void {
+    this.categoriaService.getCategorias().subscribe(data => {
+      this.categorias = data;
+    });
+  }
+
+  onSubmit() {
+    const id = this.generarIdRandom()
+    this.categoria.idCategoria = 'CAT'+id
+    this.categoriaService.addCategoria(this.categoria).subscribe({
+      next: (data) => {
+        this.mensaje = 'Categoría creada correctamente.';
+        
+        this.categoria = { nombreCategoria: '', descaripCategoria: '' }; // limpiar formulario
+        this.categoriaService.getCategorias().subscribe(data => {
+      this.categorias = data;
+    });
+      },
+      error: (err) => {
+        this.mensaje = 'Error al crear la categoría.';
+        console.error(err);
+      }
+    });
+    
+  }
+
+
+generarIdRandom(): string {
+  return Math.random().toString(36).substr(2, 9); // genera una cadena tipo '5g7z1k9q8'
+}
 }

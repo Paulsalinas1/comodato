@@ -1,5 +1,12 @@
-.list-group-item.active {
-  background-color: #1976d2 !important;
-  color: white;
-  font-weight: bold;
+.nav-link {
+  border-radius: 0;
+  text-align: left;
+  padding: 12px;
 }
+
+.nav-link.active {
+  background-color: #ffffff;
+  font-weight: bold;
+  border-left: 4px solid #000000;
+}
+
