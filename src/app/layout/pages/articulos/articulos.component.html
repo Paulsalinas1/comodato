@@ -311,3 +311,43 @@
         </div>
     </div>
 </div>
+
+<div class="container">
+  <h2>Listado de Categorías</h2>
+
+  <!-- Filtro por nombre -->
+  <div class="filter-container">
+    <input type="text" [(ngModel)]="filtroNombre" placeholder="Filtrar por nombre">
+    <button (click)="aplicarFiltro2()">Filtrar</button>
+    <button (click)="limpiarFiltro()">Limpiar</button>
+  </div>
+
+  <!-- Estado de carga -->
+  <div *ngIf="isLoading" class="loading">Cargando...</div>
+
+  <!-- Mensaje de error -->
+  <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+
+  <!-- Tabla de resultados -->
+  <table *ngIf="!isLoading && categorias.length > 0">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <!-- otras columnas -->
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let cat of categorias">
+        <td>{{ cat.idCategoria }}</td>
+        <td>{{ cat.nombreCategoria }}</td>
+        <!-- otras celdas -->
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Mensaje cuando no hay resultados -->
+  <div *ngIf="!isLoading && categorias.length === 0">
+    No se encontraron categorías
+  </div>
+</div>

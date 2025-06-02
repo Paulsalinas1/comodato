@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Categoria } from '../models/categoria';
 
@@ -12,8 +12,14 @@ export class CategoriaService {
   http = inject(HttpClient)
   constructor() {}
 
-  getCategorias(): Observable<Categoria[]> {
-    return this.http.get<Categoria[]>(this.apiUrl);
+  getCategorias(nombreFiltro?: string): Observable<Categoria[]> {
+    // Configurar parámetros de consulta si existe filtro
+    let params = new HttpParams();
+    if (nombreFiltro) {
+      params = params.append('nombre', nombreFiltro);
+    }
+
+    return this.http.get<Categoria[]>(this.apiUrl, { params });
   }
 
   addCategoria(categoria: Categoria): Observable<Categoria> {

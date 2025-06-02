@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { ChartType } from 'angular-google-charts';
+import { CategoriaService } from '../../../core/services/categoria.service';
+import { Categoria } from '../../../core/models/categoria';
 
 @Component({
   selector: 'app-articulos',
@@ -12,6 +14,13 @@ export class ArticulosComponent {
   today = new Date();
   paginaActual = 0;
   tamanioPagina = 5;
+
+  categorias: Categoria[] = [];
+  filtroNombre: string = '';
+  isLoading: boolean = false;
+  errorMessage: string = '';
+
+  constructor(private categoriaService: CategoriaService) { }
 
     pieChart2D = {
         title: 'Comodatos Por Mes',
@@ -26,7 +35,7 @@ export class ArticulosComponent {
         ],
         columns: ['Mes', 'Cantidad'],
         options: { legend: { position: 'bottom' }, responsive: true },
-      };
+    };
   
     usuarios = [
       { nombre: 'Computador lg',nom:'Lg' ,NumeroS: 'sqwr3', Categoria: 'notebook', Modelo: 'lg-240' },
@@ -64,4 +73,35 @@ export class ArticulosComponent {
     this.paginaActual = event.pageIndex;
     this.tamanioPagina = event.pageSize;
   }
+
+ngOnInit(): void {
+    this.cargarCategorias();
+  }
+
+  cargarCategorias(): void {
+    this.isLoading = true;
+    this.errorMessage = '';
+
+    this.categoriaService.getCategorias(this.filtroNombre).subscribe({
+      next: (data) => {
+        this.categorias = data;
+        this.isLoading = false;
+      },
+      error: (err) => {
+        this.errorMessage = 'Error al cargar categorías';
+        this.isLoading = false;
+        console.error(err);
+      }
+    });
+  }
+
+  aplicarFiltro2(): void {
+    this.cargarCategorias();
+  }
+
+  limpiarFiltro(): void {
+    this.filtroNombre = '';
+    this.cargarCategorias();
+  }
+
 }
