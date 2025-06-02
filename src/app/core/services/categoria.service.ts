@@ -16,7 +16,7 @@ export class CategoriaService {
     // Configurar parámetros de consulta si existe filtro
     let params = new HttpParams();
     if (nombreFiltro) {
-      params = params.append('nombre', nombreFiltro);
+      params = params.append('nombreCategoria', nombreFiltro);
     }
 
     return this.http.get<Categoria[]>(this.apiUrl, { params });
