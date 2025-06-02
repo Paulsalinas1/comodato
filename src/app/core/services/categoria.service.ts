@@ -21,11 +21,11 @@ export class CategoriaService {
   }
 
   // (Opcionales para después)
-  // updateCategoria(id: number, categoria: Categoria): Observable<any> {
-  //   return this.http.put(`${this.apiUrl}/${id}`, categoria);
-  // }
+  updateCategoria(id: string, categoria: Categoria): Observable<Categoria> {
+  return this.http.put<Categoria>(`${this.apiUrl}/${id}`, categoria);
+}
 
-  // deleteCategoria(id: number): Observable<any> {
-  //   return this.http.delete(`${this.apiUrl}/${id}`);
-  // }
+  deleteCategoria(id: string): Observable<void> {
+  return this.http.delete<void>(`${this.apiUrl}/${id}`);
+}
 }
