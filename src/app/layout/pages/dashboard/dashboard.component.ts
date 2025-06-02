@@ -250,9 +250,8 @@ export class DashboardComponent {
 
   categorias: Categoria[] = [];
   categoria: Categoria = {
-    idCategoria :'',
     nombreCategoria: '',
-    descaripCategoria: ''
+    desCategoria: ''
   };
 
   mensaje: string = '';
@@ -263,13 +262,11 @@ export class DashboardComponent {
   }
 
   onSubmit() {
-    const id = this.generarIdRandom()
-    this.categoria.idCategoria = 'CAT'+id
     this.categoriaService.addCategoria(this.categoria).subscribe({
       next: (data) => {
         this.mensaje = 'Categoría creada correctamente.';
         
-        this.categoria = { nombreCategoria: '', descaripCategoria: '' }; // limpiar formulario
+        this.categoria = { nombreCategoria: '', desCategoria: '' }; // limpiar formulario
         this.categoriaService.getCategorias().subscribe(data => {
       this.categorias = data;
     });
@@ -281,9 +278,4 @@ export class DashboardComponent {
     });
     
   }
-
-
-generarIdRandom(): string {
-  return Math.random().toString(36).substr(2, 9); // genera una cadena tipo '5g7z1k9q8'
-}
 }

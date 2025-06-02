@@ -586,7 +586,7 @@
     <h1>hola</h1>
     <div *ngFor="let cat of categorias">
       <h3>{{ cat.nombreCategoria }}</h3>
-      <p>{{ cat.descaripCategoria }}</p>
+      <p>{{ cat.desCategoria }}</p>
     </div>
 <form (ngSubmit)="onSubmit()" #categoriaForm="ngForm">
 
@@ -594,7 +594,7 @@
   <input type="text" id="nombreCategoria" name="nombreCategoria" [(ngModel)]="categoria.nombreCategoria" required>
 
   <label for="descripCategoria">Descripción:</label>
-  <textarea id="descripCategoria" name="descripCategoria" [(ngModel)]="categoria.descaripCategoria"></textarea>
+  <textarea id="descripCategoria" name="descripCategoria" [(ngModel)]="categoria.desCategoria"></textarea>
 
   <button type="submit" [disabled]="categoriaForm.invalid">Crear Categoría</button>
 </form>

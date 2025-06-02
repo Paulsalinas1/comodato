@@ -20,7 +20,6 @@ export class CategoriaService {
     return this.http.post<Categoria>(this.apiUrl, categoria);
   }
 
-  // (Opcionales para después)
   updateCategoria(id: string, categoria: Categoria): Observable<Categoria> {
   return this.http.put<Categoria>(`${this.apiUrl}/${id}`, categoria);
 }
