@@ -259,7 +259,7 @@
         </div> -->
 
         <div class="col-12">
-            <div class="card my-3">
+            <div class="card my-5">
                 <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                     <div
                         class="bg-gradient-dark shadow-dark border-radius-lg pt-2 pb-2 px-3 d-flex justify-content-between align-items-center">
@@ -271,35 +271,40 @@
                     </div>
                 </div>
 
-                <div class="card-body px-0 pb-2">
+                <div class="card-body px-0 pb-2 table-responsive">
                     <!-- Cambiado a filtroCategorias y eliminado el ngModelChange -->
                     <input type="text" [(ngModel)]="filtroCategorias" class="form-control mb-3 w-25 mx-3"
                         placeholder="Buscar...">
 
-                    <table class="table" id="tabla-categorias">
+                    <table class="table table-hover" id="tabla-categorias">
                         <thead>
                             <tr>
-                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">
                                     Categorias
                                 </th>
-                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">
                                     Detalles
+                                </th>
+                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                 </th>
                             </tr>
                         </thead>
                         <tbody>
                             <!-- Cambiado a categoriasPaginadas -->
-                            <tr class="text-capitalize" *ngFor="let cat of categoriasPaginadas">
-                                <td>
-                                    <div class="d-flex px-2 py-1">
+                            <tr class="text-capitalize" *ngFor="let cat of categoriasPaginadas"
+                                (click)="abrirModalEditarCategoria(cat)">
+                                <td scope="row">
+                                    <div class="d-flex px-2 py-2">
                                         <div class="d-flex flex-column justify-content-center me-3">
                                             <h6 class="mb-0 text-sm">{{cat.nombreCategoria}}</h6>
                                         </div>
                                     </div>
                                 </td>
-                                <td>
-                                    <p class="text-xs font-weight-bold mb-0">{{cat.desCategoria}}</p>
-                                    <p class="text-xs text-secondary mb-0"></p>
+                                <td >
+                                    <p class="text-xs font-weight-bold mb-0 py-2">{{cat.desCategoria}}</p>
+                                </td>
+                                <td class="align-middle text-center text-sm">
+                                    <mat-icon>chevron_right</mat-icon>
                                 </td>
                             </tr>
                         </tbody>
@@ -318,6 +323,7 @@
                     </div>
                 </div>
             </div>
+            
         </div>
     </div>
     

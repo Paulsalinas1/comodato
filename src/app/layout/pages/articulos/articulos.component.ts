@@ -5,6 +5,7 @@ import { CategoriaService } from '../../../core/services/categoria.service';
 import { Categoria } from '../../../core/models/categoria';
 import { MatDialog } from '@angular/material/dialog';
 import { ModalAddComponent } from '../../components/modal-add/modal-add.component';
+import { ModalCatComponent } from '../../components/modal-cat/modal-cat.component';
 
 
 @Component({
@@ -115,4 +116,24 @@ export class ArticulosComponent {
   });
   }
   
+  abrirModalEditarCategoria(cat: Categoria): void {
+  const dialogRef = this.dialog.open(ModalCatComponent, {
+    width: '400px',
+    data: { categoria: cat }
+  });
+
+  dialogRef.afterClosed().subscribe(resultado => {
+    if (resultado) {
+      if (resultado.accion === 'editar') {
+        this.categoriaService.updateCategoria(resultado.categoria.idCategoria, resultado.categoria).subscribe(() => {
+          this.cargarDatosCat();
+        });
+      } else if (resultado.accion === 'eliminar') {
+        this.categoriaService.deleteCategoria(resultado.categoria.idCategoria).subscribe(() => {
+          this.cargarDatosCat();
+        });
+      }
+    }
+  });
+}
 }

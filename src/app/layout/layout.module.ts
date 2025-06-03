@@ -12,6 +12,7 @@ import { LayoutComponent } from './layout.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { HeaderComponent } from './components/header/header.component';
 import { ModalAddComponent } from './components/modal-add/modal-add.component';
+import { ModalCatComponent } from './components/modal-cat/modal-cat.component';
 
 
 
@@ -21,6 +22,7 @@ import { ModalAddComponent } from './components/modal-add/modal-add.component';
     SidebarComponent,
     HeaderComponent,
     ModalAddComponent,
+    ModalCatComponent,
     
   ],
   imports: [

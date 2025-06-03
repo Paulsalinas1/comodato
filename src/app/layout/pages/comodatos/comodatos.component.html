@@ -89,14 +89,14 @@
     </div>
     <!-- segcion de tabla de Articulos  -->
     <div class="row">
-        <div class="col-12">
+        <div class="col-6">
             <div class="card my-5">
                 <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                     <div class="bg-gradient-dark shadow-dark border-radius-lg pt-4 pb-3">
                         <h6 class="text-white text-capitalize ps-3">Comodatos Registrados</h6>
                     </div>
                 </div>
-                <div class="card-body px-0 pb-2">
+                <div class="card-body px-0 pb-2 table-responsive">
                     <input type="text" [(ngModel)]="filtro" (ngModelChange)="aplicarFiltro()"
                         class="form-control mb-3 w-25 mx-3" placeholder="Buscar...">
 
@@ -106,15 +106,16 @@
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Usuario
                                 </th>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                    Articulos</th>
+                                    Articulos
+                                </th>
                                 <th
                                     class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                    Estado</th>
-
+                                    Estado
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class=" text-capitalize" *ngFor="let u of usuariosPaginados">
+                            <tr class="text-capitalize" *ngFor="let u of usuariosPaginados">
                                 <td>
                                     <div class="d-flex px-2 py-1">
                                         <div class="d-flex flex-column justify-content-center me-3">

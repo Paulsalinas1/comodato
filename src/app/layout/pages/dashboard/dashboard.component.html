@@ -53,7 +53,8 @@
               <p class="text-sm mb-0 text-capitalize">categorias Totales</p>
               <h4 class="mb-0">3,462</h4>
             </div>
-            <div class="icon icon-md icon-shape bg-gradient bg-secondary shadow-dark shadow text-center border-radius-lg">
+            <div
+              class="icon icon-md icon-shape bg-gradient bg-secondary shadow-dark shadow text-center border-radius-lg">
               <i class="material-symbols-rounded opacity-10">leaderboard</i>
             </div>
           </div>
@@ -85,368 +86,54 @@
     </div>
   </div>
 
-
-  <!-- fin de la seccion de presentacion -->
   <!-- seccion de graficos -->
 
   <div class="row">
     <!-- primer grafico -->
-    <div class="col-lg-6 col-md-6 mt-4 mb-4">
+    <div class="col-lg-6 col-md-6 col-sm-12 mt-4 mb-4">
       <div class="card">
-        <!-- <div class="card-header pb-0 bg-light">
-          <h6>{{pieChart2D.title}}</h6>
-          <p class="text-sm ">{{pieChart2D.description}}</p>
-        </div> -->
-        <div class="card-body">
+        <div class="card-header pb-0">
           <h6 class="mb-0">{{pieChart2D.title}}</h6>
-          <p class="text-sm ">{{pieChart2D.description}}</p>
-          <div class="pe-2">
-            <google-chart
-            [type]="pieChart2D.type"
-            [data]="pieChart2D.data"
-            [columns]="pieChart2D.columns"
-            [options]="pieChart2D.options"
-            style="width: 100%; height: 300px;">
+          <p class="text-sm">{{pieChart2D.description}}</p>
+        </div>
+        <div class="card-body">
+          <div class="img-fluid">
+            <google-chart [type]="pieChart2D.type" [data]="pieChart2D.data" [columns]="pieChart2D.columns"
+              [options]="pieChart2D.options" style="width: 100%; height: 300px;">
             </google-chart>
           </div>
           <hr class="dark horizontal">
           <div class="d-flex ">
             <i class="material-symbols-rounded text-sm my-auto me-1">schedule</i>
-             <span>Actualizado: {{ today | date:'shortDate' }}</span>
+            <span>Actualizado: {{ today | date:'shortDate' }}</span>
           </div>
         </div>
       </div>
     </div>
     <!-- segundo grafico -->
-    <div class="col-lg-6 col-md-6 mt-4 mb-4">
-      <div class="card ">
-        <!-- <div class="card-header pb-0 bg-light">
-          <h6>{{lineChart.title}}</h6>
-          <p class="text-sm ">{{lineChart.description}}</p>
-        </div> -->
-        <div class="card-body">
-          <h6 class="mb-0">{{lineChart.title}}</h6>
-          <p class="text-sm ">{{lineChart.description}}</p>
-          <div class="pe-2">
-            <google-chart
-            [type]="lineChart.type"
-            [data]="lineChart.data"
-            [columns]="lineChart.columns"
-            [options]="lineChart.options"
-            style="width: 100%; height: 300px; margin: 0 auto;">
-            </google-chart>
-          </div>
-          <hr class="dark horizontal">
-          <div class="d-flex ">
-            <i class="material-symbols-rounded text-sm my-auto me-1">schedule</i>
-             <span>Actualizado: {{ today | date:'shortDate' }}</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col-lg-4 mt-4 mb-3">
+    <div class="col-lg-6 mt-4 mb-3">
       <div class="card">
-        <div class="card-header pb-0 bg-light">
-          <h6>{{barChart.title}}</h6>
-            <p class="text-sm ">{{barChart.description}}</p>
+        <div class="card-header pb-0">
+          <h6 class="mb-0">{{stackedColumnChart.title}}</h6>
+          <p class="text-sm ">{{stackedColumnChart.description}}</p>
         </div>
         <div class="card-body">
-          <div class="pe-2">
-            <canvas baseChart [data]="barChat3Ng2.chartData" [options]="barChat2Ng2.options" [type]="'doughnut'" style="width: 100%; height: 300px;"></canvas>
-          </div>
-          <hr class="dark horizontal">
-          <div class="d-flex ">
-            <i class="material-symbols-rounded text-sm my-auto me-1">schedule</i>
-             <span>Actualizado: {{ today | date:'shortDate' }}</span>
-          </div>
-        </div>
-      </div>
-        
-    </div>
-    
-    <div class="col-lg-4 mt-4 mb-3">
-      <div class="card">
-        <div class="card-header pb-0 bg-light">
-          <h6>{{barChart.title}}</h6>
-            <p class="text-sm ">{{barChart.description}}</p>
-        </div>
-        <div class="card-body">
-          <div class="pe-2">
-            <canvas baseChart [data]="barChat3Ng2.chartData" [options]="barChat2Ng2.options" [type]="'pie'" style="width: 100%; height: 300px;"></canvas>
-          </div>
-          <hr class="dark horizontal">
-          <div class="d-flex ">
-            <i class="material-symbols-rounded text-sm my-auto me-1">schedule</i>
-             <span>Actualizado: {{ today | date:'shortDate' }}</span>
-          </div>
-        </div>
-      </div>
-        
-    </div>
-
-    <div class="col-lg-4 mt-4 mb-3">
-      <div class="card">
-        <div class="card-header pb-0 bg-light">
-          <h6>{{barChart.title}}</h6>
-            <p class="text-sm ">{{barChart.description}}</p>
-        </div>
-        <div class="card-body">
-          <div class="pe-2">
-            <canvas baseChart [data]="barChat2Ng2.chartData" [options]="barChat2Ng2.options" [type]="'bar'" style="width: 100%; height: 300px;"></canvas>
-          </div>
-          <hr class="dark horizontal">
-          <div class="d-flex ">
-            <i class="material-symbols-rounded text-sm my-auto me-1">schedule</i>
-             <span>Actualizado: {{ today | date:'shortDate' }}</span>
-          </div>
-        </div>
-      </div>
-        
-    </div>
-  </div>
-
-  <div class="row">  
-
-    <!-- tercer grafico -->
-    <div class="col-lg-4 mt-4 mb-3">
-      <div class="card">
-        <div class="card-header pb-0 bg-light">
-          <h6>{{barChart.title}}</h6>
-            <p class="text-sm ">{{barChart.description}}</p>
-        </div>
-        <div class="card-body">
-          <div class="pe-2">
-            <google-chart
-            [type]="barChart.type"
-            [data]="barChart.data"
-            [columns]="barChart.columns"
-            [options]="barChart.options"
-            style="width: 100%; height: 300px;">
-            </google-chart>
-          </div>
-          <hr class="dark horizontal">
-          <div class="d-flex ">
-            <i class="material-symbols-rounded text-sm my-auto me-1">schedule</i>
-             <span>Actualizado: {{ today | date:'shortDate' }}</span>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- cuarto grafico -->
-    <div class="col-lg-4 col-md-6 mt-4 mb-4">
-      <div class="card">
-        <div class="card-header pb-0 bg-light">
-          <h6>{{pieChart2D.title}}</h6>
-          <p class="text-sm ">{{pieChart2D.description}}</p>
-        </div>
-        <div class="card-body">
-          <div class="pe-2 pt-0">
-            <google-chart
-            [type]="pieChart2D.type"
-            [data]="pieChart2D.data"
-            [columns]="pieChart2D.columns"
-            [options]="pieChart2D.options"
-            [style]="{ width: '100%', height: '300px' }">
-            </google-chart>
-          </div>
-          <hr class="dark horizontal">
-          <div class="d-flex ">
-            <i class="material-symbols-rounded text-sm my-auto me-1">schedule</i>
-             <span>Actualizado: {{ today | date:'shortDate' }}</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- quinto grafico -->
-    <div class="col-lg-4 mt-4 mb-3">
-      <div class="card">
-        <div class="card-header pb-0 bg-light">
-          <h6>{{pieChart3D.title}}</h6>
-            <p class="text-sm ">{{pieChart3D.description}}</p>
-        </div>
-        <div class="card-body">
-          <div class="pe-2">
-            <google-chart
-            [type]="pieChart3D.type"
-            [data]="pieChart3D.data"
-            [options]="pieChart3D.options"
-            style="width: 100%; height: 300px;">
-            </google-chart>
-          </div>
-          <hr class="dark horizontal">
-          <div class="d-flex ">
-            <i class="material-symbols-rounded text-sm my-auto me-1">schedule</i>
-             <span>Actualizado: {{ today | date:'shortDate' }}</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-  <div class="row">  
-
-    <!-- sexto grafico -->
-    <div class="col-lg-9 mt-4 mb-3">
-      <div class="card">
-        <div class="card-header pb-0 bg-light">
-          <h6>{{treeMapChart.title}}</h6>
-            <p class="text-sm ">{{treeMapChart.description}}</p>
-        </div>
-        <div class="card-body">
-          <div class="pe-2">
-            <google-chart
-              [type]="treeMapChart.type"
-              [data]="treeMapChart.data"
-              [columns]="treeMapChart.columns"
-              [options]="treeMapChart.options"
+          <div class="">
+            <google-chart [type]="stackedColumnChart.type" [data]="stackedColumnChart.data"
+              [columns]="stackedColumnChart.columns" [options]="stackedColumnChart.options"
               style="width: 100%; height: 300px;">
             </google-chart>
           </div>
           <hr class="dark horizontal">
-          <div class="d-flex ">
+          <div class="d-flex">
             <i class="material-symbols-rounded text-sm my-auto me-1">schedule</i>
-             <span>Actualizado: {{ today | date:'shortDate' }}</span>
+            <span>Actualizado: {{ today | date:'shortDate' }}</span>
           </div>
         </div>
       </div>
     </div>
-    <!-- septimo grafico -->
-    
-    <!-- octabo grafico -->
-    <div class="col-lg-3 mt-4 mb-3">
-      <div class="card">
-        <div class="card-header pb-0 bg-light">
-          <h6>{{comboChart.title}}</h6>
-          <p class="text-sm ">{{comboChart.description}}</p>
-        </div>
-        <div class="card-body">
-          <div class="pe-2">
-            <google-chart
-            [type]="comboChart.type"
-            [data]="comboChart.data"
-            [columns]="comboChart.columns"
-            [options]="comboChart.options"
-            style="width: 100%; height: 300px;">
-            </google-chart>
-          </div>
-          <hr class="dark horizontal">
-          <div class="d-flex ">
-            <i class="material-symbols-rounded text-sm my-auto me-1">schedule</i>
-             <span>Actualizado: {{ today | date:'shortDate' }}</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- noveno grafico -->
-    <div class="col-lg-6 mt-4 mb-3">
-      <div class="card">
-        <div class="card-header pb-0 bg-light">
-          <h6>{{stackedColumnChart.title}}</h6>
-          <p class="text-sm ">{{stackedColumnChart.description}}</p>
-        </div>
-        <div class="card-body">
-          <div class="pe-2">
-            <google-chart
-            [type]="stackedColumnChart.type"
-            [data]="stackedColumnChart.data"
-            [columns]="stackedColumnChart.columns"
-            [options]="stackedColumnChart.options"
-            style="width: 100%; height: 300px;">
-            </google-chart>
-          </div>
-          <hr class="dark horizontal">
-          <div class="d-flex ">
-            <i class="material-symbols-rounded text-sm my-auto me-1">schedule</i>
-             <span>Actualizado: {{ today | date:'shortDate' }}</span>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- mas graficos -->
-    <div class="col-lg-6 mt-4 mb-3">
-      <div class="card">
-        <div class="card-header pb-0 bg-light">
-          <h6>{{comboChart2.title}}</h6>
-            <p class="text-sm ">{{comboChart2.description}}</p>
-        </div>
-        <div class="card-body">
-          <div class="pe-2">
-            <google-chart
-            [type]="comboChart2.type"
-            [data]="comboChart2.data"
-            [options]="comboChart2.options"
-            [columns]="comboChart2.columns"
-            style="width: 100%; height: 300px;">
-            </google-chart>
-          </div>
-          <hr class="dark horizontal">
-          <div class="d-flex ">
-            <i class="material-symbols-rounded text-sm my-auto me-1">schedule</i>
-             <span>Actualizado: {{ today | date:'shortDate' }}</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-lg-12 mt-4 mb-3">
-      <div class="card">
-        <div class="card-header pb-0 bg-light">
-          <h6>{{waterfallChart.title}}</h6>
-            <p class="text-sm ">{{waterfallChart.description}}</p>
-        </div>
-        <div class="card-body">
-          <div class="pe-2">
-            <google-chart
-            [type]="waterfallChart.type"
-            [data]="waterfallChart.data"
-            [options]="waterfallChart.options"
-            [columns]="waterfallChart.columns"
-            style="width: 100%; height: 300px;">
-            </google-chart>
-          </div>
-          <hr class="dark horizontal">
-          <div class="d-flex ">
-            <i class="material-symbols-rounded text-sm my-auto me-1">schedule</i>
-             <span>Actualizado: {{ today | date:'shortDate' }}</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-lg-12 mt-4 mb-3">
-      <div class="card">
-        <div class="card-header pb-0 bg-light">
-          <h6>{{ganttChart.title}}</h6>
-            <p class="text-sm ">{{ganttChart.description}}</p>
-        </div>
-        <div class="card-body">
-          <div class="pe-2">
-            <google-chart
-            [type]="ganttChart.type"
-            [data]="ganttChart.data"
-            [options]="ganttChart.options"
-            [columns]="ganttChart.columns"
-            style="width: 100%; height: 150px;">
-            </google-chart>
-          </div>
-          <hr class="dark horizontal">
-          <div class="d-flex ">
-            <i class="material-symbols-rounded text-sm my-auto me-1">schedule</i>
-             <span>Actualizado: {{ today | date:'shortDate' }}</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
   </div>
 
-  <!-- fin de la seccion de graficos -->
   <!-- seccion de lista usuarios -->
 
   <div class="row mb-4">
@@ -509,7 +196,7 @@
                     <span class="text-xs font-weight-bold"> 12345678-9 </span>
                   </td>
                   <td class="align-middle text-center text-sm">
-                    <span class="text-xs font-weight-bold">  9 63514691 </span>
+                    <span class="text-xs font-weight-bold"> 9 63514691 </span>
                   </td>
                   <td class="align-middle text-center text-sm">
                     <span class="text-xs font-weight-bold"> Docente </span>
@@ -576,32 +263,13 @@
           </p>
         </div>
         <div class="card-body p-3">
-          
+
         </div>
       </div>
     </div>
   </div>
 
-  <div class="bg-white">
-    <h1>hola</h1>
-    <div *ngFor="let cat of categorias">
-      <h3>{{ cat.nombreCategoria }}</h3>
-      <p>{{ cat.desCategoria }}</p>
-    </div>
-<form (ngSubmit)="onSubmit()" #categoriaForm="ngForm">
 
-  <label for="nombreCategoria">Nombre:</label>
-  <input type="text" id="nombreCategoria" name="nombreCategoria" [(ngModel)]="categoria.nombreCategoria" required>
-
-  <label for="descripCategoria">Descripción:</label>
-  <textarea id="descripCategoria" name="descripCategoria" [(ngModel)]="categoria.desCategoria"></textarea>
-
-  <button type="submit" [disabled]="categoriaForm.invalid">Crear Categoría</button>
-</form>
-
-<p *ngIf="mensaje">{{ mensaje }}</p>
-  </div>
-  
   <!-- seccion de footer -->
   <footer class="footer py-4  ">
     <div class="container-fluid">
@@ -613,13 +281,8 @@
         </div>
         <div class="col-lg-6">
           <ul class="nav nav-footer justify-content-center justify-content-lg-end">
-            <!-- links del footer en la esquina derecha -->
-            <!-- <li class="nav-item">
-              <a href="https://www.creative-tim.com" class="nav-link text-muted" target="_blank">Creative Tim</a>
-            </li> -->
           </ul>
         </div>
       </div>
     </div>
   </footer>
-</div>

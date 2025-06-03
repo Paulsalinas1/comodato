@@ -1,7 +1,5 @@
 import { Component } from '@angular/core';
 import { ChartType } from 'angular-google-charts';
-import { Categoria } from '../../../core/models/categoria';
-import { CategoriaService } from '../../../core/services/categoria.service';
 
 
 @Component({
@@ -244,35 +242,4 @@ export class DashboardComponent {
     }
   };
 
-  constructor(private categoriaService: CategoriaService ) {}
-
-  categorias: Categoria[] = [];
-  categoria: Categoria = {
-    nombreCategoria: '',
-    desCategoria: ''
-  };
-  
-  mensaje: string = '';
-  ngOnInit(): void {
-    this.categoriaService.getCategorias().subscribe(data => {
-      this.categorias = data;
-    });
-  }
-
-  onSubmit() {
-    this.categoriaService.addCategoria(this.categoria).subscribe({
-      next: (data) => {
-        this.mensaje = 'Categoría creada correctamente.';
-        
-        this.categoria = { nombreCategoria: '', desCategoria: '' }; // limpiar formulario
-        this.categoriaService.getCategorias().subscribe(data => {
-      this.categorias = data;
-    });
-      },
-      error: (err) => {
-        this.mensaje = 'Error al crear la categoría.';
-        console.error(err);
-      }
-    });
-  }
 }
