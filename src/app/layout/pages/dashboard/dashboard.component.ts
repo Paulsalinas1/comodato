@@ -253,7 +253,7 @@ export class DashboardComponent {
     nombreCategoria: '',
     desCategoria: ''
   };
-
+  
   mensaje: string = '';
   ngOnInit(): void {
     this.categoriaService.getCategorias().subscribe(data => {

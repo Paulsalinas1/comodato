@@ -88,7 +88,7 @@
         </div>
     </div>
     <!-- segcion de tabla de Articulos  -->
-    <div class="row">
+    <!--  <div class="row">
         <div class="col-12">
             <div class="card my-5">
                 <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
@@ -147,7 +147,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
     <!-- segcion de tabla complementos de articulos   -->
     <div class="ms-3">
         <h2 class="mb-0 h3 font-weight-bolder text-center">Complementos de los Articulos</h2>
@@ -155,7 +155,7 @@
         </p>
     </div>
     <div class="row">
-        <div class="col-4">
+        <!-- <div class="col-6">
             <div class="card my-5">
                 <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                     <div class="bg-gradient-dark shadow-dark border-radius-lg pt-4 pb-3">
@@ -205,7 +205,7 @@
             </div>
         </div>
 
-        <div class="col-4">
+        <div class="col-6">
             <div class="card my-5">
                 <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                     <div class="bg-gradient-dark shadow-dark border-radius-lg pt-4 pb-3">
@@ -255,9 +255,9 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
 
-        <div class="col-4">
+        <div class="col-12">
             <div class="card my-5">
                 <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                     <div class="bg-gradient-dark shadow-dark border-radius-lg pt-4 pb-3">
@@ -265,89 +265,53 @@
                     </div>
                 </div>
                 <div class="card-body px-0 pb-2">
-                    <input type="text" [(ngModel)]="filtro" (ngModelChange)="aplicarFiltro()"
-                        class="form-control mb-3 w-25 mx-3" placeholder="Buscar...">
+                    <!-- Cambiado a filtroCategorias y eliminado el ngModelChange -->
+                    <input type="text" [(ngModel)]="filtroCategorias" class="form-control mb-3 w-25 mx-3"
+                        placeholder="Buscar...">
 
                     <table class="table">
                         <thead>
                             <tr>
-                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Nombre
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                    Categorias
                                 </th>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                    descripcion</th>
-
+                                    Detalles
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class=" text-capitalize" *ngFor="let u of usuariosPaginados">
+                            <!-- Cambiado a categoriasPaginadas -->
+                            <tr class="text-capitalize" *ngFor="let cat of categoriasPaginadas">
                                 <td>
                                     <div class="d-flex px-2 py-1">
                                         <div class="d-flex flex-column justify-content-center me-3">
-                                            <h6 class="mb-0 text-sm">{{u.nombre}}</h6>
-                                            <p class="text-xs text-secondary mb-0">{{u.nom}}</p>
+                                            <h6 class="mb-0 text-sm">{{cat.nombreCategoria}}</h6>
+                                            <p class="text-xs text-secondary mb-0">{{cat.idCategoria}}</p>
                                         </div>
                                     </div>
                                 </td>
                                 <td>
-                                    <p class="text-xs font-weight-bold mb-0">{{u.nom}}</p>
+                                    <p class="text-xs font-weight-bold mb-0">{{cat.desCategoria}}</p>
                                     <p class="text-xs text-secondary mb-0"></p>
                                 </td>
-
                             </tr>
                         </tbody>
                     </table>
-
-
-
                 </div>
-                <div class="card-footer bg-white">
+                <div class="card-footer p-3 bg-white">
                     <div class="row">
                         <div class="col-12 d-flex justify-content-start px-0">
-                            
+                            <!-- Actualizado con las nuevas propiedades del paginador -->
+                            <mat-paginator class="bg-white" [length]="categoriasPaginator.length"
+                                [pageSize]="categoriasPaginator.pageSize" [pageIndex]="categoriasPaginator.pageIndex"
+                                [pageSizeOptions]="pageSizeOptions" showFirstLastButtons
+                                (page)="onPageChangeCategorias($event)">
+                            </mat-paginator>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-
-<div class="container">
-  <h2>Listado de Categorías</h2>
-
-  <!-- Filtro por nombre -->
-  <div class="filter-container">
-    <input type="text" [(ngModel)]="filtroNombre" placeholder="Filtrar por nombre">
-    <button (click)="aplicarFiltro2()">Filtrar</button>
-    <button (click)="limpiarFiltro()">Limpiar</button>
-  </div>
-
-  <!-- Estado de carga -->
-  <div *ngIf="isLoading" class="loading">Cargando...</div>
-
-  <!-- Mensaje de error -->
-  <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
-
-  <!-- Tabla de resultados -->
-  <table *ngIf="!isLoading && categorias.length > 0">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Nombre</th>
-        <!-- otras columnas -->
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let cat of categorias">
-        <td>{{ cat.idCategoria }}</td>
-        <td>{{ cat.nombreCategoria }}</td>
-        <!-- otras celdas -->
-      </tr>
-    </tbody>
-  </table>
-
-  <!-- Mensaje cuando no hay resultados -->
-  <div *ngIf="!isLoading && categorias.length === 0">
-    No se encontraron categorías
-  </div>
 </div>
