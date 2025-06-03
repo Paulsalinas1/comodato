@@ -77,13 +77,17 @@ export class ArticulosComponent {
   onPageChangeCategorias(event: PageEvent): void {
     this.categoriasPaginator.pageIndex = event.pageIndex;
     this.categoriasPaginator.pageSize = event.pageSize;
+
+    // Opcional: scroll al inicio de la tabla
+    setTimeout(() => {
+      document.getElementById('tabla-categorias')?.scrollIntoView({ behavior: 'instant' });
+    }, 0);
   }
 
   private actualizarLongitudCategorias(): void {
     this.categoriasPaginator.length = this.categorias.length;
   }
 
-  
   abrirModalNuevaCategoria() {
   const dialogRef = this.dialog.open(ModalAddComponent, {
     width: '400px',
@@ -109,6 +113,6 @@ export class ArticulosComponent {
       });
     }
   });
-}
+  }
   
 }
