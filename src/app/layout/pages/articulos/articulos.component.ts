@@ -96,6 +96,7 @@ export class ArticulosComponent {
     this.categoriasPaginator.length = this.categorias.length;
   }
 
+  //modal de agragar categorias
   abrirModalNuevaCategoria() {
     const dialogRef = this.dialog.open(ModalAddComponent, {
       width: '400px',
@@ -133,32 +134,32 @@ export class ArticulosComponent {
     });
   }
 
-  // Para editar (pasa valores iniciales)
-abrirModalEditarCategoria(categoria: any) {
-  const dialogRef = this.dialog.open(ModalDesComponent, {
-    width: '400px',
-    data: {
-      titulo: 'Editar Categoría',
-      campos: [
-        { tipo: 'text', nombre: 'nombreCategoria', etiqueta: 'Nombre', obligatorio: true },
-        { tipo: 'textarea', nombre: 'desCategoria', etiqueta: 'Descripción', obligatorio: false }
-      ],
-      valoresIniciales: categoria
-    }
-  });
-
-  dialogRef.afterClosed().subscribe(resultado => {
-    if (resultado) {
-      if (resultado.eliminar) {
-        this.categoriaService.deleteCategoria(categoria.idCategoria).subscribe(() => {
-          this.cargarDatosCat();
-        });
-      } else {
-        this.categoriaService.updateCategoria(categoria.idCategoria, resultado).subscribe(() => {
-          this.cargarDatosCat();
-        });
+  //modal de editar y eliminar categorias
+  abrirModalEditarCategoria(categoria: any) {
+    const dialogRef = this.dialog.open(ModalDesComponent, {
+      width: '400px',
+      data: {
+        titulo: 'Editar Categoría',
+        campos: [
+          { tipo: 'text', nombre: 'nombreCategoria', etiqueta: 'Nombre', obligatorio: true },
+          { tipo: 'textarea', nombre: 'desCategoria', etiqueta: 'Descripción', obligatorio: false }
+        ],
+        valoresIniciales: categoria
       }
-    }
-  });
-}
+    });
+
+    dialogRef.afterClosed().subscribe(resultado => {
+      if (resultado) {
+        if (resultado.eliminar) {
+          this.categoriaService.deleteCategoria(categoria.idCategoria).subscribe(() => {
+            this.cargarDatosCat();
+          });
+        } else {
+          this.categoriaService.updateCategoria(categoria.idCategoria, resultado).subscribe(() => {
+            this.cargarDatosCat();
+          });
+        }
+      }
+    });
+  }
 }
