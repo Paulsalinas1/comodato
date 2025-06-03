@@ -1,52 +1,55 @@
-<h2 mat-dialog-title>{{ data.titulo }}</h2>
+<div class="card my-0 shadow-sm">
+  <div class="card-header p-0 position-relative mt-4 mx-3 z-index-2">
+    <div
+      class="bg-gradient-dark shadow-dark border-radius-lg pt-2 pb-2 px-3 d-flex justify-content-between align-items-center">
+      <p class="text-white text-uppercase m-0">{{ data.titulo }}</p>
+      
+    </div>
+    </div>
+  
+  <div class="card-body px-0 pb-2">
+    <form [formGroup]="form" class="row g-3">
 
-<mat-dialog-content>
-  <form [formGroup]="form">
+      <ng-container *ngFor="let campo of data.campos">
+        <div class="col-md-6">
+          <label class="form-label fw-semibold">{{ campo.etiqueta }}</label>
 
-    <ng-container *ngFor="let campo of data.campos">
+          <!-- Campo de texto -->
+          <input *ngIf="campo.tipo === 'text'"
+                 type="text"
+                 class="form-control"
+                 [formControlName]="campo.nombre"
+                 [required]="campo.obligatorio" />
 
-      <!-- input texto -->
-      <mat-form-field class="w-100" *ngIf="campo.tipo === 'text'">
-        <mat-label>{{ campo.etiqueta }}</mat-label>
-        <input matInput [formControlName]="campo.nombre" [required]="campo.obligatorio" />
-        <mat-error *ngIf="form.get(campo.nombre)?.hasError('required')">
-          Este campo es obligatorio
-        </mat-error>
-      </mat-form-field>
+          <!-- Textarea -->
+          <textarea *ngIf="campo.tipo === 'textarea'"
+                    class="form-control"
+                    rows="3"
+                    [formControlName]="campo.nombre"
+                    [required]="campo.obligatorio"></textarea>
 
-      <!-- textarea -->
-      <mat-form-field class="w-100" *ngIf="campo.tipo === 'textarea'">
-        <mat-label>{{ campo.etiqueta }}</mat-label>
-        <textarea matInput rows="3" [formControlName]="campo.nombre" [required]="campo.obligatorio"></textarea>
-        <mat-error *ngIf="form.get(campo.nombre)?.hasError('required')">
-          Este campo es obligatorio
-        </mat-error>
-      </mat-form-field>
+          <!-- Select con botón de agregar -->
+          <div *ngIf="campo.tipo === 'select'" class="input-group">
+            <select class="form-select"
+                    [formControlName]="campo.nombre"
+                    [required]="campo.obligatorio">
+              <option *ngFor="let opcion of campo.opciones" [value]="opcion.valor">
+                {{ opcion.texto }}
+              </option>
+            </select>
+            <button type="button" class="btn btn-outline-secondary" (click)="agregarOpcion()">
+              <i class="bi bi-plus"></i>
+            </button>
+          </div>
+        </div>
+      </ng-container>
 
-      <!-- select -->
-      <mat-form-field class="w-100" *ngIf="campo.tipo === 'select'">
-        <mat-label>{{ campo.etiqueta }}</mat-label>
-        <mat-select [formControlName]="campo.nombre" [required]="campo.obligatorio">
-          <mat-option *ngFor="let opcion of campo.opciones" [value]="opcion.valor">
-            {{ opcion.texto }}
-          </mat-option>
-        </mat-select>
-        <mat-error *ngIf="form.get(campo.nombre)?.hasError('required')">
-          Este campo es obligatorio
-        </mat-error>
-      </mat-form-field>
+    </form>
+  </div>
 
-    </ng-container>
-
-  </form>
-</mat-dialog-content>
-
-<mat-dialog-actions align="end">
-  <button mat-button (click)="cancelar()">Cancelar</button>
-  <button mat-button color="warn" *ngIf="data.valoresIniciales" (click)="eliminar?.()">
-    Eliminar
-  </button>
-  <button mat-raised-button color="primary" (click)="guardar()" [disabled]="form.invalid">
-    Guardar
-  </button>
-</mat-dialog-actions>
+  <div class="card-footer text-end">
+    <button type="button" class="btn btn-secondary me-2" (click)="cancelar()">Cancelar</button>
+    <button *ngIf="data.valoresIniciales" type="button" class="btn btn-danger me-2" (click)="eliminar?.()">Eliminar</button>
+    <button type="button" class="btn btn-primary" (click)="guardar()" [disabled]="form.invalid">Guardar</button>
+  </div>
+</div>

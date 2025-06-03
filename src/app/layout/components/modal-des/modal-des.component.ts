@@ -54,4 +54,8 @@ form!: FormGroup;
     // Opcional, si quieres manejar eliminación en el modal
     this.dialogRef.close({ eliminar: true });
   }
+
+  agregarOpcion(){
+    
+  }
 }
