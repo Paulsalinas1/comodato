@@ -29,10 +29,7 @@ export class ArticulosComponent {
 
   // Datos
   categorias: Categoria[] = [];
-  nuevaCategoria = {
-    nombreCategoria: '',
-    desCategoria: '',
-  };
+  
 
   // Filtros
   filtroCategorias: string = '';
