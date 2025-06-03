@@ -258,21 +258,21 @@
             </div>
         </div> -->
 
-        <div class="col-12">
+        <div class="col-lg-12 col-md-6 col-sm-12">
             <div class="card my-5">
                 <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                     <div
                         class="bg-gradient-dark shadow-dark border-radius-lg pt-2 pb-2 px-3 d-flex justify-content-between align-items-center">
-                        <h6 class="text-white text-capitalize m-0">Categorías Registradas</h6>
-                        <button type="button" class="btn btn-secondary btn-lg shadow-sm d-flex align-items-center mt-2"
+                        <p class="text-white text-uppercase m-0" >Categorías Registradas</p>
+                        <button type="button" class="btn btn-secondary btn-lg shadow-sm d-flex align-items-center mt-2 px-2"
                             (click)="abrirModalNuevaCategoria()">
-                            <mat-icon class="me-2">add</mat-icon> Nueva Categoría
+                            <mat-icon class="me-1">add</mat-icon>Nueva Categoría
                         </button>
                     </div>
                 </div>
 
-                <div class="card-body px-0 pb-2 table-responsive">
-                    <!-- Cambiado a filtroCategorias y eliminado el ngModelChange -->
+                <div class="card-body px-0 pb-2 table-responsive"  style="overflow-y: auto; scrollbar-width: none; -ms-overflow-style: none;">
+                    <!-- Filtro -->
                     <input type="text" [(ngModel)]="filtroCategorias" class="form-control mb-3 w-25 mx-3"
                         placeholder="Buscar...">
 
@@ -290,20 +290,20 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- Cambiado a categoriasPaginadas -->
+                            <!--Muestra las categorias paginadas -->
                             <tr class="text-capitalize" *ngFor="let cat of categoriasPaginadas"
                                 (click)="abrirModalEditarCategoria(cat)">
                                 <td scope="row">
-                                    <div class="d-flex px-2 py-2">
+                                    <div class="d-flex px-3 py-1">
                                         <div class="d-flex flex-column justify-content-center me-3">
                                             <h6 class="mb-0 text-sm">{{cat.nombreCategoria}}</h6>
                                         </div>
                                     </div>
                                 </td>
                                 <td >
-                                    <p class="text-xs font-weight-bold mb-0 py-2">{{cat.desCategoria}}</p>
+                                    <p class="text-xs font-weight-bold mb-0 py-2 text-wrap">{{cat.desCategoria}}</p>
                                 </td>
-                                <td class="align-middle text-center text-sm">
+                                <td class="align-middle text-start text-sm">
                                     <mat-icon>chevron_right</mat-icon>
                                 </td>
                             </tr>
@@ -313,7 +313,7 @@
                 <div class="card-footer px-4 bg-white">
                     <div class="row">
                         <div class="col-12 d-flex justify-content-start px-0">
-                            <!-- Actualizado con las nuevas propiedades del paginador -->
+                            <!-- propiedades del paginador -->
                             <mat-paginator class="bg-white" [length]="categoriasPaginator.length"
                                 [pageSize]="categoriasPaginator.pageSize" [pageIndex]="categoriasPaginator.pageIndex"
                                 [pageSizeOptions]="pageSizeOptions" showFirstLastButtons
