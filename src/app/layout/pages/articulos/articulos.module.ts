@@ -8,6 +8,8 @@ import { GoogleChartsModule } from 'angular-google-charts';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { FormsModule } from '@angular/forms';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatIconModule } from '@angular/material/icon';
+
 
 
 
@@ -23,6 +25,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     NgxPaginationModule,
     FormsModule,
     MatPaginatorModule,
+    MatIconModule
+    
   ]
 })
 export class ArticulosModule { }

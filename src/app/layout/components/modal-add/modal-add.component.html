@@ -1,0 +1,23 @@
+<h2 mat-dialog-title>{{ data.titulo }}</h2>
+<mat-dialog-content>
+  <form>
+    <ng-container *ngFor="let campo of data.campos">
+      <mat-form-field class="w-100 mb-3">
+        <mat-label>{{ campo.etiqueta }}</mat-label>
+        <input 
+          matInput 
+          [type]="campo.tipo" 
+          [(ngModel)]="datos[campo.nombre]" 
+          [name]="campo.nombre"
+          [required]="campo.obligatorio"
+          >
+          
+      </mat-form-field>
+    </ng-container>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancelar()">Cancelar</button>
+  <button mat-raised-button color="primary" (click)="guardar()">Guardar</button>
+</mat-dialog-actions>

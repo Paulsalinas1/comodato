@@ -244,8 +244,6 @@ export class DashboardComponent {
     }
   };
 
-
-  
   constructor(private categoriaService: CategoriaService ) {}
 
   categorias: Categoria[] = [];
@@ -276,6 +274,5 @@ export class DashboardComponent {
         console.error(err);
       }
     });
-    
   }
 }
