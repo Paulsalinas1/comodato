@@ -14,11 +14,10 @@ const routes: Routes = [
   },
   {path: 'usuarios',
     loadChildren: () => import('./usuarios/usuarios.module').then(m => m.UsuariosModule)},
-  {path: '', redirectTo: 'dashboard', pathMatch: 'full'},
-  {
-    path: 'admin',
-      loadChildren: () => import('./vadmin/vadmin.module').then(m => m.VadminModule)
+  {path: 'admin',
+    loadChildren: () => import('./vadmin/vadmin.module').then(m => m.VadminModule)
   },
+  {path: '', redirectTo: 'dashboard', pathMatch: 'full'},
   
 ];
 

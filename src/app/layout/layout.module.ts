@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 
@@ -12,9 +12,8 @@ import { LayoutComponent } from './layout.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { HeaderComponent } from './components/header/header.component';
 import { ModalAddComponent } from './components/modal-add/modal-add.component';
-import { ModalCatComponent } from './components/modal-cat/modal-cat.component';
-
-
+import { ModalDesComponent } from './components/modal-des/modal-des.component';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
   declarations: [
@@ -22,7 +21,7 @@ import { ModalCatComponent } from './components/modal-cat/modal-cat.component';
     SidebarComponent,
     HeaderComponent,
     ModalAddComponent,
-    ModalCatComponent,
+    ModalDesComponent,
     
   ],
   imports: [
@@ -33,15 +32,17 @@ import { ModalCatComponent } from './components/modal-cat/modal-cat.component';
     MatInputModule,
     MatButtonModule,
     MatIconModule,
-    FormsModule
-    
+    FormsModule,
+    ReactiveFormsModule,
+    MatSelectModule,
 
   ],
   exports: [
     LayoutComponent,
     SidebarComponent,
     HeaderComponent,
-    ModalAddComponent
+    ModalAddComponent,
+    ModalDesComponent
     
   ],
 })

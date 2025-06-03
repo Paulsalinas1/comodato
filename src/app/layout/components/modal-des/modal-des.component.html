@@ -4,16 +4,26 @@
   <form [formGroup]="form">
 
     <ng-container *ngFor="let campo of data.campos">
-      <!-- Campo de texto -->
+
+      <!-- input texto -->
       <mat-form-field class="w-100" *ngIf="campo.tipo === 'text'">
         <mat-label>{{ campo.etiqueta }}</mat-label>
-        <input matInput [formControlName]="campo.nombre" [required]="campo.obligatorio">
+        <input matInput [formControlName]="campo.nombre" [required]="campo.obligatorio" />
         <mat-error *ngIf="form.get(campo.nombre)?.hasError('required')">
           Este campo es obligatorio
         </mat-error>
       </mat-form-field>
 
-      <!-- Campo select -->
+      <!-- textarea -->
+      <mat-form-field class="w-100" *ngIf="campo.tipo === 'textarea'">
+        <mat-label>{{ campo.etiqueta }}</mat-label>
+        <textarea matInput rows="3" [formControlName]="campo.nombre" [required]="campo.obligatorio"></textarea>
+        <mat-error *ngIf="form.get(campo.nombre)?.hasError('required')">
+          Este campo es obligatorio
+        </mat-error>
+      </mat-form-field>
+
+      <!-- select -->
       <mat-form-field class="w-100" *ngIf="campo.tipo === 'select'">
         <mat-label>{{ campo.etiqueta }}</mat-label>
         <mat-select [formControlName]="campo.nombre" [required]="campo.obligatorio">
@@ -25,6 +35,7 @@
           Este campo es obligatorio
         </mat-error>
       </mat-form-field>
+
     </ng-container>
 
   </form>
@@ -32,6 +43,9 @@
 
 <mat-dialog-actions align="end">
   <button mat-button (click)="cancelar()">Cancelar</button>
+  <button mat-button color="warn" *ngIf="data.valoresIniciales" (click)="eliminar?.()">
+    Eliminar
+  </button>
   <button mat-raised-button color="primary" (click)="guardar()" [disabled]="form.invalid">
     Guardar
   </button>
