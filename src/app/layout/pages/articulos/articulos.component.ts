@@ -146,7 +146,15 @@ export class ArticulosComponent {
         ],
         campos: [
           { tipo: 'text', nombre: 'nombreCategoria', etiqueta: 'Nombre', obligatorio: true, paso: 0 },
-          { tipo: 'textarea', nombre: 'desCategoria', etiqueta: 'Descripción', obligatorio: false, paso: 0 }
+          { tipo: 'textarea', nombre: 'desCategoria', etiqueta: 'Descripción', obligatorio: false, paso: 0 },
+          {tipo: 'select', nombre: 'selecCat', etiqueta: 'seleccion',obligatorio:false,paso:0,
+            opciones: [
+            { valor: '', texto: 'Seleccione un estado' },
+            { valor: 'BUENO', texto: 'BUENO' },
+            { valor: 'REGULAR', texto: 'REGULAR' },
+            { valor: 'MALO', texto: 'MALO' }
+          ]
+          }
         ],
         valoresIniciales: categoria
       }
