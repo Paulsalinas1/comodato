@@ -138,9 +138,13 @@ export class ArticulosComponent {
       height: '', 
       data: {
         titulo: 'Editar Categoría',
+        pasos: [
+          'Editar Categoría'
+          
+        ],
         campos: [
-          { tipo: 'text', nombre: 'nombreCategoria', etiqueta: 'Nombre', obligatorio: true },
-          { tipo: 'textarea', nombre: 'desCategoria', etiqueta: 'Descripción', obligatorio: false }
+          { tipo: 'text', nombre: 'nombreCategoria', etiqueta: 'Nombre', obligatorio: true, paso: 0 },
+          { tipo: 'textarea', nombre: 'desCategoria', etiqueta: 'Descripción', obligatorio: false, paso: 0 }
         ],
         valoresIniciales: categoria
       }

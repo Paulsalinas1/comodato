@@ -7,6 +7,7 @@ interface Campo {
   nombre: string;
   etiqueta: string;
   obligatorio: boolean;
+  paso?: number;
   opciones?: { valor: any; texto: string }[];
 }
 @Component({
@@ -17,12 +18,14 @@ interface Campo {
 })
 export class ModalDesComponent {
 form!: FormGroup;
+pasoActual = 0; // Paso activo inicial
 
   constructor(
     private fb: FormBuilder,
     public dialogRef: MatDialogRef<ModalDesComponent>,
     @Inject(MAT_DIALOG_DATA) public data: {
       titulo: string;
+      pasos: string[];
       campos: Campo[];
       valoresIniciales?: { [key: string]: any }; // Para cargar datos si es edición
     }
@@ -58,4 +61,16 @@ form!: FormGroup;
   agregarOpcion(){
     
   }
+
+siguientePaso() {
+  if (this.pasoActual < this.data.pasos.length - 1) {
+    this.pasoActual++;
+  }
+}
+
+anteriorPaso() {
+  if (this.pasoActual > 0) {
+    this.pasoActual--;
+  }
+}
 }

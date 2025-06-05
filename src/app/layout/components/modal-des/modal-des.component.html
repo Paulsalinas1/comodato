@@ -1,55 +1,68 @@
 <div class="card my-0 shadow-sm">
   <div class="card-header p-0 position-relative mt-4 mx-3 z-index-2">
-    <div
-      class="bg-gradient-dark shadow-dark border-radius-lg pt-2 pb-2 px-3 d-flex justify-content-between align-items-center">
+    <div class="bg-gradient-dark shadow-dark border-radius-lg pt-2 pb-2 px-3 d-flex justify-content-between align-items-center">
       <p class="text-white text-uppercase m-0">{{ data.titulo }}</p>
-      
     </div>
-    </div>
-  
-  <div class="card-body px-0 pb-2">
+  </div>
+
+  <!-- Barra de pasos visual dinámica -->
+<div class="px-3 pt-3 pb-0">
+  <ul class="nav nav-pills nav-justified mb-3">
+    <li class="nav-item" *ngFor="let paso of data.pasos; let i = index">
+      <span class="nav-link" [ngClass]="{ 'active': i === pasoActual }">
+        {{ paso }}
+      </span>
+    </li>
+  </ul>
+</div>
+
+  <div class="card-body px-3 pb-2">
     <form [formGroup]="form" class="row g-3">
-
       <ng-container *ngFor="let campo of data.campos">
-        <div class="col-md-6">
-          <label class="form-label fw-semibold">{{ campo.etiqueta }}</label>
+  <div *ngIf="campo.paso === pasoActual" class="col-md-6">
+    <label class="form-label fw-semibold">{{ campo.etiqueta }}</label>
 
-          <!-- Campo de texto -->
-          <input *ngIf="campo.tipo === 'text'"
-                 type="text"
-                 class="form-control"
-                 [formControlName]="campo.nombre"
-                 [required]="campo.obligatorio" />
+    <input *ngIf="campo.tipo === 'text'"
+           type="text"
+           class="form-control"
+           [formControlName]="campo.nombre"
+           [required]="campo.obligatorio" />
 
-          <!-- Textarea -->
-          <textarea *ngIf="campo.tipo === 'textarea'"
-                    class="form-control"
-                    rows="3"
-                    [formControlName]="campo.nombre"
-                    [required]="campo.obligatorio"></textarea>
+    <textarea *ngIf="campo.tipo === 'textarea'"
+              class="form-control"
+              rows="3"
+              [formControlName]="campo.nombre"
+              [required]="campo.obligatorio"></textarea>
 
-          <!-- Select con botón de agregar -->
-          <div *ngIf="campo.tipo === 'select'" class="input-group">
-            <select class="form-select"
-                    [formControlName]="campo.nombre"
-                    [required]="campo.obligatorio">
-              <option *ngFor="let opcion of campo.opciones" [value]="opcion.valor">
-                {{ opcion.texto }}
-              </option>
-            </select>
-            <button type="button" class="btn btn-outline-secondary" (click)="agregarOpcion()">
-              <i class="bi bi-plus"></i>
-            </button>
-          </div>
-        </div>
-      </ng-container>
-
+    <div *ngIf="campo.tipo === 'select'" class="input-group">
+      <select class="form-select"
+              [formControlName]="campo.nombre"
+              [required]="campo.obligatorio">
+        <option *ngFor="let opcion of campo.opciones" [value]="opcion.valor">
+          {{ opcion.texto }}
+        </option>
+      </select>
+      <button type="button" class="btn btn-outline-secondary" (click)="agregarOpcion()">
+        <i class="bi bi-plus"></i>
+      </button>
+    </div>
+  </div>
+</ng-container>
     </form>
   </div>
 
-  <div class="card-footer text-end">
-    <button type="button" class="btn btn-secondary me-2" (click)="cancelar()">Cancelar</button>
-    <button *ngIf="data.valoresIniciales" type="button" class="btn btn-danger me-2" (click)="eliminar?.()">Eliminar</button>
-    <button type="button" class="btn btn-primary" (click)="guardar()" [disabled]="form.invalid">Guardar</button>
+  <div class="card-footer d-flex justify-content-between">
+  <div>
+    <button *ngIf="pasoActual > 0" class="btn btn-outline-secondary me-2" (click)="anteriorPaso()">Anterior</button>
+    <button *ngIf="pasoActual < data.pasos.length - 1" class="btn btn-outline-primary" (click)="siguientePaso()">Siguiente</button>
   </div>
+
+  <div>
+    <button type="button" class="btn btn-secondary me-2" (click)="cancelar()">Cancelar</button>
+    <button *ngIf="data.valoresIniciales && pasoActual === data.pasos.length - 1"
+            type="button" class="btn btn-danger me-2" (click)="eliminar?.()">Eliminar</button>
+    <button *ngIf="pasoActual === data.pasos.length - 1"
+            type="button" class="btn btn-primary" (click)="guardar()" [disabled]="form.invalid">Guardar</button>
+  </div>
+</div>
 </div>
