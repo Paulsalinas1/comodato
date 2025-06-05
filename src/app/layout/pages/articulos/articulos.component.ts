@@ -134,12 +134,14 @@ export class ArticulosComponent {
   //modal de editar y eliminar categorias
   abrirModalEditarCategoria(categoria: any) {
     const dialogRef = this.dialog.open(ModalDesComponent, {
-      width: '',
+      width: '600px',
       height: '', 
       data: {
         titulo: 'Editar Categoría',
         pasos: [
-          'Editar Categoría'
+          'Informacion basica',
+          
+          
           
         ],
         campos: [

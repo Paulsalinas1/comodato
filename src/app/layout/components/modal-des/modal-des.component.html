@@ -1,68 +1,64 @@
 <div class="card my-0 shadow-sm">
   <div class="card-header p-0 position-relative mt-4 mx-3 z-index-2">
-    <div class="bg-gradient-dark shadow-dark border-radius-lg pt-2 pb-2 px-3 d-flex justify-content-between align-items-center">
-      <p class="text-white text-uppercase m-0">{{ data.titulo }}</p>
+    <div
+      class="bg-gradient-dark shadow-dark border-radius-lg pt-2 pb-2 px-3 ">
+      <p class="text-white text-uppercase text-center m-0">{{ data.titulo }}</p>
     </div>
   </div>
 
   <!-- Barra de pasos visual dinámica -->
-<div class="px-3 pt-3 pb-0">
-  <ul class="nav nav-pills nav-justified mb-3">
-    <li class="nav-item" *ngFor="let paso of data.pasos; let i = index">
-      <span class="nav-link" [ngClass]="{ 'active': i === pasoActual }">
-        {{ paso }}
-      </span>
-    </li>
-  </ul>
-</div>
+  <div class="px-3 pt-3 pb-0">
+    <ul class="nav nav-pills nav-justified mb-3 px-2" >
+      <li class="nav-item " *ngFor="let paso of data.pasos; let i = index" >
+        <span class="nav-link text-capitalize" [ngClass]="{
+          'active bg-gradient-dark text-white': i === pasoActual,
+          'bg-light text-secondary': i !== pasoActual
+        }">
+          {{ paso }}
+        </span>
+      </li>
+    </ul>
+  </div>
 
   <div class="card-body px-3 pb-2">
-    <form [formGroup]="form" class="row g-3">
+    <form [formGroup]="form" class="row g-3" >
       <ng-container *ngFor="let campo of data.campos">
-  <div *ngIf="campo.paso === pasoActual" class="col-md-6">
-    <label class="form-label fw-semibold">{{ campo.etiqueta }}</label>
+        <div *ngIf="campo.paso === pasoActual" class="col-md-12">
+          <label class="form-label fw-semibold text-capitalize">{{ campo.etiqueta }}</label>
 
-    <input *ngIf="campo.tipo === 'text'"
-           type="text"
-           class="form-control"
-           [formControlName]="campo.nombre"
-           [required]="campo.obligatorio" />
+          <input *ngIf="campo.tipo === 'text'" type="text" class="form-control border p-2 " [formControlName]="campo.nombre"
+            [required]="campo.obligatorio" />
 
-    <textarea *ngIf="campo.tipo === 'textarea'"
-              class="form-control"
-              rows="3"
-              [formControlName]="campo.nombre"
-              [required]="campo.obligatorio"></textarea>
+          <textarea *ngIf="campo.tipo === 'textarea'" class="form-control border p-2" rows="3" [formControlName]="campo.nombre"
+            [required]="campo.obligatorio"></textarea>
 
-    <div *ngIf="campo.tipo === 'select'" class="input-group">
-      <select class="form-select"
-              [formControlName]="campo.nombre"
-              [required]="campo.obligatorio">
-        <option *ngFor="let opcion of campo.opciones" [value]="opcion.valor">
-          {{ opcion.texto }}
-        </option>
-      </select>
-      <button type="button" class="btn btn-outline-secondary" (click)="agregarOpcion()">
-        <i class="bi bi-plus"></i>
-      </button>
-    </div>
-  </div>
-</ng-container>
+          <div *ngIf="campo.tipo === 'select'" class="input-group">
+            <select class="form-select" [formControlName]="campo.nombre" [required]="campo.obligatorio">
+              <option *ngFor="let opcion of campo.opciones" [value]="opcion.valor">
+                {{ opcion.texto }}
+              </option>
+            </select>
+            <button type="button" class="btn btn-outline-secondary" (click)="agregarOpcion()">
+              <i class="bi bi-plus"></i>
+            </button>
+          </div>
+        </div>
+      </ng-container>
     </form>
   </div>
 
-  <div class="card-footer d-flex justify-content-between">
-  <div>
-    <button *ngIf="pasoActual > 0" class="btn btn-outline-secondary me-2" (click)="anteriorPaso()">Anterior</button>
-    <button *ngIf="pasoActual < data.pasos.length - 1" class="btn btn-outline-primary" (click)="siguientePaso()">Siguiente</button>
+  <div class="card-footer row gap-3 p-2 m-0 px-5">
+    <hr class="horizontal opacity-75 dark mt-0 mb-0">
+      <button *ngIf="pasoActual > 0" class="col btn btn-sm btn-outline-secondary" (click)="anteriorPaso()">Anterior</button>
+      <button *ngIf="pasoActual < data.pasos.length - 1" class="col btn btn-sm btn-outline-primary"
+        (click)="siguientePaso()">Siguiente</button>
+    
+      <button type="button" class="col btn btn-sm btn-secondary" (click)="cancelar()">Cancelar</button>
+      <button *ngIf="data.valoresIniciales && pasoActual === data.pasos.length - 1" type="button"
+        class="col btn btn-sm btn-danger" (click)="eliminar?.()">Eliminar</button>
+      <button *ngIf="pasoActual === data.pasos.length - 1" type="button" class="col btn btn-sm btn-primary" (click)="guardar()"
+        [disabled]="form.invalid">Guardar</button>
+    
   </div>
 
-  <div>
-    <button type="button" class="btn btn-secondary me-2" (click)="cancelar()">Cancelar</button>
-    <button *ngIf="data.valoresIniciales && pasoActual === data.pasos.length - 1"
-            type="button" class="btn btn-danger me-2" (click)="eliminar?.()">Eliminar</button>
-    <button *ngIf="pasoActual === data.pasos.length - 1"
-            type="button" class="btn btn-primary" (click)="guardar()" [disabled]="form.invalid">Guardar</button>
-  </div>
-</div>
 </div>
