@@ -3028,13 +3028,13 @@ textarea.form-control-lg {
   font-size: 0.875rem;
   font-weight: 400;
   line-height: 1.5rem;
-  color: #404040;
+  color: rgb(0, 0, 0);
   appearance: none;
   background-color: transparent;
   background-image: var(--bs-form-select-bg-img), var(--bs-form-select-bg-icon, none);
   background-repeat: no-repeat;
   background-size: 16px 12px;
-  border: 1px solid #d2d6da;
+  border: 1px solid rgb(128, 128, 130);
   border-radius: 0.375rem;
   transition: 0.2s ease;
 }
@@ -3046,7 +3046,7 @@ textarea.form-control-lg {
 }
 
 .form-select:focus {
-  border-color: transparent;
+  border-color: rgb(128, 128, 130);
   outline: 0;
   box-shadow: none;
 }

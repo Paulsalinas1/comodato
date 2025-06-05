@@ -141,8 +141,6 @@ export class ArticulosComponent {
         pasos: [
           'Informacion basica',
           
-          
-          
         ],
         campos: [
           { tipo: 'text', nombre: 'nombreCategoria', etiqueta: 'Nombre', obligatorio: true, paso: 0 },

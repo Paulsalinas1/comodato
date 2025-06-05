@@ -25,10 +25,10 @@
         <div *ngIf="campo.paso === pasoActual" class="col-md-12">
           <label class="form-label fw-semibold text-capitalize" [for]="campo.etiqueta">{{ campo.etiqueta }}</label>
 
-          <input *ngIf="campo.tipo === 'text'" type="text" class="form-control border p-2 " [id]="campo.etiqueta"
+          <input *ngIf="campo.tipo === 'text'" type="text" class="form-control glow-on-focus border p-2 " [id]="campo.etiqueta"
             [formControlName]="campo.nombre" [required]="campo.obligatorio" />
 
-          <textarea *ngIf="campo.tipo === 'textarea'" class="form-control border p-2" rows="3" [id]="campo.etiqueta"
+          <textarea *ngIf="campo.tipo === 'textarea'" class="form-control glow-on-focus border p-2" rows="3" [id]="campo.etiqueta"
             [formControlName]="campo.nombre" [required]="campo.obligatorio"></textarea>
 
 
@@ -60,10 +60,10 @@
     <button *ngIf="pasoActual < data.pasos.length - 1" class="col btn btn-sm btn-outline-primary"
       (click)="siguientePaso()">Siguiente</button>
 
-    <button type="button" class="col btn btn-sm btn-secondary" (click)="cancelar()">Cancelar</button>
+    <button type="button" class="col btn btn-sm btn-light" (click)="cancelar()">Cancelar</button>
     <button *ngIf="data.valoresIniciales && pasoActual === data.pasos.length - 1" type="button"
       class="col btn btn-sm btn-danger" (click)="eliminar?.()">Eliminar</button>
-    <button *ngIf="pasoActual === data.pasos.length - 1" type="button" class="col btn btn-sm btn-primary"
+    <button *ngIf="pasoActual === data.pasos.length - 1" type="button" class="col btn btn-sm btn-dark"
       (click)="guardar()" [disabled]="form.invalid">Guardar</button>
 
   </div>
