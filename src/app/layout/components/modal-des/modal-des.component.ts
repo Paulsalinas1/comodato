@@ -1,15 +1,9 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Campo } from '../../../core/models/Campo';
 
-interface Campo {
-  tipo: 'text' | 'textarea' | 'select';
-  nombre: string;
-  etiqueta: string;
-  obligatorio: boolean;
-  paso?: number;
-  opciones?: { valor: any; texto: string }[];
-}
+
 @Component({
   selector: 'app-modal-cat',
   standalone: false,
@@ -24,7 +18,7 @@ pasoActual = 0; // Paso activo inicial
     private fb: FormBuilder,
     public dialogRef: MatDialogRef<ModalDesComponent>,
     @Inject(MAT_DIALOG_DATA) public data: {
-      titulo: string;
+      titulo: string,
       pasos: string[];
       campos: Campo[];
       valoresIniciales?: { [key: string]: any }; // Para cargar datos si es edición

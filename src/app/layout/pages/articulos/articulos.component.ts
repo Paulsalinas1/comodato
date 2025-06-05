@@ -99,19 +99,24 @@ export class ArticulosComponent {
       width: '400px',
       data: {
         titulo: 'Crear Nueva Categoría',
+        pasos: [
+          'Informacion basica'
+        ],
         campos: [
           {
             tipo: 'text',
             nombre: 'nombreCategoria',
             etiqueta: 'Nombre',
             obligatorio: true,
+            paso:0
           },
           {
             tipo: 'text',
             nombre: 'desCategoria',
             etiqueta: 'Descripción',
             obligatorio: false,
-          },
+            paso:0
+          }
         ],
       },
     });
@@ -139,20 +144,12 @@ export class ArticulosComponent {
       data: {
         titulo: 'Editar Categoría',
         pasos: [
-          'Informacion basica',
-          
+          'Informacion basica'
         ],
         campos: [
           { tipo: 'text', nombre: 'nombreCategoria', etiqueta: 'Nombre', obligatorio: true, paso: 0 },
-          { tipo: 'textarea', nombre: 'desCategoria', etiqueta: 'Descripción', obligatorio: false, paso: 0 },
-          {tipo: 'select', nombre: 'selecCat', etiqueta: 'seleccion',obligatorio:false,paso:0,
-            opciones: [
-            { valor: '', texto: 'Seleccione un estado' },
-            { valor: 'BUENO', texto: 'BUENO' },
-            { valor: 'REGULAR', texto: 'REGULAR' },
-            { valor: 'MALO', texto: 'MALO' }
-          ]
-          }
+          { tipo: 'textarea', nombre: 'desCategoria', etiqueta: 'Descripción', obligatorio: false, paso: 0 }
+          
         ],
         valoresIniciales: categoria
       }
