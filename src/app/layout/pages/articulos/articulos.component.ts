@@ -8,6 +8,8 @@ import { ModalAddComponent } from '../../components/modal-add/modal-add.componen
 import { ModalDesComponent } from '../../components/modal-des/modal-des.component';
 import { Marca } from '../../../core/models/Marca';
 import { MarcaService } from '../../../core/services/marca.service';
+import { Modelo } from '../../../core/models/modelo';
+import { ModeloService } from '../../../core/services/modelo.service';
 
 
 @Component({
@@ -36,23 +38,35 @@ export class ArticulosComponent {
     length: 0,
   };
 
+  // Configuración de paginación para modelos
+  modelosPaginator = {
+    pageIndex: 0,
+    pageSize: 5,
+    length: 0,
+  };
+
   // Datos
   categorias: Categoria[] = [];
   marcas: Marca[] = [];
+  modelos: Modelo[] = [];
+
 
   // Filtros
   filtroCategorias: string = '';
   filtroMarcas: string = '';
+  filtroModelos: string = '';
 
   constructor(
     private categoriaService: CategoriaService,
     private marcasService: MarcaService,
+    private modeloService: ModeloService,
     private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
     this.cargarDatosCat();
     this.cargarDatosMar();
+    this.cargarDatosMod();
   }
 
   cargarDatosCat(): void {
@@ -85,6 +99,22 @@ export class ArticulosComponent {
 
   private actualizarLongitudMarcas(): void {
     this.marcasPaginator.length = this.marcas.length;
+  }
+
+  cargarDatosMod(): void {
+    this.modeloService.getModelos().subscribe({
+      next: (data) => {
+        this.modelos = data;
+        this.actualizarLongitudModelos();
+      },
+      error: (err) => {
+        console.error('Error al cargar modelos:', err);
+      },
+    });
+  }
+
+  private actualizarLongitudModelos(): void {
+    this.modelosPaginator.length = this.modelos.length;
   }
 
   // Filtrado y paginación de categorías
@@ -151,6 +181,40 @@ export class ArticulosComponent {
     setTimeout(() => {
       document
         .getElementById('tabla-marcas')
+        ?.scrollIntoView({ behavior: 'instant' });
+    }, 0);
+  }
+
+  // Filtrado y paginación de modelos
+  get modelosFiltradas(): Modelo[] {
+    const texto = this.filtroModelos.trim().toLowerCase();
+    if (!texto) return this.modelos;
+
+    return this.modelos.filter((modelos) =>
+      Object.values(modelos).some((val) =>
+        String(val).toLowerCase().includes(texto)
+      )
+    );
+  }
+
+  get modelosPaginadas(): Modelo[] {
+    this.modelosPaginator.length = this.modelosFiltradas.length;
+    const startIndex =
+      this.modelosPaginator.pageIndex * this.modelosPaginator.pageSize;
+    return this.modelosFiltradas.slice(
+      startIndex,
+      startIndex + this.modelosPaginator.pageSize
+    );
+  }
+
+  onPageChangeModelos(event: PageEvent): void {
+    this.modelosPaginator.pageIndex = event.pageIndex;
+    this.modelosPaginator.pageSize = event.pageSize;
+
+    // Opcional: scroll al inicio de la tabla
+    setTimeout(() => {
+      document
+        .getElementById('tabla-modelos')
         ?.scrollIntoView({ behavior: 'instant' });
     }, 0);
   }
@@ -295,60 +359,171 @@ export class ArticulosComponent {
     });
   }
 
-abrirModalEditarMarca(marca: any) {
-  // Primero cargamos las categorías (suponiendo que tienes un servicio para eso)
-  this.categoriaService.getCategorias().subscribe((categorias) => {
-    const dialogRef = this.dialog.open(ModalDesComponent, {
-      width: '600px',
-      data: {
-        titulo: 'Editar Marca',
-        pasos: ['Información básica'],
-        campos: [
-          {
-            tipo: 'text',
-            nombre: 'nombreMarca',
-            etiqueta: 'Nombre',
-            obligatorio: true,
-            paso: 0,
-          },
-          {
-            tipo: 'textarea',
-            nombre: 'desMarca',
-            etiqueta: 'Descripción',
-            obligatorio: false,
-            paso: 0,
-          },
-          {
-            tipo: 'select',
-            nombre: 'Categoria_idCategoria',
-            etiqueta: 'Categoría',
-            obligatorio: true,
-            paso: 0,
-            opciones: categorias.map(cat => ({
-              valor: cat.idCategoria,
-              texto: cat.nombreCategoria,
-            })),
+  //modal de editar y eliminar marcas
+  abrirModalEditarMarca(marca: any) {
+    // Primero cargamos las categorías (suponiendo que tienes un servicio para eso)
+    this.categoriaService.getCategorias().subscribe((categorias) => {
+      const dialogRef = this.dialog.open(ModalDesComponent, {
+        width: '600px',
+        data: {
+          titulo: 'Editar Marca',
+          pasos: ['Información básica'],
+          campos: [
+            {
+              tipo: 'text',
+              nombre: 'nombreMarca',
+              etiqueta: 'Nombre',
+              obligatorio: true,
+              paso: 0,
+            },
+            {
+              tipo: 'textarea',
+              nombre: 'desMarca',
+              etiqueta: 'Descripción',
+              obligatorio: false,
+              paso: 0,
+            },
+            {
+              tipo: 'select',
+              nombre: 'Categoria_idCategoria',
+              etiqueta: 'Categoría',
+              obligatorio: true,
+              paso: 0,
+              opciones: categorias.map((cat) => ({
+                valor: cat.idCategoria,
+                texto: cat.nombreCategoria,
+              })),
+            },
+          ],
+          valoresIniciales: marca,
+        },
+      });
+
+      dialogRef.afterClosed().subscribe((resultado) => {
+        if (resultado) {
+          if (resultado.eliminar) {
+            this.marcasService.deleteMarca(marca.idMarca).subscribe(() => {
+              this.cargarDatosMar();
+            });
+          } else {
+            this.marcasService
+              .updateMarca(marca.idMarca, resultado)
+              .subscribe(() => {
+                this.cargarDatosMar();
+              });
           }
-        ],
-        valoresIniciales: marca,
-      },
-    });
-
-    dialogRef.afterClosed().subscribe((resultado) => {
-      if (resultado) {
-        if (resultado.eliminar) {
-          this.marcasService.deleteMarca(marca.idMarca).subscribe(() => {
-            this.cargarDatosMar();
-          });
-        } else {
-          this.marcasService.updateMarca(marca.idMarca, resultado).subscribe(() => {
-            this.cargarDatosMar();
-          });
         }
-      }
+      });
     });
-  });
-}
+  }
 
+  //modal de agregar modelo
+  abrirModalNuevaModelo() {
+    this.categoriaService.getCategorias().subscribe({
+      next: (categorias) => {
+        const dialogRef = this.dialog.open(ModalAddComponent, {
+          width: '400px',
+          data: {
+            titulo: 'Crear Nuevo Modelo',
+            pasos: ['Información básica'],
+            campos: [
+              {
+                tipo: 'text',
+                nombre: 'nombreModelo',
+                etiqueta: 'Nombre',
+                obligatorio: true,
+                paso: 0,
+              },
+              {
+                tipo: 'text',
+                nombre: 'desModelo',
+                etiqueta: 'Descripción',
+                obligatorio: false,
+                paso: 0,
+              },
+              {
+                tipo: 'select',
+                nombre: 'Categoria_idCategoria',
+                etiqueta: 'Categoría',
+                obligatorio: true,
+                paso: 0,
+                opciones: categorias.map((cat) => ({
+                  valor: cat.idCategoria,
+                  texto: cat.nombreCategoria,
+                })),
+              },
+            ],
+          },
+        });
 
+        dialogRef.afterClosed().subscribe((result) => {
+          if (result) {
+            this.modeloService.createModelo(result).subscribe({
+              next: () => this.cargarDatosMod(),
+              error: (err) => console.error('Error al agregar modelo:', err),
+            });
+          }
+        });
+      },
+      error: (err) => console.error('Error al cargar categorías:', err),
+    });
+  }
+
+  //modal de editar y eliminar modelo
+  abrirModalEditarModelo(modelo: any) {
+    // Primero cargamos las categorías (suponiendo que tienes un servicio para eso)
+    this.categoriaService.getCategorias().subscribe((categorias) => {
+      const dialogRef = this.dialog.open(ModalDesComponent, {
+        width: '600px',
+        data: {
+          titulo: 'Editar Modelo',
+          pasos: ['Información básica'],
+          campos: [
+            {
+              tipo: 'text',
+              nombre: 'nombreModelo',
+              etiqueta: 'Nombre',
+              obligatorio: true,
+              paso: 0,
+            },
+            {
+              tipo: 'textarea',
+              nombre: 'desModelo',
+              etiqueta: 'Descripción',
+              obligatorio: false,
+              paso: 0,
+            },
+            {
+              tipo: 'select',
+              nombre: 'Categoria_idCategoria',
+              etiqueta: 'Categoría',
+              obligatorio: true,
+              paso: 0,
+              opciones: categorias.map((cat) => ({
+                valor: cat.idCategoria,
+                texto: cat.nombreCategoria,
+              })),
+            },
+          ],
+          valoresIniciales: modelo,
+        },
+      });
+
+      dialogRef.afterClosed().subscribe((resultado) => {
+        if (resultado) {
+          if (resultado.eliminar) {
+            this.modeloService.deleteModelo(modelo.idModelo).subscribe(() => {
+              this.cargarDatosMod();
+            });
+          } else {
+            this.modeloService
+              .updateModelo(modelo.idModelo, resultado)
+              .subscribe(() => {
+                this.cargarDatosMod();
+              });
+          }
+        }
+      });
+    });
+  }
 }

@@ -258,7 +258,7 @@
             </div>
         </div> -->
 
-        <div class="col-lg-6 col-md-6 col-sm-12">
+        <div class="col-lg-12 col-md-6 col-sm-12">
             <div class="card my-5">
                 <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                     <div class="bg-gradient-dark shadow-dark border-radius-lg pt-2 pb-2 px-3 d-flex justify-content-between align-items-center">
@@ -383,6 +383,71 @@
                                 [pageSize]="marcasPaginator.pageSize" [pageIndex]="marcasPaginator.pageIndex"
                                 [pageSizeOptions]="pageSizeOptions" showFirstLastButtons
                                 (page)="onPageChangeMarcas($event)">
+                            </mat-paginator>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> 
+
+        <div class="col-lg-6 col-md-6 col-sm-12">
+            <div class="card my-5">
+                <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                    <div class="bg-gradient-dark shadow-dark border-radius-lg pt-2 pb-2 px-3 d-flex justify-content-between align-items-center">
+                        <p class="text-white text-uppercase m-0">Modelos Registrados</p>
+                        <button type="button" class="btn btn-secondary btn-lg shadow-sm d-flex align-items-center mt-2 px-2"
+                            (click)="abrirModalNuevaModelo()">
+                            <mat-icon class="me-1">add</mat-icon>Nuevo Modelo
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body px-0 pb-2 table-responsive"  style="overflow-y: auto; scrollbar-width: none; -ms-overflow-style: none;">
+                    <!-- Filtro -->
+                    <input type="text" [(ngModel)]="filtroModelos" class="form-control mb-3 w-25 mx-3"
+                        placeholder="Buscar...">
+
+                    <table class="table table-hover" id="tabla-modelos">
+                        <thead>
+                            <tr>
+                                <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">
+                                    Modelos
+                                </th>
+                                <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">
+                                    Detalles
+                                </th>
+                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!--Muestra las categorias paginadas -->
+                            <tr class="text-capitalize" *ngFor="let mod of modelosPaginadas"
+                                (click)="abrirModalEditarModelo(mod)">
+                                <td scope="row">
+                                    <div class="d-flex px-3 py-1">
+                                        <div class="d-flex flex-column justify-content-center me-3">
+                                            <h6 class="mb-0 text-sm">{{mod.nombreModelo}}</h6>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td >
+                                    <p class="text-xs font-weight-bold mb-0 py-2 text-wrap">{{mod.desModelo}}</p>
+                                </td>
+                                <td class="align-middle text-start text-sm">
+                                    <mat-icon>chevron_right</mat-icon>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer px-4 bg-white">
+                    <div class="row">
+                        <div class="col-12 d-flex justify-content-start px-0">
+                            <!-- propiedades del paginador -->
+                            <mat-paginator class="bg-white" [length]="modelosPaginator.length"
+                                [pageSize]="modelosPaginator.pageSize" [pageIndex]="modelosPaginator.pageIndex"
+                                [pageSizeOptions]="pageSizeOptions" showFirstLastButtons
+                                (page)="onPageChangeModelos($event)">
                             </mat-paginator>
                         </div>
                     </div>
