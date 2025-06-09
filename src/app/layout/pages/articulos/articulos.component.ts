@@ -6,6 +6,8 @@ import { Categoria } from '../../../core/models/categoria';
 import { MatDialog } from '@angular/material/dialog';
 import { ModalAddComponent } from '../../components/modal-add/modal-add.component';
 import { ModalDesComponent } from '../../components/modal-des/modal-des.component';
+import { Marca } from '../../../core/models/Marca';
+import { MarcaService } from '../../../core/services/marca.service';
 
 
 @Component({
@@ -27,20 +29,30 @@ export class ArticulosComponent {
     length: 0,
   };
 
+  // Configuración de paginación para marcas
+  marcasPaginator = {
+    pageIndex: 0,
+    pageSize: 5,
+    length: 0,
+  };
+
   // Datos
   categorias: Categoria[] = [];
-  
+  marcas: Marca[] = [];
 
   // Filtros
   filtroCategorias: string = '';
+  filtroMarcas: string = '';
 
   constructor(
     private categoriaService: CategoriaService,
+    private marcasService: MarcaService,
     private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
     this.cargarDatosCat();
+    this.cargarDatosMar();
   }
 
   cargarDatosCat(): void {
@@ -53,6 +65,26 @@ export class ArticulosComponent {
         console.error('Error al cargar categorías:', err);
       },
     });
+  }
+
+  private actualizarLongitudCategorias(): void {
+    this.categoriasPaginator.length = this.categorias.length;
+  }
+
+  cargarDatosMar(): void {
+    this.marcasService.getMarcas().subscribe({
+      next: (data) => {
+        this.marcas = data;
+        this.actualizarLongitudMarcas();
+      },
+      error: (err) => {
+        console.error('Error al cargar marcas:', err);
+      },
+    });
+  }
+
+  private actualizarLongitudMarcas(): void {
+    this.marcasPaginator.length = this.marcas.length;
   }
 
   // Filtrado y paginación de categorías
@@ -89,8 +121,38 @@ export class ArticulosComponent {
     }, 0);
   }
 
-  private actualizarLongitudCategorias(): void {
-    this.categoriasPaginator.length = this.categorias.length;
+  // Filtrado y paginación de marcas
+  get marcasFiltradas(): Marca[] {
+    const texto = this.filtroMarcas.trim().toLowerCase();
+    if (!texto) return this.marcas;
+
+    return this.marcas.filter((Marca) =>
+      Object.values(Marca).some((val) =>
+        String(val).toLowerCase().includes(texto)
+      )
+    );
+  }
+
+  get marcasPaginadas(): Marca[] {
+    this.marcasPaginator.length = this.marcasFiltradas.length;
+    const startIndex =
+      this.marcasPaginator.pageIndex * this.marcasPaginator.pageSize;
+    return this.marcasFiltradas.slice(
+      startIndex,
+      startIndex + this.marcasPaginator.pageSize
+    );
+  }
+
+  onPageChangeMarcas(event: PageEvent): void {
+    this.marcasPaginator.pageIndex = event.pageIndex;
+    this.marcasPaginator.pageSize = event.pageSize;
+
+    // Opcional: scroll al inicio de la tabla
+    setTimeout(() => {
+      document
+        .getElementById('tabla-marcas')
+        ?.scrollIntoView({ behavior: 'instant' });
+    }, 0);
   }
 
   //modal de agragar categorias
@@ -99,24 +161,22 @@ export class ArticulosComponent {
       width: '400px',
       data: {
         titulo: 'Crear Nueva Categoría',
-        pasos: [
-          'Informacion basica'
-        ],
+        pasos: ['Informacion basica'],
         campos: [
           {
             tipo: 'text',
             nombre: 'nombreCategoria',
             etiqueta: 'Nombre',
             obligatorio: true,
-            paso:0
+            paso: 0,
           },
           {
             tipo: 'text',
             nombre: 'desCategoria',
             etiqueta: 'Descripción',
             obligatorio: false,
-            paso:0
-          }
+            paso: 0,
+          },
         ],
       },
     });
@@ -140,33 +200,155 @@ export class ArticulosComponent {
   abrirModalEditarCategoria(categoria: any) {
     const dialogRef = this.dialog.open(ModalDesComponent, {
       width: '600px',
-      height: '', 
+      height: '',
       data: {
         titulo: 'Editar Categoría',
-        pasos: [
-          'Informacion basica'
-        ],
+        pasos: ['Informacion basica'],
         campos: [
-          { tipo: 'text', nombre: 'nombreCategoria', etiqueta: 'Nombre', obligatorio: true, paso: 0 },
-          { tipo: 'textarea', nombre: 'desCategoria', etiqueta: 'Descripción', obligatorio: false, paso: 0 }
-          
+          {
+            tipo: 'text',
+            nombre: 'nombreCategoria',
+            etiqueta: 'Nombre',
+            obligatorio: true,
+            paso: 0,
+          },
+          {
+            tipo: 'textarea',
+            nombre: 'desCategoria',
+            etiqueta: 'Descripción',
+            obligatorio: false,
+            paso: 0,
+          },
         ],
-        valoresIniciales: categoria
-      }
+        valoresIniciales: categoria,
+      },
     });
 
-    dialogRef.afterClosed().subscribe(resultado => {
+    dialogRef.afterClosed().subscribe((resultado) => {
       if (resultado) {
         if (resultado.eliminar) {
-          this.categoriaService.deleteCategoria(categoria.idCategoria).subscribe(() => {
-            this.cargarDatosCat();
-          });
+          this.categoriaService
+            .deleteCategoria(categoria.idCategoria)
+            .subscribe(() => {
+              this.cargarDatosCat();
+            });
         } else {
-          this.categoriaService.updateCategoria(categoria.idCategoria, resultado).subscribe(() => {
-            this.cargarDatosCat();
-          });
+          this.categoriaService
+            .updateCategoria(categoria.idCategoria, resultado)
+            .subscribe(() => {
+              this.cargarDatosCat();
+            });
         }
       }
     });
   }
+
+  //modal de agregar marcas
+  abrirModalNuevaMarca() {
+    this.categoriaService.getCategorias().subscribe({
+      next: (categorias) => {
+        const dialogRef = this.dialog.open(ModalAddComponent, {
+          width: '400px',
+          data: {
+            titulo: 'Crear Nueva Marca',
+            pasos: ['Información básica'],
+            campos: [
+              {
+                tipo: 'text',
+                nombre: 'nombreMarca',
+                etiqueta: 'Nombre',
+                obligatorio: true,
+                paso: 0,
+              },
+              {
+                tipo: 'text',
+                nombre: 'desMarca',
+                etiqueta: 'Descripción',
+                obligatorio: false,
+                paso: 0,
+              },
+              {
+                tipo: 'select',
+                nombre: 'Categoria_idCategoria',
+                etiqueta: 'Categoría',
+                obligatorio: true,
+                paso: 0,
+                opciones: categorias.map((cat) => ({
+                  valor: cat.idCategoria,
+                  texto: cat.nombreCategoria,
+                })),
+              },
+            ],
+          },
+        });
+
+        dialogRef.afterClosed().subscribe((result) => {
+          if (result) {
+            this.marcasService.createMarca(result).subscribe({
+              next: () => this.cargarDatosMar(),
+              error: (err) => console.error('Error al agregar marca:', err),
+            });
+          }
+        });
+      },
+      error: (err) => console.error('Error al cargar categorías:', err),
+    });
+  }
+
+abrirModalEditarMarca(marca: any) {
+  // Primero cargamos las categorías (suponiendo que tienes un servicio para eso)
+  this.categoriaService.getCategorias().subscribe((categorias) => {
+    const dialogRef = this.dialog.open(ModalDesComponent, {
+      width: '600px',
+      data: {
+        titulo: 'Editar Marca',
+        pasos: ['Información básica'],
+        campos: [
+          {
+            tipo: 'text',
+            nombre: 'nombreMarca',
+            etiqueta: 'Nombre',
+            obligatorio: true,
+            paso: 0,
+          },
+          {
+            tipo: 'textarea',
+            nombre: 'desMarca',
+            etiqueta: 'Descripción',
+            obligatorio: false,
+            paso: 0,
+          },
+          {
+            tipo: 'select',
+            nombre: 'Categoria_idCategoria',
+            etiqueta: 'Categoría',
+            obligatorio: true,
+            paso: 0,
+            opciones: categorias.map(cat => ({
+              valor: cat.idCategoria,
+              texto: cat.nombreCategoria,
+            })),
+          }
+        ],
+        valoresIniciales: marca,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((resultado) => {
+      if (resultado) {
+        if (resultado.eliminar) {
+          this.marcasService.deleteMarca(marca.idMarca).subscribe(() => {
+            this.cargarDatosMar();
+          });
+        } else {
+          this.marcasService.updateMarca(marca.idMarca, resultado).subscribe(() => {
+            this.cargarDatosMar();
+          });
+        }
+      }
+    });
+  });
+}
+
+
 }

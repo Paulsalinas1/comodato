@@ -30,7 +30,9 @@ pasoActual = 0; // Paso activo inicial
 
     this.data.campos.forEach(campo => {
       const validators = campo.obligatorio ? [Validators.required] : [];
-      const valorInicial = this.data.valoresIniciales ? this.data.valoresIniciales[campo.nombre] || '' : '';
+      const valorInicial = this.data.valoresIniciales?.[campo.nombre] !== undefined
+                          ? this.data.valoresIniciales[campo.nombre]
+                          : '';
       group[campo.nombre] = this.fb.control(valorInicial, validators);
     });
 
