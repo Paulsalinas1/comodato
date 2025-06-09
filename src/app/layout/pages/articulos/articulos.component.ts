@@ -10,7 +10,9 @@ import { Marca } from '../../../core/models/Marca';
 import { MarcaService } from '../../../core/services/marca.service';
 import { Modelo } from '../../../core/models/modelo';
 import { ModeloService } from '../../../core/services/modelo.service';
-
+import { Articulo } from '../../../core/models/articulo';
+import { ArticulosService } from '../../../core/services/articulos.service';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-articulos',
@@ -45,21 +47,30 @@ export class ArticulosComponent {
     length: 0,
   };
 
+  // Configuración de paginación para modelos
+  articulosPaginator = {
+    pageIndex: 0,
+    pageSize: 5,
+    length: 0,
+  };
+
   // Datos
   categorias: Categoria[] = [];
   marcas: Marca[] = [];
   modelos: Modelo[] = [];
-
+  articulos: Articulo[] = [];
 
   // Filtros
   filtroCategorias: string = '';
   filtroMarcas: string = '';
   filtroModelos: string = '';
+  filtroArticulos: string = '';
 
   constructor(
     private categoriaService: CategoriaService,
     private marcasService: MarcaService,
     private modeloService: ModeloService,
+    private articuloService: ArticulosService,
     private dialog: MatDialog
   ) {}
 
@@ -67,6 +78,7 @@ export class ArticulosComponent {
     this.cargarDatosCat();
     this.cargarDatosMar();
     this.cargarDatosMod();
+    this.cargarDatosArti();
   }
 
   cargarDatosCat(): void {
@@ -117,6 +129,22 @@ export class ArticulosComponent {
     this.modelosPaginator.length = this.modelos.length;
   }
 
+  cargarDatosArti(): void {
+    this.articuloService.getArticulos().subscribe({
+      next: (data) => {
+        this.articulos = data;
+        this.actualizarLongitudArticulos();
+      },
+      error: (err) => {
+        console.error('Error al cargar articulos:', err);
+      },
+    });
+  }
+
+  private actualizarLongitudArticulos(): void {
+    this.articulosPaginator.length = this.articulos.length;
+  }
+
   // Filtrado y paginación de categorías
   get categoriasFiltradas(): Categoria[] {
     const texto = this.filtroCategorias.trim().toLowerCase();
@@ -156,8 +184,8 @@ export class ArticulosComponent {
     const texto = this.filtroMarcas.trim().toLowerCase();
     if (!texto) return this.marcas;
 
-    return this.marcas.filter((Marca) =>
-      Object.values(Marca).some((val) =>
+    return this.marcas.filter((marca) =>
+      Object.values(marca).some((val) =>
         String(val).toLowerCase().includes(texto)
       )
     );
@@ -190,8 +218,8 @@ export class ArticulosComponent {
     const texto = this.filtroModelos.trim().toLowerCase();
     if (!texto) return this.modelos;
 
-    return this.modelos.filter((modelos) =>
-      Object.values(modelos).some((val) =>
+    return this.modelos.filter((modelo) =>
+      Object.values(modelo).some((val) =>
         String(val).toLowerCase().includes(texto)
       )
     );
@@ -215,6 +243,40 @@ export class ArticulosComponent {
     setTimeout(() => {
       document
         .getElementById('tabla-modelos')
+        ?.scrollIntoView({ behavior: 'instant' });
+    }, 0);
+  }
+
+  // Filtrado y paginación de Articulos
+  get articulosFiltradas(): Articulo[] {
+    const texto = this.filtroArticulos.trim().toLowerCase();
+    if (!texto) return this.articulos;
+
+    return this.articulos.filter((articulo) =>
+      Object.values(articulo).some((val) =>
+        String(val).toLowerCase().includes(texto)
+      )
+    );
+  }
+
+  get articulosPaginadas(): Articulo[] {
+    this.articulosPaginator.length = this.articulosFiltradas.length;
+    const startIndex =
+      this.articulosPaginator.pageIndex * this.articulosPaginator.pageSize;
+    return this.articulosFiltradas.slice(
+      startIndex,
+      startIndex + this.articulosPaginator.pageSize
+    );
+  }
+
+  onPageChangeArticulos(event: PageEvent): void {
+    this.articulosPaginator.pageIndex = event.pageIndex;
+    this.articulosPaginator.pageSize = event.pageSize;
+
+    // Opcional: scroll al inicio de la tabla
+    setTimeout(() => {
+      document
+        .getElementById('tabla-articulos')
         ?.scrollIntoView({ behavior: 'instant' });
     }, 0);
   }
@@ -521,6 +583,237 @@ export class ArticulosComponent {
               .subscribe(() => {
                 this.cargarDatosMod();
               });
+          }
+        }
+      });
+    });
+  }
+
+  // Modal para agregar un nuevo artículo
+  abrirModalNuevoArticulo() {
+    forkJoin({
+      categorias: this.categoriaService.getCategorias(),
+      marcas: this.marcasService.getMarcas(),
+      modelos: this.modeloService.getModelos(),
+    }).subscribe({
+      next: ({ categorias, marcas, modelos }) => {
+        const dialogRef = this.dialog.open(ModalAddComponent, {
+          width: '600px',
+          data: {
+            titulo: 'Crear Nuevo Artículo',
+            pasos: [
+              'Información básica',
+              'Estado y disponibilidad',
+              'Clasificación',
+            ],
+            campos: [
+              // Paso 0: Información básica
+              {
+                tipo: 'text',
+                nombre: 'nombreArticulo',
+                etiqueta: 'Nombre',
+                obligatorio: true,
+                paso: 0,
+              },
+              {
+                tipo: 'text',
+                nombre: 'desArticulo',
+                etiqueta: 'Descripción',
+                obligatorio: false,
+                paso: 0,
+              },
+
+              // Paso 1: Estado y disponibilidad
+              {
+                tipo: 'select',
+                nombre: 'estadoArticulo',
+                etiqueta: 'Estado',
+                obligatorio: true,
+                paso: 1,
+                opciones: [
+                  { valor: 'FUNCIONAL', texto: 'Funcional' },
+                  { valor: 'MANTENIMIENTO', texto: 'Mantenimiento' },
+                  { valor: 'DEFECTUOSO', texto: 'Defectuoso' },
+                ],
+              },
+              {
+                tipo: 'select',
+                nombre: 'dispArticulo',
+                etiqueta: 'Disponibilidad',
+                obligatorio: true,
+                paso: 1,
+                opciones: [
+                  { valor: 'DISPONIBLE', texto: 'Disponible' },
+                  { valor: 'EN_COMODATO', texto: 'En Comodato' },
+                  { valor: 'RESERVADO', texto: 'Reservado' },
+                ],
+              },
+              {
+                tipo: 'text',
+                nombre: 'numSerieArticulo',
+                etiqueta: 'Número de Serie',
+                obligatorio: true,
+                paso: 0,
+              },
+
+              // Paso 2: Clasificación
+              {
+                tipo: 'select',
+                nombre: 'Categoria_idCategoria',
+                etiqueta: 'Categoría',
+                obligatorio: true,
+                paso: 2,
+                opciones: categorias.map((c) => ({
+                  valor: c.idCategoria,
+                  texto: c.nombreCategoria,
+                })),
+              },
+              {
+                tipo: 'select',
+                nombre: 'Marca_idMarca',
+                etiqueta: 'Marca',
+                obligatorio: true,
+                paso: 2,
+                opciones: marcas.map((m) => ({
+                  valor: m.idMarca,
+                  texto: m.nombreMarca,
+                })),
+              },
+              {
+                tipo: 'select',
+                nombre: 'Modelo_idModelo',
+                etiqueta: 'Modelo',
+                obligatorio: true,
+                paso: 2,
+                opciones: modelos.map((mo) => ({
+                  valor: mo.idModelo,
+                  texto: mo.nombreModelo,
+                })),
+              },
+            ],
+          },
+        });
+
+        dialogRef.afterClosed().subscribe((result) => {
+          if (result) {
+            this.articuloService.createArticulo(result).subscribe({
+              next: () => this.cargarDatosArti(),
+              error: (err) => console.error('Error al agregar artículo:', err),
+            });
+          }
+        });
+      },
+      error: (err) =>
+        console.error('Error al cargar datos para el formulario:', err),
+    });
+  }
+
+  // Modal para editar y eliminar artículo
+  abrirModalEditarArticulo(articulo: any) {
+    forkJoin({
+      categorias: this.categoriaService.getCategorias(),
+      marcas: this.marcasService.getMarcas(),
+      modelos: this.modeloService.getModelos(),
+    }).subscribe(({ categorias, marcas, modelos }) => {
+      const dialogRef = this.dialog.open(ModalDesComponent, {
+        width: '600px',
+        data: {
+          titulo: 'Editar Artículo',
+          pasos: ['Información básica'],
+          campos: [
+            {
+              tipo: 'text',
+              nombre: 'nombreArticulo',
+              etiqueta: 'Nombre',
+              obligatorio: true,
+              paso: 0,
+            },
+            {
+              tipo: 'textarea',
+              nombre: 'desArticulo',
+              etiqueta: 'Descripción',
+              obligatorio: false,
+              paso: 0,
+            },
+            {
+              tipo: 'select',
+              nombre: 'estadoArticulo',
+              etiqueta: 'Estado',
+              obligatorio: true,
+              paso: 0,
+              opciones: [
+                { valor: 'FUNCIONAL', texto: 'Funcional' },
+                { valor: 'MANTENIMIENTO', texto: 'Mantenimiento' },
+                { valor: 'DEFECTUOSO', texto: 'Defectuoso' },
+              ],
+            },
+            {
+              tipo: 'select',
+              nombre: 'dispArticulo',
+              etiqueta: 'Disponibilidad',
+              obligatorio: true,
+              paso: 0,
+              opciones: [
+                { valor: 'DISPONIBLE', texto: 'Disponible' },
+                { valor: 'EN_COMODATO', texto: 'En Comodato' },
+                { valor: 'RESERVADO', texto: 'Reservado' },
+              ],
+            },
+            {
+              tipo: 'text',
+              nombre: 'numSerieArticulo',
+              etiqueta: 'Número de Serie',
+              obligatorio: true,
+              paso: 0,
+            },
+            {
+              tipo: 'select',
+              nombre: 'Marca_idMarca',
+              etiqueta: 'Marca',
+              obligatorio: true,
+              paso: 0,
+              opciones: marcas.map((m) => ({
+                valor: m.idMarca,
+                texto: m.nombreMarca,
+              })),
+            },
+            {
+              tipo: 'select',
+              nombre: 'Categoria_idCategoria',
+              etiqueta: 'Categoría',
+              obligatorio: true,
+              paso: 0,
+              opciones: categorias.map((c) => ({
+                valor: c.idCategoria,
+                texto: c.nombreCategoria,
+              })),
+            },
+            {
+              tipo: 'select',
+              nombre: 'Modelo_idModelo',
+              etiqueta: 'Modelo',
+              obligatorio: true,
+              paso: 0,
+              opciones: modelos.map((mo) => ({
+                valor: mo.idModelo,
+                texto: mo.nombreModelo,
+              })),
+            },
+          ],
+          valoresIniciales: articulo,
+        },
+      });
+
+      dialogRef.afterClosed().subscribe((resultado) => {
+        if (resultado) {
+          if (resultado.eliminar) {
+            this.articuloService
+              .deleteArticulo(articulo.idArticulo)
+              .subscribe(() => this.cargarDatosArti());
+          } else {
+            this.articuloService
+              .updateArticulo(articulo.idArticulo, resultado)
+              .subscribe(() => this.cargarDatosArti());
           }
         }
       });
