@@ -75,10 +75,7 @@ export class ModalAddComponent {
     this.dialogRef.close();
   }
 
-  agregarOpcion(campo: Campo) {
-    if (campo.nombre === 'Categoria_idCategoria') {
-      this.dialogRef.close({ agregarCategoria: true });
-    }
+  agregarOpcion() {
     
   }
 

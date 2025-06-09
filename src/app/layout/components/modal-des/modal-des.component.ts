@@ -140,7 +140,10 @@ export class ModalDesComponent implements OnInit {
     }
   }
 
-  agregarOpcion() {
+  agregarOpcion(campo: Campo) {
     // Opcional: lógica para agregar opciones desde el modal
+    if (campo.nombre === 'Categoria_idCategoria') {
+      this.dialogRef.close({ agregarCategoria: true });
+    }
   }
 }
