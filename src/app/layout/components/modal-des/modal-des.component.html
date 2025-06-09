@@ -62,7 +62,7 @@
 
     <button type="button" class="col btn btn-sm btn-light" (click)="cancelar()">Cancelar</button>
     <button *ngIf="data.valoresIniciales && pasoActual === data.pasos.length - 1" type="button"
-      class="col btn btn-sm btn-danger" (click)="eliminar?.()">Eliminar</button>
+      class="col btn btn-sm btn-danger" (click)="eliminar()">Eliminar</button>
     <button *ngIf="pasoActual === data.pasos.length - 1" type="button" class="col btn btn-sm btn-dark"
       (click)="guardar()" [disabled]="form.invalid">Guardar</button>
 

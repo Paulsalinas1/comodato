@@ -705,114 +705,125 @@ export class ArticulosComponent {
   }
 
   // Modal para editar y eliminar artículo
-  abrirModalEditarArticulo(articulo: any) {
-    forkJoin({
-      categorias: this.categoriaService.getCategorias(),
-      marcas: this.marcasService.getMarcas(),
-      modelos: this.modeloService.getModelos(),
-    }).subscribe(({ categorias, marcas, modelos }) => {
-      const dialogRef = this.dialog.open(ModalDesComponent, {
-        width: '600px',
-        data: {
-          titulo: 'Editar Artículo',
-          pasos: ['Información básica'],
-          campos: [
-            {
-              tipo: 'text',
-              nombre: 'nombreArticulo',
-              etiqueta: 'Nombre',
-              obligatorio: true,
-              paso: 0,
-            },
-            {
-              tipo: 'textarea',
-              nombre: 'desArticulo',
-              etiqueta: 'Descripción',
-              obligatorio: false,
-              paso: 0,
-            },
-            {
-              tipo: 'select',
-              nombre: 'estadoArticulo',
-              etiqueta: 'Estado',
-              obligatorio: true,
-              paso: 0,
-              opciones: [
-                { valor: 'FUNCIONAL', texto: 'Funcional' },
-                { valor: 'MANTENIMIENTO', texto: 'Mantenimiento' },
-                { valor: 'DEFECTUOSO', texto: 'Defectuoso' },
-              ],
-            },
-            {
-              tipo: 'select',
-              nombre: 'dispArticulo',
-              etiqueta: 'Disponibilidad',
-              obligatorio: true,
-              paso: 0,
-              opciones: [
-                { valor: 'DISPONIBLE', texto: 'Disponible' },
-                { valor: 'EN_COMODATO', texto: 'En Comodato' },
-                { valor: 'RESERVADO', texto: 'Reservado' },
-              ],
-            },
-            {
-              tipo: 'text',
-              nombre: 'numSerieArticulo',
-              etiqueta: 'Número de Serie',
-              obligatorio: true,
-              paso: 0,
-            },
-            {
-              tipo: 'select',
-              nombre: 'Marca_idMarca',
-              etiqueta: 'Marca',
-              obligatorio: true,
-              paso: 0,
-              opciones: marcas.map((m) => ({
-                valor: m.idMarca,
-                texto: m.nombreMarca,
-              })),
-            },
-            {
-              tipo: 'select',
-              nombre: 'Categoria_idCategoria',
-              etiqueta: 'Categoría',
-              obligatorio: true,
-              paso: 0,
-              opciones: categorias.map((c) => ({
-                valor: c.idCategoria,
-                texto: c.nombreCategoria,
-              })),
-            },
-            {
-              tipo: 'select',
-              nombre: 'Modelo_idModelo',
-              etiqueta: 'Modelo',
-              obligatorio: true,
-              paso: 0,
-              opciones: modelos.map((mo) => ({
-                valor: mo.idModelo,
-                texto: mo.nombreModelo,
-              })),
-            },
-          ],
-          valoresIniciales: articulo,
-        },
-      });
+abrirModalEditarArticulo(articulo: any) {
+  forkJoin({
+    categorias: this.categoriaService.getCategorias(),
+    marcas: this.marcasService.getMarcas(),
+    modelos: this.modeloService.getModelos(),
+  }).subscribe(({ categorias, marcas, modelos }) => {
+    const dialogRef = this.dialog.open(ModalDesComponent, {
+      width: '600px',
+      data: {
+        titulo: 'Editar Artículo',
+        pasos: [
+          'Información básica',
+          'Estado y disponibilidad',
+          'Clasificación',
+        ],
+        campos: [
+          // Paso 0: Información básica
+          {
+            tipo: 'text',
+            nombre: 'nombreArticulo',
+            etiqueta: 'Nombre',
+            obligatorio: true,
+            paso: 0,
+          },
+          {
+            tipo: 'textarea',
+            nombre: 'desArticulo',
+            etiqueta: 'Descripción',
+            obligatorio: false,
+            paso: 0,
+          },
+          {
+            tipo: 'text',
+            nombre: 'numSerieArticulo',
+            etiqueta: 'Número de Serie',
+            obligatorio: true,
+            paso: 0,
+          },
 
-      dialogRef.afterClosed().subscribe((resultado) => {
-        if (resultado) {
-          if (resultado.eliminar) {
-            this.articuloService
-              .deleteArticulo(articulo.idArticulo)
-              .subscribe(() => this.cargarDatosArti());
-          } else {
-            this.articuloService
-              .updateArticulo(articulo.idArticulo, resultado)
-              .subscribe(() => this.cargarDatosArti());
-          }
-        }
-      });
+          // Paso 1: Estado y disponibilidad
+          {
+            tipo: 'select',
+            nombre: 'estadoArticulo',
+            etiqueta: 'Estado',
+            obligatorio: true,
+            paso: 1,
+            opciones: [
+              { valor: 'FUNCIONAL', texto: 'Funcional' },
+              { valor: 'MANTENIMIENTO', texto: 'Mantenimiento' },
+              { valor: 'DEFECTUOSO', texto: 'Defectuoso' },
+            ],
+          },
+          {
+            tipo: 'select',
+            nombre: 'dispArticulo',
+            etiqueta: 'Disponibilidad',
+            obligatorio: true,
+            paso: 1,
+            opciones: [
+              { valor: 'DISPONIBLE', texto: 'Disponible' },
+              { valor: 'EN_COMODATO', texto: 'En Comodato' },
+              { valor: 'RESERVADO', texto: 'Reservado' },
+            ],
+          },
+
+          // Paso 2: Clasificación
+          {
+            tipo: 'select',
+            nombre: 'Categoria_idCategoria',
+            etiqueta: 'Categoría',
+            obligatorio: true,
+            paso: 2,
+            opciones: categorias.map((c) => ({
+              valor: c.idCategoria,
+              texto: c.nombreCategoria,
+            })),
+          },
+          {
+            tipo: 'select',
+            nombre: 'Marca_idMarca',
+            etiqueta: 'Marca',
+            obligatorio: true,
+            paso: 2,
+            opciones: [], // Se llenará dinámicamente
+          },
+          {
+            tipo: 'select',
+            nombre: 'Modelo_idModelo',
+            etiqueta: 'Modelo',
+            obligatorio: true,
+            paso: 2,
+            opciones: [], // Se llenará dinámicamente
+          },
+        ],
+        categorias,
+        marcas,
+        modelos,
+        valoresIniciales: {
+          ...articulo,
+          marca: articulo.Marca_idMarca,
+          modelo: articulo.Modelo_idModelo,
+        },
+      },
     });
-  }
+
+    dialogRef.afterClosed().subscribe((resultado) => {
+      if (resultado) {
+        if (resultado.eliminar) {
+          this.articuloService
+            .deleteArticulo(articulo.idArticulo)
+            .subscribe(() => this.cargarDatosArti());
+        } else {
+          this.articuloService
+            .updateArticulo(articulo.idArticulo, resultado)
+            .subscribe(() => this.cargarDatosArti());
+        }
+      }
+    });
+  });
+}
+
 }
