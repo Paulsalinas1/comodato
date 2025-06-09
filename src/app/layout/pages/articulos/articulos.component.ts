@@ -8,10 +8,10 @@ import { ModalAddComponent } from '../../components/modal-add/modal-add.componen
 import { ModalDesComponent } from '../../components/modal-des/modal-des.component';
 import { Marca } from '../../../core/models/Marca';
 import { MarcaService } from '../../../core/services/marca.service';
-import { Modelo } from '../../../core/models/modelo';
 import { ModeloService } from '../../../core/services/modelo.service';
 import { Articulo } from '../../../core/models/articulo';
 import { ArticulosService } from '../../../core/services/articulos.service';
+import { Modelo } from '../../../core/models/Modelo';
 import { forkJoin } from 'rxjs';
 
 @Component({
@@ -674,10 +674,7 @@ export class ArticulosComponent {
                 etiqueta: 'Marca',
                 obligatorio: true,
                 paso: 2,
-                opciones: marcas.map((m) => ({
-                  valor: m.idMarca,
-                  texto: m.nombreMarca,
-                })),
+                opciones: [], // Se llenará dinámicamente
               },
               {
                 tipo: 'select',
@@ -685,12 +682,11 @@ export class ArticulosComponent {
                 etiqueta: 'Modelo',
                 obligatorio: true,
                 paso: 2,
-                opciones: modelos.map((mo) => ({
-                  valor: mo.idModelo,
-                  texto: mo.nombreModelo,
-                })),
+                opciones: [], // Se llenará dinámicamente
               },
             ],
+            marcas,
+            modelos,
           },
         });
 
