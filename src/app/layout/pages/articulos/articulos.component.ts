@@ -531,16 +531,29 @@ export class ArticulosComponent {
         }
         if (resultado) {
           if (resultado.eliminar) {
-            this.marcasService.deleteMarca(marca.idMarca).subscribe(() => {
+            this.marcasService.deleteMarca(marca.idMarca).subscribe(({
+              next: () => {
+                this.cargarDatosMar();
+                this.toastEliminar(marca.nombreMarca);
+              },
+              error: (err) => {
+                this.toastError(err.error.error);
+              }
               
-              this.cargarDatosMar();
-            });
+            }));
           } else {
             this.marcasService
               .updateMarca(marca.idMarca, resultado)
-              .subscribe(() => {
-                this.cargarDatosMar();
-              });
+              .subscribe(({
+                next: () => {
+                  this.cargarDatosMar();
+                  this.toastEdit(marca.nombreMarca);
+                },
+                error: (err) => {
+                  this.toastError(err.error.error);
+                }
+                
+              }));
           }
         }
       });
@@ -594,13 +607,13 @@ export class ArticulosComponent {
           }
           if (result) {
             this.modeloService.createModelo(result).subscribe({
-              next: () => this.cargarDatosMod(),
-              error: (err) => console.error('Error al agregar modelo:', err),
+              next: () => {this.cargarDatosMod(); this.toastComplete(result.nombreModelo) },
+              error: (err) => this.toastError(err.error.error),
             });
           }
         });
       },
-      error: (err) => console.error('Error al cargar categorías:', err),
+      error: (err) => this.toastError(err.error.error),
     });
   }
 
@@ -651,14 +664,22 @@ export class ArticulosComponent {
         }
         if (resultado) {
           if (resultado.eliminar) {
-            this.modeloService.deleteModelo(modelo.idModelo).subscribe(() => {
-              this.cargarDatosMod();
+            this.modeloService.deleteModelo(modelo.idModelo).subscribe({
+              next: () => {
+                this.cargarDatosMod();
+                this.toastEliminar(modelo.nombreModelo);
+              },
+              error: (err) => this.toastError(err.error.error),
             });
           } else {
             this.modeloService
               .updateModelo(modelo.idModelo, resultado)
-              .subscribe(() => {
-                this.cargarDatosMod();
+              .subscribe( {
+                next: () => {
+                  this.cargarDatosMod();
+                  this.toastEdit(modelo.nombreModelo)
+                } , error: (err) => this.toastError(err.error.error),
+                
               });
           }
         }
@@ -783,14 +804,17 @@ export class ArticulosComponent {
           }
           if (result) {
             this.articuloService.createArticulo(result).subscribe({
-              next: () => this.cargarDatosArti(),
-              error: (err) => console.error('Error al agregar artículo:', err),
+              next: () => {
+                this.cargarDatosArti();
+                this.toastComplete(result.nombreArticulo);
+              },
+              error: (err) => this.toastError(err.error.error),
             });
           }
         });
       },
       error: (err) =>
-        console.error('Error al cargar datos para el formulario:', err),
+        this.toastError(err.error.error),
     });
   }
 
@@ -911,14 +935,22 @@ export class ArticulosComponent {
           if (resultado.eliminar) {
             this.articuloService
               .deleteArticulo(articulo.idArticulo)
-              .subscribe(() => {
-                this.cargarDatosArti();
+              .subscribe({
+                next: () => {
+                  this.cargarDatosArti();
+                  this.toastEliminar(articulo.nombreArticulo);
+                },
+                error:(err) => this.toastError(err.error.error),                
               });
           } else {
             this.articuloService
               .updateArticulo(articulo.idArticulo, resultado)
-              .subscribe(() => {
-                this.cargarDatosArti();
+              .subscribe( {
+                next: ()=> {
+                  this.cargarDatosArti();
+                  this.toastEdit(articulo.nombreArticulo);
+                }, 
+                error:(err)  => this.toastError(err.error.error),
               });
           }
         }
@@ -926,10 +958,7 @@ export class ArticulosComponent {
     });
   }
 
-  abrirModalCrearCategoria(
-    respaldo: any,
-    origen: 'articulo' | 'marca' | 'modelo' | 'articulo2' | 'marca2' | 'modelo2'
-  ) {
+  abrirModalCrearCategoria(respaldo: any, origen: 'articulo' | 'marca' | 'modelo' | 'articulo2' | 'marca2' | 'modelo2') {
     const dialogRef = this.dialog.open(ModalAddComponent, {
       width: '400px',
       data: {
@@ -956,8 +985,11 @@ export class ArticulosComponent {
 
     dialogRef.afterClosed().subscribe((resultado) => {
       if (resultado) {
-        this.categoriaService.addCategoria(resultado).subscribe(() => {
-          this.redirigirSegunOrigen(respaldo, origen);
+        this.categoriaService.addCategoria(resultado).subscribe({
+          next: () => {
+            this.redirigirSegunOrigen(respaldo, origen);
+            this.toastComplete(resultado.nombreCategoria);
+          },error: (err) => this.toastError(err.error.error),          
         });
       } else {
         this.redirigirSegunOrigen(respaldo, origen);
@@ -1009,16 +1041,19 @@ export class ArticulosComponent {
         dialogRef.afterClosed().subscribe((result) => {
           if (result) {
             this.modeloService.createModelo(result).subscribe({
-              next: () => this.cargarDatosMod(),
-              error: (err) => console.error('Error al agregar modelo:', err),
+              next: () => {
+                this.cargarDatosMod();
+                this.toastComplete(result.nombreModelo);
+                this.redirigirSegunOrigen(respaldo, origen);
+              },
+              error: (err) => this.toastError(err.error.error),
             });
-            this.redirigirSegunOrigen(respaldo, origen);
           } else {
             this.redirigirSegunOrigen(respaldo, origen);
           }
         });
       },
-      error: (err) => console.error('Error al cargar categorías:', err),
+      error: (err) => this.toastError(err.error.error),
     });
   }
 
@@ -1066,16 +1101,19 @@ export class ArticulosComponent {
         dialogRef.afterClosed().subscribe((result) => {
           if (result) {
             this.marcasService.createMarca(result).subscribe({
-              next: () => this.cargarDatosMar(),
-              error: (err) => console.error('Error al agregar marca:', err),
+              next: () =>{
+                this.cargarDatosMar();
+                this.toastComplete(result.nombreMarca);
+                this.redirigirSegunOrigen(respaldo, origen);
+              } ,
+              error: (err) => this.toastError(err.error.error),
             });
-            this.redirigirSegunOrigen(respaldo, origen);
           } else {
             this.redirigirSegunOrigen(respaldo, origen);
           }
         });
       },
-      error: (err) => console.error('Error al cargar categorías:', err),
+      error: (err) => this.toastError(err.error.error),
     });
   }
 
