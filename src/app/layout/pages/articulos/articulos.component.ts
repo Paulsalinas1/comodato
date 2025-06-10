@@ -68,12 +68,12 @@ export class ArticulosComponent {
   filtroArticulos: string = '';
 
   constructor(
-    private categoriaService: CategoriaService,
-    private marcasService: MarcaService,
-    private modeloService: ModeloService,
-    private articuloService: ArticulosService,
-    private dialog: MatDialog,
-    private snackBar: MatSnackBar
+    private readonly categoriaService: CategoriaService,
+    private readonly marcasService: MarcaService,
+    private readonly modeloService: ModeloService,
+    private readonly articuloService: ArticulosService,
+    private readonly dialog: MatDialog,
+    private readonly snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -958,7 +958,10 @@ export class ArticulosComponent {
     });
   }
 
-  abrirModalCrearCategoria(respaldo: any, origen: 'articulo' | 'marca' | 'modelo' | 'articulo2' | 'marca2' | 'modelo2') {
+  abrirModalCrearCategoria(
+    respaldo: any, 
+    origen: 'articulo' | 'marca' | 'modelo' | 'articulo2' | 'marca2' | 'modelo2'
+  ) {
     const dialogRef = this.dialog.open(ModalAddComponent, {
       width: '400px',
       data: {
