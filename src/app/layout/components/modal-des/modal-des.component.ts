@@ -145,5 +145,14 @@ export class ModalDesComponent implements OnInit {
     if (campo.nombre === 'Categoria_idCategoria') {
       this.dialogRef.close({ agregarCategoria: true });
     }
+
+    if (campo.nombre === 'Modelo_idModelo') {
+      this.dialogRef.close({ agregarModelo: true });
+    }
+
+    if (campo.nombre === 'Marca_idMarca') {
+      this.dialogRef.close({ agregarMarca: true });
+    }
+    
   }
 }

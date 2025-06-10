@@ -370,7 +370,7 @@ export class ArticulosComponent {
   }
 
   //modal de agregar marcas
-  abrirModalNuevaMarca() {
+  abrirModalNuevaMarca(respaldo? :any) {
     this.categoriaService.getCategorias().subscribe({
       next: (categorias) => {
         const dialogRef = this.dialog.open(ModalAddComponent, {
@@ -405,10 +405,14 @@ export class ArticulosComponent {
                 })),
               },
             ],
+            respaldo: respaldo
           },
         });
-
         dialogRef.afterClosed().subscribe((result) => {
+          if (result?.agregarCategoria) {
+            this.abrirModalCrearCategoria(result.respaldo, 'marca2');
+            return;
+          }
           if (result) {
             this.marcasService.createMarca(result).subscribe({
               next: () => this.cargarDatosMar(),
@@ -423,7 +427,6 @@ export class ArticulosComponent {
 
   //modal de editar y eliminar marcas
   abrirModalEditarMarca(marca: any) {
-    // Primero cargamos las categorías (suponiendo que tienes un servicio para eso)
     this.categoriaService.getCategorias().subscribe((categorias) => {
       const dialogRef = this.dialog.open(ModalDesComponent, {
         width: '600px',
@@ -462,6 +465,10 @@ export class ArticulosComponent {
       });
 
       dialogRef.afterClosed().subscribe((resultado) => {
+        if (resultado?.agregarCategoria) {
+          this.abrirModalCrearCategoria(marca, 'marca');
+          return;
+        }
         if (resultado) {
           if (resultado.eliminar) {
             this.marcasService.deleteMarca(marca.idMarca).subscribe(() => {
@@ -480,7 +487,7 @@ export class ArticulosComponent {
   }
 
   //modal de agregar modelo
-  abrirModalNuevaModelo() {
+  abrirModalNuevaModelo(respaldo?: any) {
     this.categoriaService.getCategorias().subscribe({
       next: (categorias) => {
         const dialogRef = this.dialog.open(ModalAddComponent, {
@@ -502,6 +509,7 @@ export class ArticulosComponent {
                 etiqueta: 'Descripción',
                 obligatorio: false,
                 paso: 0,
+                
               },
               {
                 tipo: 'select',
@@ -515,10 +523,15 @@ export class ArticulosComponent {
                 })),
               },
             ],
+            respaldo: respaldo,
           },
         });
 
         dialogRef.afterClosed().subscribe((result) => {
+          if (result?.agregarCategoria) {
+            this.abrirModalCrearCategoria(result.respaldo, 'modelo2');
+            return;
+          }
           if (result) {
             this.modeloService.createModelo(result).subscribe({
               next: () => this.cargarDatosMod(),
@@ -572,6 +585,10 @@ export class ArticulosComponent {
       });
 
       dialogRef.afterClosed().subscribe((resultado) => {
+        if (resultado?.agregarCategoria) {
+          this.abrirModalCrearCategoria(modelo, 'modelo');
+          return;
+        }
         if (resultado) {
           if (resultado.eliminar) {
             this.modeloService.deleteModelo(modelo.idModelo).subscribe(() => {
@@ -590,7 +607,7 @@ export class ArticulosComponent {
   }
 
   // Modal para agregar un nuevo artículo
-  abrirModalNuevoArticulo() {
+  abrirModalNuevoArticulo(respaldo? :any) {
     forkJoin({
       categorias: this.categoriaService.getCategorias(),
       marcas: this.marcasService.getMarcas(),
@@ -687,10 +704,15 @@ export class ArticulosComponent {
             ],
             marcas,
             modelos,
+            respaldo: respaldo,
           },
         });
 
         dialogRef.afterClosed().subscribe((result) => {
+          if (result?.agregarCategoria) {
+            this.abrirModalCrearCategoria(result.respaldo, 'articulo2');
+            return;
+          }
           if (result) {
             this.articuloService.createArticulo(result).subscribe({
               next: () => this.cargarDatosArti(),
@@ -706,126 +728,136 @@ export class ArticulosComponent {
 
   // Modal para editar y eliminar artículo
   abrirModalEditarArticulo(articulo: any) {
-    this.abrirFormularioArticulo(articulo);
-  }
-
-  abrirFormularioArticulo(articulo: any) {
     forkJoin({
-    categorias: this.categoriaService.getCategorias(),
-    marcas: this.marcasService.getMarcas(),
-    modelos: this.modeloService.getModelos(),
-  }).subscribe(({ categorias, marcas, modelos }) => {
-    const dialogRef = this.dialog.open(ModalDesComponent, {
-      width: '600px',
-      data: {
-        titulo: 'Editar Artículo',
-        pasos: ['Información básica', 'Detalles Técnicos', 'Ubicación'], // o como lo tengas
-        campos: [
-          {
-            tipo: 'text',
-            nombre: 'nombreArticulo',
-            etiqueta: 'Nombre',
-            obligatorio: true,
-            paso: 0,
-          },
-          {
-            tipo: 'textarea',
-            nombre: 'desArticulo',
-            etiqueta: 'Descripción',
-            obligatorio: false,
-            paso: 0,
-          },
-          {
-            tipo: 'select',
-            nombre: 'estadoArticulo',
-            etiqueta: 'Estado',
-            obligatorio: true,
-            paso: 0,
-            opciones: [
-              { valor: 'FUNCIONAL', texto: 'Funcional' },
-              { valor: 'MANTENIMIENTO', texto: 'Mantenimiento' },
-              { valor: 'DEFECTUOSO', texto: 'Defectuoso' },
-            ],
-          },
-          {
-            tipo: 'select',
-            nombre: 'dispArticulo',
-            etiqueta: 'Disponibilidad',
-            obligatorio: true,
-            paso: 0,
-            opciones: [
-              { valor: 'DISPONIBLE', texto: 'Disponible' },
-              { valor: 'EN_COMODATO', texto: 'En Comodato' },
-              { valor: 'RESERVADO', texto: 'Reservado' },
-            ],
-          },
-          {
-            tipo: 'text',
-            nombre: 'numSerieArticulo',
-            etiqueta: 'Número de Serie',
-            obligatorio: true,
-            paso: 1,
-          },
-          {
-            tipo: 'select',
-            nombre: 'Marca_idMarca',
-            etiqueta: 'Marca',
-            obligatorio: true,
-            paso: 1,
-            opciones: marcas.map((m) => ({
-              valor: m.idMarca,
-              texto: m.nombreMarca,
-            })),
-          },
-          {
-            tipo: 'select',
-            nombre: 'Categoria_idCategoria',
-            etiqueta: 'Categoría',
-            obligatorio: true,
-            paso: 1,
-            opciones: categorias.map((c) => ({
-              valor: c.idCategoria,
-              texto: c.nombreCategoria,
-            })),
-          },
-          {
-            tipo: 'select',
-            nombre: 'Modelo_idModelo',
-            etiqueta: 'Modelo',
-            obligatorio: true,
-            paso: 1,
-            opciones: modelos.map((mo) => ({
-              valor: mo.idModelo,
-              texto: mo.nombreModelo,
-            })),
-          },
-        ],
-        valoresIniciales: articulo,
-      },
-    });
+      categorias: this.categoriaService.getCategorias(),
+      marcas: this.marcasService.getMarcas(),
+      modelos: this.modeloService.getModelos(),
+    }).subscribe(({ categorias, marcas, modelos }) => {
+      const dialogRef = this.dialog.open(ModalDesComponent, {
+        width: '600px',
+        data: {
+          titulo: 'Editar Artículo',
+          pasos: ['Información básica', 'Detalles Técnicos', 'Ubicación'], // o como lo tengas
+          campos: [
+            {
+              tipo: 'text',
+              nombre: 'nombreArticulo',
+              etiqueta: 'Nombre',
+              obligatorio: true,
+              paso: 0,
+            },
+            {
+              tipo: 'textarea',
+              nombre: 'desArticulo',
+              etiqueta: 'Descripción',
+              obligatorio: false,
+              paso: 0,
+            },
+            {
+              tipo: 'select',
+              nombre: 'estadoArticulo',
+              etiqueta: 'Estado',
+              obligatorio: true,
+              paso: 0,
+              opciones: [
+                { valor: 'FUNCIONAL', texto: 'Funcional' },
+                { valor: 'MANTENIMIENTO', texto: 'Mantenimiento' },
+                { valor: 'DEFECTUOSO', texto: 'Defectuoso' },
+              ],
+            },
+            {
+              tipo: 'select',
+              nombre: 'dispArticulo',
+              etiqueta: 'Disponibilidad',
+              obligatorio: true,
+              paso: 0,
+              opciones: [
+                { valor: 'DISPONIBLE', texto: 'Disponible' },
+                { valor: 'EN_COMODATO', texto: 'En Comodato' },
+                { valor: 'RESERVADO', texto: 'Reservado' },
+              ],
+            },
+            {
+              tipo: 'text',
+              nombre: 'numSerieArticulo',
+              etiqueta: 'Número de Serie',
+              obligatorio: true,
+              paso: 1,
+            },
+            {
+              tipo: 'select',
+              nombre: 'Marca_idMarca',
+              etiqueta: 'Marca',
+              obligatorio: true,
+              paso: 1,
+              opciones: marcas.map((m) => ({
+                valor: m.idMarca,
+                texto: m.nombreMarca,
+              })),
+            },
+            {
+              tipo: 'select',
+              nombre: 'Categoria_idCategoria',
+              etiqueta: 'Categoría',
+              obligatorio: true,
+              paso: 1,
+              opciones: categorias.map((c) => ({
+                valor: c.idCategoria,
+                texto: c.nombreCategoria,
+              })),
+            },
+            {
+              tipo: 'select',
+              nombre: 'Modelo_idModelo',
+              etiqueta: 'Modelo',
+              obligatorio: true,
+              paso: 1,
+              opciones: modelos.map((mo) => ({
+                valor: mo.idModelo,
+                texto: mo.nombreModelo,
+              })),
+            },
+          ],
+          valoresIniciales: articulo,
+        },
+      });
 
-    dialogRef.afterClosed().subscribe((resultado) => {
-      if (resultado?.agregarCategoria) {
-        this.abrirModalCrearCategoria(articulo);
-        return;
-      }
-
-      if (resultado) {
-        if (resultado.eliminar) {
-          this.articuloService.deleteArticulo(articulo.idArticulo).subscribe(() => {
-            this.cargarDatosArti();
-          });
-        } else {
-          this.articuloService.updateArticulo(articulo.idArticulo, resultado).subscribe(() => {
-            this.cargarDatosArti();
-          });
+      dialogRef.afterClosed().subscribe((resultado) => {
+        if (resultado?.agregarCategoria) {
+          this.abrirModalCrearCategoria(articulo, 'articulo');
+          return;
         }
-      }
+
+        if (resultado?.agregarModelo) {
+          this.abrirModalCrearModelo(articulo);
+          return;
+        }
+
+        if (resultado?.agregarMarca) {
+          this.abrirModalCrearModelo(articulo);
+          return;
+        }
+
+        if (resultado) {
+          if (resultado.eliminar) {
+            this.articuloService
+              .deleteArticulo(articulo.idArticulo)
+              .subscribe(() => {
+                this.cargarDatosArti();
+              });
+          } else {
+            this.articuloService
+              .updateArticulo(articulo.idArticulo, resultado)
+              .subscribe(() => {
+                this.cargarDatosArti();
+              });
+          }
+        }
+      });
     });
-  });
   }
 
-  abrirModalCrearCategoria(articulo: any) {
+  abrirModalCrearCategoria(respaldo: any, origen: 'articulo' | 'marca' | 'modelo' |'articulo2' | 'marca2' | 'modelo2') {
     const dialogRef = this.dialog.open(ModalAddComponent, {
       width: '400px',
       data: {
@@ -853,13 +885,135 @@ export class ArticulosComponent {
     dialogRef.afterClosed().subscribe((resultado) => {
       if (resultado) {
         this.categoriaService.addCategoria(resultado).subscribe(() => {
-          // ❗ Volver a abrir el formulario del artículo con la categoría ya incluida
-          this.abrirFormularioArticulo(articulo);
+          this.redirigirSegunOrigen(respaldo, origen);
         });
       } else {
-        // Si cancela, también reabrimos el modal original
-        this.abrirFormularioArticulo(articulo);
+        this.redirigirSegunOrigen(respaldo, origen);
       }
     });
+  }
+
+  abrirModalCrearModelo(respaldo: any) {
+    this.categoriaService.getCategorias().subscribe({
+      next: (categorias) => {
+        const dialogRef = this.dialog.open(ModalAddComponent, {
+          width: '400px',
+          data: {
+            titulo: 'Crear Nuevo Modelo',
+            pasos: ['Información básica'],
+            campos: [
+              {
+                tipo: 'text',
+                nombre: 'nombreModelo',
+                etiqueta: 'Nombre',
+                obligatorio: true,
+                paso: 0,
+              },
+              {
+                tipo: 'text',
+                nombre: 'desModelo',
+                etiqueta: 'Descripción',
+                obligatorio: false,
+                paso: 0,
+              },
+              {
+                tipo: 'select',
+                nombre: 'Categoria_idCategoria',
+                etiqueta: 'Categoría',
+                obligatorio: true,
+                paso: 0,
+                opciones: categorias.map((cat) => ({
+                  valor: cat.idCategoria,
+                  texto: cat.nombreCategoria,
+                })),
+              },
+            ],
+          },
+        });
+
+        dialogRef.afterClosed().subscribe((result) => {
+          if (result) {
+            this.modeloService.createModelo(result).subscribe({
+              next: () => this.cargarDatosMod(),
+              error: (err) => console.error('Error al agregar modelo:', err),
+            });
+            this.abrirModalEditarArticulo(respaldo);
+          } else {
+            this.abrirModalEditarArticulo(respaldo);
+          }
+        });
+      },
+      error: (err) => console.error('Error al cargar categorías:', err),
+    });
+  }
+
+  abrirModalCrearMarca(respaldo: any) {
+    this.categoriaService.getCategorias().subscribe({
+      next: (categorias) => {
+        const dialogRef = this.dialog.open(ModalAddComponent, {
+          width: '400px',
+          data: {
+            titulo: 'Crear Nueva Marca',
+            pasos: ['Información básica'],
+            campos: [
+              {
+                tipo: 'text',
+                nombre: 'nombreMarca',
+                etiqueta: 'Nombre',
+                obligatorio: true,
+                paso: 0,
+              },
+              {
+                tipo: 'text',
+                nombre: 'desMarca',
+                etiqueta: 'Descripción',
+                obligatorio: false,
+                paso: 0,
+              },
+              {
+                tipo: 'select',
+                nombre: 'Categoria_idCategoria',
+                etiqueta: 'Categoría',
+                obligatorio: true,
+                paso: 0,
+                opciones: categorias.map((cat) => ({
+                  valor: cat.idCategoria,
+                  texto: cat.nombreCategoria,
+                })),
+              },
+            ],
+          },
+        });
+
+        dialogRef.afterClosed().subscribe((result) => {
+          if (result) {
+            this.marcasService.createMarca(result).subscribe({
+              next: () => this.cargarDatosMar(),
+              error: (err) => console.error('Error al agregar marca:', err),
+            });
+            this.abrirModalEditarArticulo(respaldo);
+          } else {
+            this.abrirModalEditarArticulo(respaldo);
+          }
+        });
+      },
+      error: (err) => console.error('Error al cargar categorías:', err),
+    });
+  }
+
+  private redirigirSegunOrigen(respaldo: any, origen: 'articulo' | 'marca' | 'modelo'|'articulo2' | 'marca2' | 'modelo2') {
+    if (origen === 'articulo') {
+      this.abrirModalEditarArticulo(respaldo);
+    } else if (origen === 'marca') {
+      this.abrirModalEditarMarca(respaldo);
+    } else if (origen === 'modelo') {
+      this.abrirModalEditarModelo(respaldo);
+    } else if (origen === 'articulo2') {
+      this.abrirModalNuevoArticulo(respaldo);
+    } else if (origen === 'marca2') {
+      this.abrirModalNuevaMarca(respaldo);
+    } else if (origen === 'modelo2') {
+      this.abrirModalNuevaModelo(respaldo);
+    }
   }
 }

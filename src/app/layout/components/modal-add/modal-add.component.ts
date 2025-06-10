@@ -23,9 +23,6 @@ export class ModalAddComponent {
   modelos: Modelo[] = [];
   modelosFiltrados: Modelo[] = [];
 
-
-  
-
   constructor(
     private fb: FormBuilder,
     private categoriaService: CategoriaService,
@@ -38,6 +35,7 @@ export class ModalAddComponent {
       categorias: Categoria[];
       modelos: Modelo[];
       marcas: Marca[];
+      respaldo?: any; 
     }
   ) {}
 
@@ -50,9 +48,16 @@ export class ModalAddComponent {
 
     this.data.campos.forEach((campo) => {
       const validators = campo.obligatorio ? [Validators.required] : [];
-      group[campo.nombre] = this.fb.control('', validators);
+      group[campo.nombre] = this.fb.control(this.data.respaldo?.[campo.nombre] || '', validators);
     });
     this.form = this.fb.group(group);
+
+    // Si ya hay una categoría en el respaldo, hacer filtrado inicial
+    const categoriaId = this.form.get('Categoria_idCategoria')?.value;
+    if (categoriaId) {
+      this.filtrarMarcasPorCategoria(categoriaId);
+      this.filtrarModelosPorCategoria(categoriaId);
+    }
 
     // Al cambiar la categoría filtras marcas y modelos
     this.form
@@ -75,8 +80,18 @@ export class ModalAddComponent {
     this.dialogRef.close();
   }
 
-  agregarOpcion() {
-    
+  agregarOpcion(campo: Campo) {
+    if (campo.nombre === 'Categoria_idCategoria') {
+      this.dialogRef.close({ agregarCategoria: true, respaldo:this.form.getRawValue() });
+    }
+
+    if (campo.nombre === 'Modelo_idModelo') {
+      this.dialogRef.close({ agregarModelo: true , respaldo:this.form.getRawValue()});
+    }
+
+    if (campo.nombre === 'Marca_idMarca') {
+      this.dialogRef.close({ agregarMarca: true, respaldo:this.form.getRawValue()});
+    }
   }
 
   siguientePaso() {
