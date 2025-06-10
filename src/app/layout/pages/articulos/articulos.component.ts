@@ -102,8 +102,8 @@ export class ArticulosComponent {
   }
 
   toastError(result: any) {
-    this.snackBar.open('Error al guardar: ' + result, 'Cerrar', {
-      duration: 5000,
+    this.snackBar.open('Error: ' + result, 'Cerrar', {
+      duration: 5000000,
       panelClass: ['snackbar-error'],
       horizontalPosition: 'center',
       verticalPosition: 'top',
@@ -354,7 +354,6 @@ export class ArticulosComponent {
             this.toastComplete(result.nombreCategoria);
           },
           error: (err) => {
-            console.error('Error al agregar categoría:', err);
             this.toastError(err.error.error);
           },
         });
@@ -401,7 +400,6 @@ export class ArticulosComponent {
                 this.toastEliminar(categoria.nombreCategoria);
               },
               error: (err) => {
-                console.error('Error al eliminar:', err);
                 this.toastError(err.error.error);
               },
             });
@@ -414,7 +412,6 @@ export class ArticulosComponent {
                 this.toastComplete(categoria.nombreCategoria);
               },
               error: (err) => {
-                console.error('Error al editar:', err);
                 this.toastError(err.error.error);
               },
             });

@@ -29164,3 +29164,13 @@ html, body {
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.mat-mdc-snack-bar-container.snackbar-exito .mat-mdc-snackbar-surface {
+  background-color: #4caf50 !important;
+  color: white !important;
+}
+
+.mat-mdc-snack-bar-container.snackbar-error .mat-mdc-snackbar-surface {
+  background-color: #f44336 !important;
+  color: white !important;
+}
