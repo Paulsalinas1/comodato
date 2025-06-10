@@ -13,6 +13,7 @@ import { Articulo } from '../../../core/models/articulo';
 import { ArticulosService } from '../../../core/services/articulos.service';
 import { Modelo } from '../../../core/models/Modelo';
 import { forkJoin } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-articulos',
@@ -71,7 +72,8 @@ export class ArticulosComponent {
     private marcasService: MarcaService,
     private modeloService: ModeloService,
     private articuloService: ArticulosService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -79,6 +81,42 @@ export class ArticulosComponent {
     this.cargarDatosMar();
     this.cargarDatosMod();
     this.cargarDatosArti();
+  }
+
+  toastComplete(result: any) {
+    this.snackBar.open(result + ' sea Guardado !', 'Cerrar', {
+      duration: 3000, // tiempo que se muestra en ms
+      panelClass: ['snackbar-exito'], // clase CSS para estilos personalizados
+      horizontalPosition: 'center', // posición horizontal: 'start' | 'center' | 'end' | 'left' | 'right'
+      verticalPosition: 'top', // posición vertical: 'top' | 'bottom'
+    });
+  }
+
+  toastEdit(result: any) {
+    this.snackBar.open(result + ' sea Editado !', 'Cerrar', {
+      duration: 3000, // tiempo que se muestra en ms
+      panelClass: ['snackbar-exito'], // clase CSS para estilos personalizados
+      horizontalPosition: 'center', // posición horizontal: 'start' | 'center' | 'end' | 'left' | 'right'
+      verticalPosition: 'top', // posición vertical: 'top' | 'bottom'
+    });
+  }
+
+  toastError(result: any) {
+    this.snackBar.open('Error al guardar: ' + result, 'Cerrar', {
+      duration: 5000,
+      panelClass: ['snackbar-error'],
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
+    });
+  }
+
+  toastEliminar(result: any) {
+    this.snackBar.open(result + ' se a eliminado', 'Cerrar', {
+      duration: 3000,
+      panelClass: ['snackbar-error'],
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
+    });
   }
 
   cargarDatosCat(): void {
@@ -175,7 +213,7 @@ export class ArticulosComponent {
     setTimeout(() => {
       document
         .getElementById('tabla-categorias')
-        ?.scrollIntoView({ behavior: 'smooth' , block: "center"});
+        ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }, 0);
   }
 
@@ -209,7 +247,7 @@ export class ArticulosComponent {
     setTimeout(() => {
       document
         .getElementById('tabla-marcas')
-        ?.scrollIntoView({ behavior: 'smooth' , block: "center" });
+        ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }, 0);
   }
 
@@ -243,7 +281,7 @@ export class ArticulosComponent {
     setTimeout(() => {
       document
         .getElementById('tabla-modelos')
-        ?.scrollIntoView({ behavior: 'smooth' , block: "center" });
+        ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }, 0);
   }
 
@@ -277,7 +315,7 @@ export class ArticulosComponent {
     setTimeout(() => {
       document
         .getElementById('tabla-articulos')
-        ?.scrollIntoView({ behavior: 'smooth' , block: "center"});
+        ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }, 0);
   }
 
@@ -312,10 +350,12 @@ export class ArticulosComponent {
         // Aquí llamas al servicio para guardar la nueva categoría
         this.categoriaService.addCategoria(result).subscribe({
           next: () => {
-            this.cargarDatosCat(); // refresca la lista después de agregar
+            this.cargarDatosCat();
+            this.toastComplete(result.nombreCategoria);
           },
           error: (err) => {
             console.error('Error al agregar categoría:', err);
+            this.toastError(err.error.error);
           },
         });
       }
@@ -355,14 +395,28 @@ export class ArticulosComponent {
         if (resultado.eliminar) {
           this.categoriaService
             .deleteCategoria(categoria.idCategoria)
-            .subscribe(() => {
-              this.cargarDatosCat();
+            .subscribe({
+              next: () => {
+                this.cargarDatosCat();
+                this.toastEliminar(categoria.nombreCategoria);
+              },
+              error: (err) => {
+                console.error('Error al eliminar:', err);
+                this.toastError(err.error.error);
+              },
             });
         } else {
           this.categoriaService
             .updateCategoria(categoria.idCategoria, resultado)
-            .subscribe(() => {
-              this.cargarDatosCat();
+            .subscribe({
+              next: () => {
+                this.cargarDatosCat();
+                this.toastComplete(categoria.nombreCategoria);
+              },
+              error: (err) => {
+                console.error('Error al editar:', err);
+                this.toastError(err.error.error);
+              },
             });
         }
       }
@@ -370,7 +424,7 @@ export class ArticulosComponent {
   }
 
   //modal de agregar marcas
-  abrirModalNuevaMarca(respaldo? :any) {
+  abrirModalNuevaMarca(respaldo?: any) {
     this.categoriaService.getCategorias().subscribe({
       next: (categorias) => {
         const dialogRef = this.dialog.open(ModalAddComponent, {
@@ -405,7 +459,7 @@ export class ArticulosComponent {
                 })),
               },
             ],
-            respaldo: respaldo
+            respaldo: respaldo,
           },
         });
         dialogRef.afterClosed().subscribe((result) => {
@@ -415,8 +469,14 @@ export class ArticulosComponent {
           }
           if (result) {
             this.marcasService.createMarca(result).subscribe({
-              next: () => this.cargarDatosMar(),
-              error: (err) => console.error('Error al agregar marca:', err),
+              next: () => {
+                this.cargarDatosMar();
+                this.toastComplete(result.nombreMarca); 
+              },
+              error: (err) =>{ 
+                console.error('Error al agregar marca:', err);
+                this.toastError(err.error.error);
+              },
             });
           }
         });
@@ -472,6 +532,7 @@ export class ArticulosComponent {
         if (resultado) {
           if (resultado.eliminar) {
             this.marcasService.deleteMarca(marca.idMarca).subscribe(() => {
+              
               this.cargarDatosMar();
             });
           } else {
@@ -509,7 +570,6 @@ export class ArticulosComponent {
                 etiqueta: 'Descripción',
                 obligatorio: false,
                 paso: 0,
-                
               },
               {
                 tipo: 'select',
@@ -607,7 +667,7 @@ export class ArticulosComponent {
   }
 
   // Modal para agregar un nuevo artículo
-  abrirModalNuevoArticulo(respaldo? :any) {
+  abrirModalNuevoArticulo(respaldo?: any) {
     forkJoin({
       categorias: this.categoriaService.getCategorias(),
       marcas: this.marcasService.getMarcas(),
@@ -714,11 +774,11 @@ export class ArticulosComponent {
             return;
           }
           if (result?.agregarMarca) {
-            this.abrirModalCrearMarca(result.respaldo,'articulo2');
+            this.abrirModalCrearMarca(result.respaldo, 'articulo2');
             return;
           }
           if (result?.agregarModelo) {
-            this.abrirModalCrearModelo(result.respaldo , 'articulo2');
+            this.abrirModalCrearModelo(result.respaldo, 'articulo2');
             return;
           }
           if (result) {
@@ -745,7 +805,11 @@ export class ArticulosComponent {
         width: '600px',
         data: {
           titulo: 'Editar Artículo',
-          pasos: ['Información básica', 'Estado y disponibilidad', 'Clasificación'],
+          pasos: [
+            'Información básica',
+            'Estado y disponibilidad',
+            'Clasificación',
+          ],
           campos: [
             {
               tipo: 'text',
@@ -791,7 +855,8 @@ export class ArticulosComponent {
               etiqueta: 'Número de Serie',
               obligatorio: true,
               paso: 0,
-            },{
+            },
+            {
               tipo: 'select',
               nombre: 'Categoria_idCategoria',
               etiqueta: 'Categoría',
@@ -810,7 +875,7 @@ export class ArticulosComponent {
               paso: 2,
               opciones: [],
             },
-            
+
             {
               tipo: 'select',
               nombre: 'Modelo_idModelo',
@@ -861,7 +926,10 @@ export class ArticulosComponent {
     });
   }
 
-  abrirModalCrearCategoria(respaldo: any, origen: 'articulo' | 'marca' | 'modelo' |'articulo2' | 'marca2' | 'modelo2') {
+  abrirModalCrearCategoria(
+    respaldo: any,
+    origen: 'articulo' | 'marca' | 'modelo' | 'articulo2' | 'marca2' | 'modelo2'
+  ) {
     const dialogRef = this.dialog.open(ModalAddComponent, {
       width: '400px',
       data: {
@@ -897,7 +965,10 @@ export class ArticulosComponent {
     });
   }
 
-  abrirModalCrearModelo(respaldo: any , origen: 'articulo' | 'marca' | 'modelo' |'articulo2' | 'marca2' | 'modelo2') {
+  abrirModalCrearModelo(
+    respaldo: any,
+    origen: 'articulo' | 'marca' | 'modelo' | 'articulo2' | 'marca2' | 'modelo2'
+  ) {
     this.categoriaService.getCategorias().subscribe({
       next: (categorias) => {
         const dialogRef = this.dialog.open(ModalAddComponent, {
@@ -941,9 +1012,9 @@ export class ArticulosComponent {
               next: () => this.cargarDatosMod(),
               error: (err) => console.error('Error al agregar modelo:', err),
             });
-            this.redirigirSegunOrigen(respaldo , origen);
+            this.redirigirSegunOrigen(respaldo, origen);
           } else {
-            this.redirigirSegunOrigen(respaldo , origen);
+            this.redirigirSegunOrigen(respaldo, origen);
           }
         });
       },
@@ -951,7 +1022,10 @@ export class ArticulosComponent {
     });
   }
 
-  abrirModalCrearMarca(respaldo: any , origen: 'articulo' | 'marca' | 'modelo' |'articulo2' | 'marca2' | 'modelo2') {
+  abrirModalCrearMarca(
+    respaldo: any,
+    origen: 'articulo' | 'marca' | 'modelo' | 'articulo2' | 'marca2' | 'modelo2'
+  ) {
     this.categoriaService.getCategorias().subscribe({
       next: (categorias) => {
         const dialogRef = this.dialog.open(ModalAddComponent, {
@@ -1005,7 +1079,10 @@ export class ArticulosComponent {
     });
   }
 
-  private redirigirSegunOrigen(respaldo: any, origen: 'articulo' | 'marca' | 'modelo'|'articulo2' | 'marca2' | 'modelo2') {
+  private redirigirSegunOrigen(
+    respaldo: any,
+    origen: 'articulo' | 'marca' | 'modelo' | 'articulo2' | 'marca2' | 'modelo2'
+  ) {
     if (origen === 'articulo') {
       this.abrirModalEditarArticulo(respaldo);
     } else if (origen === 'marca') {
