@@ -175,7 +175,7 @@ export class ArticulosComponent {
     setTimeout(() => {
       document
         .getElementById('tabla-categorias')
-        ?.scrollIntoView({ behavior: 'smooth' });
+        ?.scrollIntoView({ behavior: 'smooth' , block: "center"});
     }, 0);
   }
 
@@ -209,7 +209,7 @@ export class ArticulosComponent {
     setTimeout(() => {
       document
         .getElementById('tabla-marcas')
-        ?.scrollIntoView({ behavior: 'smooth' });
+        ?.scrollIntoView({ behavior: 'smooth' , block: "center" });
     }, 0);
   }
 
@@ -243,7 +243,7 @@ export class ArticulosComponent {
     setTimeout(() => {
       document
         .getElementById('tabla-modelos')
-        ?.scrollIntoView({ behavior: 'smooth' });
+        ?.scrollIntoView({ behavior: 'smooth' , block: "center" });
     }, 0);
   }
 
@@ -277,7 +277,7 @@ export class ArticulosComponent {
     setTimeout(() => {
       document
         .getElementById('tabla-articulos')
-        ?.scrollIntoView({ behavior: 'smooth' });
+        ?.scrollIntoView({ behavior: 'smooth' , block: "center"});
     }, 0);
   }
 
