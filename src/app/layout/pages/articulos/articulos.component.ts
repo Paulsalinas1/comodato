@@ -713,6 +713,14 @@ export class ArticulosComponent {
             this.abrirModalCrearCategoria(result.respaldo, 'articulo2');
             return;
           }
+          if (result?.agregarMarca) {
+            this.abrirModalCrearMarca(result.respaldo,'articulo2');
+            return;
+          }
+          if (result?.agregarModelo) {
+            this.abrirModalCrearModelo(result.respaldo , 'articulo2');
+            return;
+          }
           if (result) {
             this.articuloService.createArticulo(result).subscribe({
               next: () => this.cargarDatosArti(),
@@ -829,12 +837,12 @@ export class ArticulosComponent {
         }
 
         if (resultado?.agregarModelo) {
-          this.abrirModalCrearModelo(articulo);
+          this.abrirModalCrearModelo(articulo, 'articulo');
           return;
         }
 
         if (resultado?.agregarMarca) {
-          this.abrirModalCrearModelo(articulo);
+          this.abrirModalCrearModelo(articulo, 'articulo');
           return;
         }
 
@@ -893,7 +901,7 @@ export class ArticulosComponent {
     });
   }
 
-  abrirModalCrearModelo(respaldo: any) {
+  abrirModalCrearModelo(respaldo: any , origen: 'articulo' | 'marca' | 'modelo' |'articulo2' | 'marca2' | 'modelo2') {
     this.categoriaService.getCategorias().subscribe({
       next: (categorias) => {
         const dialogRef = this.dialog.open(ModalAddComponent, {
@@ -937,9 +945,9 @@ export class ArticulosComponent {
               next: () => this.cargarDatosMod(),
               error: (err) => console.error('Error al agregar modelo:', err),
             });
-            this.abrirModalEditarArticulo(respaldo);
+            this.redirigirSegunOrigen(respaldo , origen);
           } else {
-            this.abrirModalEditarArticulo(respaldo);
+            this.redirigirSegunOrigen(respaldo , origen);
           }
         });
       },
@@ -947,7 +955,7 @@ export class ArticulosComponent {
     });
   }
 
-  abrirModalCrearMarca(respaldo: any) {
+  abrirModalCrearMarca(respaldo: any , origen: 'articulo' | 'marca' | 'modelo' |'articulo2' | 'marca2' | 'modelo2') {
     this.categoriaService.getCategorias().subscribe({
       next: (categorias) => {
         const dialogRef = this.dialog.open(ModalAddComponent, {
@@ -991,9 +999,9 @@ export class ArticulosComponent {
               next: () => this.cargarDatosMar(),
               error: (err) => console.error('Error al agregar marca:', err),
             });
-            this.abrirModalEditarArticulo(respaldo);
+            this.redirigirSegunOrigen(respaldo, origen);
           } else {
-            this.abrirModalEditarArticulo(respaldo);
+            this.redirigirSegunOrigen(respaldo, origen);
           }
         });
       },
