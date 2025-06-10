@@ -114,7 +114,16 @@
                                     Articulo
                                 </th>
                                 <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">
-                                    Detalles
+                                    Categoria
+                                </th>
+                                <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">
+                                    Marca/Modelo
+                                </th>
+                                <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">
+                                    Estado
+                                </th>
+                                <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">
+                                     Disponibilidad 
                                 </th>
                                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                 </th>
@@ -128,11 +137,26 @@
                                     <div class="d-flex px-3 py-1">
                                         <div class="d-flex flex-column justify-content-center me-3">
                                             <h6 class="mb-0 text-sm">{{art.nombreArticulo}}</h6>
+                                            <p class="text-xs text-secondary mb-0">{{art.numSerieArticulo}}</p>
                                         </div>
                                     </div>
                                 </td>
-                                <td >
-                                    <p class="text-xs font-weight-bold mb-0 py-2 text-wrap">{{art.desArticulo}}</p>
+                                <td>
+                                    <p class="text-xs font-weight-bold mb-0 py-2 text-wrap">{{ categoriasMap[art.Categoria_idCategoria] }}</p>
+                                </td>
+                                <td>
+                                    <div class="d-flex py-1">
+                                        <div class="d-flex flex-column justify-content-center me-3">
+                                            <p class="text-xs font-weight-bold mb-0 text-wrap">{{ marcasMap[art.Marca_idMarca] }}</p>
+                                            <p class="text-xs text-secondary mb-0">{{ modelosMap[art.Modelo_idModelo] }}</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <p class="text-xs font-weight-bold mb-0 py-2 text-wrap">{{art.estadoArticulo}}</p>
+                                </td>
+                                <td>
+                                    <p class="text-xs font-weight-bold mb-0 py-2 text-wrap">{{art.dispArticulo}}</p>
                                 </td>
                                 <td class="align-middle text-start text-sm">
                                     <mat-icon>chevron_right</mat-icon>

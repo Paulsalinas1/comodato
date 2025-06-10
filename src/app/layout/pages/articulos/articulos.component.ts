@@ -12,7 +12,7 @@ import { ModeloService } from '../../../core/services/modelo.service';
 import { Articulo } from '../../../core/models/articulo';
 import { ArticulosService } from '../../../core/services/articulos.service';
 import { Modelo } from '../../../core/models/Modelo';
-import { forkJoin } from 'rxjs';
+import { forkJoin, map, Observable } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
@@ -60,6 +60,9 @@ export class ArticulosComponent {
   marcas: Marca[] = [];
   modelos: Modelo[] = [];
   articulos: Articulo[] = [];
+  categoriasMap: { [id: string]: string } = {};
+  marcasMap: { [id: string]: string } = {};
+  modelosMap: { [id: string]: string } = {};
 
   // Filtros
   filtroCategorias: string = '';
@@ -81,6 +84,19 @@ export class ArticulosComponent {
     this.cargarDatosMar();
     this.cargarDatosMod();
     this.cargarDatosArti();
+
+    this.categoriaService.getCategorias().subscribe(cats => {
+      this.categoriasMap = Object.fromEntries(cats.map(c => [c.idCategoria, c.nombreCategoria]));
+    });
+    this.marcasService.getMarcas().subscribe(marcas => {
+      this.marcasMap = Object.fromEntries(marcas.map(m => [m.idMarca, m.nombreMarca]));
+    });
+    this.modeloService.getModelos().subscribe(modelos => {
+      this.modelosMap = Object.fromEntries(modelos.map(m => [m.idModelo, m.nombreModelo]));
+    });
+    this.articuloService.getArticulos().subscribe(items => {
+      this.articulos = items;
+    });
   }
 
   toastComplete(result: any) {
@@ -468,9 +484,9 @@ export class ArticulosComponent {
             this.marcasService.createMarca(result).subscribe({
               next: () => {
                 this.cargarDatosMar();
-                this.toastComplete(result.nombreMarca); 
+                this.toastComplete(result.nombreMarca);
               },
-              error: (err) =>{ 
+              error: (err) => {
                 console.error('Error al agregar marca:', err);
                 this.toastError(err.error.error);
               },
@@ -528,29 +544,25 @@ export class ArticulosComponent {
         }
         if (resultado) {
           if (resultado.eliminar) {
-            this.marcasService.deleteMarca(marca.idMarca).subscribe(({
+            this.marcasService.deleteMarca(marca.idMarca).subscribe({
               next: () => {
                 this.cargarDatosMar();
                 this.toastEliminar(marca.nombreMarca);
               },
               error: (err) => {
                 this.toastError(err.error.error);
-              }
-              
-            }));
+              },
+            });
           } else {
-            this.marcasService
-              .updateMarca(marca.idMarca, resultado)
-              .subscribe(({
-                next: () => {
-                  this.cargarDatosMar();
-                  this.toastEdit(marca.nombreMarca);
-                },
-                error: (err) => {
-                  this.toastError(err.error.error);
-                }
-                
-              }));
+            this.marcasService.updateMarca(marca.idMarca, resultado).subscribe({
+              next: () => {
+                this.cargarDatosMar();
+                this.toastEdit(marca.nombreMarca);
+              },
+              error: (err) => {
+                this.toastError(err.error.error);
+              },
+            });
           }
         }
       });
@@ -604,7 +616,10 @@ export class ArticulosComponent {
           }
           if (result) {
             this.modeloService.createModelo(result).subscribe({
-              next: () => {this.cargarDatosMod(); this.toastComplete(result.nombreModelo) },
+              next: () => {
+                this.cargarDatosMod();
+                this.toastComplete(result.nombreModelo);
+              },
               error: (err) => this.toastError(err.error.error),
             });
           }
@@ -671,12 +686,12 @@ export class ArticulosComponent {
           } else {
             this.modeloService
               .updateModelo(modelo.idModelo, resultado)
-              .subscribe( {
+              .subscribe({
                 next: () => {
                   this.cargarDatosMod();
-                  this.toastEdit(modelo.nombreModelo)
-                } , error: (err) => this.toastError(err.error.error),
-                
+                  this.toastEdit(modelo.nombreModelo);
+                },
+                error: (err) => this.toastError(err.error.error),
               });
           }
         }
@@ -810,8 +825,7 @@ export class ArticulosComponent {
           }
         });
       },
-      error: (err) =>
-        this.toastError(err.error.error),
+      error: (err) => this.toastError(err.error.error),
     });
   }
 
@@ -930,24 +944,22 @@ export class ArticulosComponent {
 
         if (resultado) {
           if (resultado.eliminar) {
-            this.articuloService
-              .deleteArticulo(articulo.idArticulo)
-              .subscribe({
-                next: () => {
-                  this.cargarDatosArti();
-                  this.toastEliminar(articulo.nombreArticulo);
-                },
-                error:(err) => this.toastError(err.error.error),                
-              });
+            this.articuloService.deleteArticulo(articulo.idArticulo).subscribe({
+              next: () => {
+                this.cargarDatosArti();
+                this.toastEliminar(articulo.nombreArticulo);
+              },
+              error: (err) => this.toastError(err.error.error),
+            });
           } else {
             this.articuloService
               .updateArticulo(articulo.idArticulo, resultado)
-              .subscribe( {
-                next: ()=> {
+              .subscribe({
+                next: () => {
                   this.cargarDatosArti();
                   this.toastEdit(articulo.nombreArticulo);
-                }, 
-                error:(err)  => this.toastError(err.error.error),
+                },
+                error: (err) => this.toastError(err.error.error),
               });
           }
         }
@@ -956,7 +968,7 @@ export class ArticulosComponent {
   }
 
   abrirModalCrearCategoria(
-    respaldo: any, 
+    respaldo: any,
     origen: 'articulo' | 'marca' | 'modelo' | 'articulo2' | 'marca2' | 'modelo2'
   ) {
     const dialogRef = this.dialog.open(ModalAddComponent, {
@@ -989,7 +1001,8 @@ export class ArticulosComponent {
           next: () => {
             this.redirigirSegunOrigen(respaldo, origen);
             this.toastComplete(resultado.nombreCategoria);
-          },error: (err) => this.toastError(err.error.error),          
+          },
+          error: (err) => this.toastError(err.error.error),
         });
       } else {
         this.redirigirSegunOrigen(respaldo, origen);
@@ -1101,11 +1114,11 @@ export class ArticulosComponent {
         dialogRef.afterClosed().subscribe((result) => {
           if (result) {
             this.marcasService.createMarca(result).subscribe({
-              next: () =>{
+              next: () => {
                 this.cargarDatosMar();
                 this.toastComplete(result.nombreMarca);
                 this.redirigirSegunOrigen(respaldo, origen);
-              } ,
+              },
               error: (err) => this.toastError(err.error.error),
             });
           } else {
@@ -1134,5 +1147,11 @@ export class ArticulosComponent {
     } else if (origen === 'modelo2') {
       this.abrirModalNuevaModelo(respaldo);
     }
+  }
+
+  BuscarPIdCat(idCat: string): Observable<string> {
+    return this.categoriaService
+      .obtenerPorId(idCat)
+      .pipe(map((c) => c.nombreCategoria));
   }
 }
