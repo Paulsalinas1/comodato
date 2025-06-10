@@ -745,7 +745,7 @@ export class ArticulosComponent {
         width: '600px',
         data: {
           titulo: 'Editar Artículo',
-          pasos: ['Información básica', 'Detalles Técnicos', 'Ubicación'], // o como lo tengas
+          pasos: ['Información básica', 'Estado y disponibilidad', 'Clasificación'],
           campos: [
             {
               tipo: 'text',
@@ -766,7 +766,7 @@ export class ArticulosComponent {
               nombre: 'estadoArticulo',
               etiqueta: 'Estado',
               obligatorio: true,
-              paso: 0,
+              paso: 1,
               opciones: [
                 { valor: 'FUNCIONAL', texto: 'Funcional' },
                 { valor: 'MANTENIMIENTO', texto: 'Mantenimiento' },
@@ -778,7 +778,7 @@ export class ArticulosComponent {
               nombre: 'dispArticulo',
               etiqueta: 'Disponibilidad',
               obligatorio: true,
-              paso: 0,
+              paso: 1,
               opciones: [
                 { valor: 'DISPONIBLE', texto: 'Disponible' },
                 { valor: 'EN_COMODATO', texto: 'En Comodato' },
@@ -790,25 +790,13 @@ export class ArticulosComponent {
               nombre: 'numSerieArticulo',
               etiqueta: 'Número de Serie',
               obligatorio: true,
-              paso: 1,
-            },
-            {
-              tipo: 'select',
-              nombre: 'Marca_idMarca',
-              etiqueta: 'Marca',
-              obligatorio: true,
-              paso: 1,
-              opciones: marcas.map((m) => ({
-                valor: m.idMarca,
-                texto: m.nombreMarca,
-              })),
-            },
-            {
+              paso: 0,
+            },{
               tipo: 'select',
               nombre: 'Categoria_idCategoria',
               etiqueta: 'Categoría',
               obligatorio: true,
-              paso: 1,
+              paso: 2,
               opciones: categorias.map((c) => ({
                 valor: c.idCategoria,
                 texto: c.nombreCategoria,
@@ -816,16 +804,24 @@ export class ArticulosComponent {
             },
             {
               tipo: 'select',
+              nombre: 'Marca_idMarca',
+              etiqueta: 'Marca',
+              obligatorio: true,
+              paso: 2,
+              opciones: [],
+            },
+            
+            {
+              tipo: 'select',
               nombre: 'Modelo_idModelo',
               etiqueta: 'Modelo',
               obligatorio: true,
-              paso: 1,
-              opciones: modelos.map((mo) => ({
-                valor: mo.idModelo,
-                texto: mo.nombreModelo,
-              })),
+              paso: 2,
+              opciones: [],
             },
           ],
+          marcas,
+          modelos,
           valoresIniciales: articulo,
         },
       });
