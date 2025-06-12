@@ -3,7 +3,7 @@ export interface Persona {
   nomPersona: string;
   apPersona: string;
   rutPersona: string;
-  telePersona: string;
+  telefPersona: string;
   directPersona: string;
   desPersona?: string;
   Estamento_idEstamento: string;
