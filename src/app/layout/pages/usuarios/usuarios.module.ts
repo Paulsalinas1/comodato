@@ -8,6 +8,10 @@ import { GoogleChartsModule } from 'angular-google-charts';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { FormsModule } from '@angular/forms';
 
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+
 
 
 @NgModule({
@@ -20,7 +24,10 @@ import { FormsModule } from '@angular/forms';
     LayoutModule,
     GoogleChartsModule,
     NgxPaginationModule,
-    FormsModule
+    FormsModule,
+    MatPaginatorModule,
+    MatIconModule,
+    MatSnackBarModule
   ]
 })
 export class UsuariosModule { }

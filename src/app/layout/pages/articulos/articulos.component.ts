@@ -85,6 +85,10 @@ export class ArticulosComponent {
     this.cargarDatosMod();
     this.cargarDatosArti();
 
+    this.cargarNombres();
+  }
+
+  cargarNombres(){
     this.categoriaService.getCategorias().subscribe((cats) => {
       this.categoriasMap = Object.fromEntries(
         cats.map((c) => [c.idCategoria, c.nombreCategoria])
@@ -373,6 +377,7 @@ export class ArticulosComponent {
         this.categoriaService.addCategoria(result).subscribe({
           next: () => {
             this.cargarDatosCat();
+            this.cargarNombres();
             this.toastComplete(result.nombreCategoria);
           },
           error: (err) => {
@@ -431,6 +436,7 @@ export class ArticulosComponent {
             .subscribe({
               next: () => {
                 this.cargarDatosCat();
+                this.cargarNombres();
                 this.toastComplete(categoria.nombreCategoria);
               },
               error: (err) => {
@@ -490,6 +496,7 @@ export class ArticulosComponent {
             this.marcasService.createMarca(result).subscribe({
               next: () => {
                 this.cargarDatosMar();
+                this.cargarNombres();
                 this.toastComplete(result.nombreMarca);
               },
               error: (err) => {
@@ -563,6 +570,7 @@ export class ArticulosComponent {
             this.marcasService.updateMarca(marca.idMarca, resultado).subscribe({
               next: () => {
                 this.cargarDatosMar();
+                this.cargarNombres();
                 this.toastEdit(marca.nombreMarca);
               },
               error: (err) => {
@@ -624,6 +632,7 @@ export class ArticulosComponent {
             this.modeloService.createModelo(result).subscribe({
               next: () => {
                 this.cargarDatosMod();
+                this.cargarNombres();
                 this.toastComplete(result.nombreModelo);
               },
               error: (err) => this.toastError(err.error.error),
@@ -695,6 +704,7 @@ export class ArticulosComponent {
               .subscribe({
                 next: () => {
                   this.cargarDatosMod();
+                  this.cargarNombres();
                   this.toastEdit(modelo.nombreModelo);
                 },
                 error: (err) => this.toastError(err.error.error),
@@ -1005,6 +1015,8 @@ export class ArticulosComponent {
       if (resultado) {
         this.categoriaService.addCategoria(resultado).subscribe({
           next: () => {
+            this.cargarDatosCat();
+            this.cargarNombres();
             this.redirigirSegunOrigen(respaldo, origen);
             this.toastComplete(resultado.nombreCategoria);
           },
@@ -1071,6 +1083,7 @@ export class ArticulosComponent {
             this.modeloService.createModelo(result).subscribe({
               next: () => {
                 this.cargarDatosMod();
+                this.cargarNombres();
                 this.toastComplete(result.nombreModelo);
                 this.redirigirSegunOrigen(respaldo, origen);
               },
@@ -1140,6 +1153,7 @@ export class ArticulosComponent {
             this.marcasService.createMarca(result).subscribe({
               next: () => {
                 this.cargarDatosMar();
+                this.cargarNombres();
                 this.toastComplete(result.nombreMarca);
                 this.redirigirSegunOrigen(respaldo, origen);
               },
