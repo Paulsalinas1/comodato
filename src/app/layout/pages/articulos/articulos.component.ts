@@ -85,16 +85,22 @@ export class ArticulosComponent {
     this.cargarDatosMod();
     this.cargarDatosArti();
 
-    this.categoriaService.getCategorias().subscribe(cats => {
-      this.categoriasMap = Object.fromEntries(cats.map(c => [c.idCategoria, c.nombreCategoria]));
+    this.categoriaService.getCategorias().subscribe((cats) => {
+      this.categoriasMap = Object.fromEntries(
+        cats.map((c) => [c.idCategoria, c.nombreCategoria])
+      );
     });
-    this.marcasService.getMarcas().subscribe(marcas => {
-      this.marcasMap = Object.fromEntries(marcas.map(m => [m.idMarca, m.nombreMarca]));
+    this.marcasService.getMarcas().subscribe((marcas) => {
+      this.marcasMap = Object.fromEntries(
+        marcas.map((m) => [m.idMarca, m.nombreMarca])
+      );
     });
-    this.modeloService.getModelos().subscribe(modelos => {
-      this.modelosMap = Object.fromEntries(modelos.map(m => [m.idModelo, m.nombreModelo]));
+    this.modeloService.getModelos().subscribe((modelos) => {
+      this.modelosMap = Object.fromEntries(
+        modelos.map((m) => [m.idModelo, m.nombreModelo])
+      );
     });
-    this.articuloService.getArticulos().subscribe(items => {
+    this.articuloService.getArticulos().subscribe((items) => {
       this.articulos = items;
     });
   }
@@ -714,7 +720,7 @@ export class ArticulosComponent {
             pasos: [
               'Información básica',
               'Estado y disponibilidad',
-              'Clasificación',
+              'Clasificación de articulo',
             ],
             campos: [
               // Paso 0: Información básica
@@ -843,7 +849,7 @@ export class ArticulosComponent {
           pasos: [
             'Información básica',
             'Estado y disponibilidad',
-            'Clasificación',
+            'Clasificación de articulo',
           ],
           campos: [
             {
@@ -969,7 +975,7 @@ export class ArticulosComponent {
 
   abrirModalCrearCategoria(
     respaldo: any,
-    origen: 'articulo' | 'marca' | 'modelo' | 'articulo2' | 'marca2' | 'modelo2'
+    origen: 'articulo' | 'marca' | 'modelo' | 'articulo2' | 'marca2' | 'modelo2' | 'modelo3' | 'marca3' | 'modelo4' | 'marca4'
   ) {
     const dialogRef = this.dialog.open(ModalAddComponent, {
       width: '400px',
@@ -1012,7 +1018,7 @@ export class ArticulosComponent {
 
   abrirModalCrearModelo(
     respaldo: any,
-    origen: 'articulo' | 'marca' | 'modelo' | 'articulo2' | 'marca2' | 'modelo2'
+    origen: 'articulo' | 'marca' | 'modelo' | 'articulo2' | 'marca2' | 'modelo2' | 'modelo3' | 'marca3' | 'modelo4' | 'marca4'
   ) {
     this.categoriaService.getCategorias().subscribe({
       next: (categorias) => {
@@ -1052,6 +1058,15 @@ export class ArticulosComponent {
         });
 
         dialogRef.afterClosed().subscribe((result) => {
+          if (result?.agregarCategoria) {
+            if (origen === 'articulo') {
+              this.abrirModalCrearCategoria(respaldo, 'modelo3');
+              return;
+            } else if (origen === 'articulo2') {
+              this.abrirModalCrearCategoria(respaldo, 'modelo4');
+              return;
+            }
+          }
           if (result) {
             this.modeloService.createModelo(result).subscribe({
               next: () => {
@@ -1072,7 +1087,7 @@ export class ArticulosComponent {
 
   abrirModalCrearMarca(
     respaldo: any,
-    origen: 'articulo' | 'marca' | 'modelo' | 'articulo2' | 'marca2' | 'modelo2'
+    origen: 'articulo' | 'marca' | 'modelo' | 'articulo2' | 'marca2' | 'modelo2' | 'modelo3' | 'marca3' | 'modelo4' | 'marca4'
   ) {
     this.categoriaService.getCategorias().subscribe({
       next: (categorias) => {
@@ -1112,6 +1127,15 @@ export class ArticulosComponent {
         });
 
         dialogRef.afterClosed().subscribe((result) => {
+          if (result?.agregarCategoria) {
+            if (origen === 'articulo') {
+              this.abrirModalCrearCategoria(respaldo, 'marca3');
+              return;
+            } else if (origen === 'articulo2') {
+              this.abrirModalCrearCategoria(respaldo, 'marca4');
+              return;
+            }
+          }
           if (result) {
             this.marcasService.createMarca(result).subscribe({
               next: () => {
@@ -1132,7 +1156,7 @@ export class ArticulosComponent {
 
   private redirigirSegunOrigen(
     respaldo: any,
-    origen: 'articulo' | 'marca' | 'modelo' | 'articulo2' | 'marca2' | 'modelo2'
+    origen: 'articulo' | 'marca' | 'modelo' | 'articulo2' | 'marca2' | 'modelo2' | 'modelo3' | 'marca3' | 'modelo4' | 'marca4'
   ) {
     if (origen === 'articulo') {
       this.abrirModalEditarArticulo(respaldo);
@@ -1146,6 +1170,14 @@ export class ArticulosComponent {
       this.abrirModalNuevaMarca(respaldo);
     } else if (origen === 'modelo2') {
       this.abrirModalNuevaModelo(respaldo);
+    } else if (origen === 'modelo3') {
+      this.abrirModalCrearModelo(respaldo , 'articulo');
+    } else if (origen === 'modelo4') {
+      this.abrirModalCrearModelo(respaldo , 'articulo2');
+    } else if (origen === 'marca3') {
+      this.abrirModalCrearMarca(respaldo , 'articulo');
+    } else if (origen === 'marca4') {
+      this.abrirModalCrearMarca(respaldo , 'articulo2');
     }
   }
 
