@@ -303,100 +303,99 @@ export class UsuariosComponent {
   }
 
   //modal de crear Persona
-abrirModalNuevaPersona(respaldo?: any): void {
-  this.svcEstamento.getEstamentos().subscribe({
-    next: (estamentos) => {
-      const dialogRef = this.dialog.open(ModalAddComponent, {
-        width: '1000px',
-        data: {
-          titulo: 'Crear Nuevo Usuario',
-          pasos: ['Información básica', 'Datos de Contacto', 'Complementos'],
-          campos: [
-            {
-              tipo: 'text',
-              nombre: 'nomPersona',
-              etiqueta: 'Nombres',
-              obligatorio: true,
-              paso: 0,
-            },
-            {
-              tipo: 'text',
-              nombre: 'apPersona',
-              etiqueta: 'Apellidos',
-              obligatorio: true,
-              paso: 0,
-            },
-            {
-              tipo: 'text',
-              nombre: 'rutPersona',
-              etiqueta: 'RUT',
-              obligatorio: true,
-              paso: 0,
-            },
-            {
-              tipo: 'text',
-              nombre: 'telefPersona',
-              etiqueta: 'Teléfono',
-              obligatorio: true,
-              paso: 1,
-            },
-            {
-              tipo: 'text',
-              nombre: 'directPersona',
-              etiqueta: 'Dirección',
-              obligatorio: true,
-              paso: 1,
-            },
-            {
-              tipo: 'select',
-              nombre: 'Estamento_idEstamento',
-              etiqueta: 'Estamento',
-              obligatorio: true,
-              paso: 2,
-              opciones: estamentos.map((est) => ({
-                valor: est.idEstamento,
-                texto: est.nombreEstamento,
-              })),
-            },
-            {
-              tipo: 'text',
-              nombre: 'desPersona',
-              etiqueta: 'Descripción',
-              obligatorio: false,
-              paso: 2,
-            },
-          ],
-          respaldo: respaldo,
-        },
-      });
+  abrirModalNuevaPersona(respaldo?: any): void {
+    this.svcEstamento.getEstamentos().subscribe({
+      next: (estamentos) => {
+        const dialogRef = this.dialog.open(ModalAddComponent, {
+          width: '1000px',
+          data: {
+            titulo: 'Crear Nuevo Usuario',
+            pasos: ['Información básica', 'Datos de Contacto', 'Complementos'],
+            campos: [
+              {
+                tipo: 'text',
+                nombre: 'nomPersona',
+                etiqueta: 'Nombres',
+                obligatorio: true,
+                paso: 0,
+              },
+              {
+                tipo: 'text',
+                nombre: 'apPersona',
+                etiqueta: 'Apellidos',
+                obligatorio: true,
+                paso: 0,
+              },
+              {
+                tipo: 'text',
+                nombre: 'rutPersona',
+                etiqueta: 'RUT',
+                obligatorio: true,
+                paso: 0,
+              },
+              {
+                tipo: 'text',
+                nombre: 'telefPersona',
+                etiqueta: 'Teléfono',
+                obligatorio: true,
+                paso: 1,
+              },
+              {
+                tipo: 'text',
+                nombre: 'directPersona',
+                etiqueta: 'Dirección',
+                obligatorio: true,
+                paso: 1,
+              },
+              {
+                tipo: 'select',
+                nombre: 'Estamento_idEstamento',
+                etiqueta: 'Estamento',
+                obligatorio: true,
+                paso: 2,
+                opciones: estamentos.map((est) => ({
+                  valor: est.idEstamento,
+                  texto: est.nombreEstamento,
+                })),
+              },
+              {
+                tipo: 'text',
+                nombre: 'desPersona',
+                etiqueta: 'Descripción',
+                obligatorio: false,
+                paso: 2,
+              },
+            ],
+            respaldo: respaldo,
+          },
+        });
 
-      dialogRef.afterClosed().subscribe((result) => {
-        if (result?.agregarEstamento) {
-          this.abrirModalCrearEstamento(result.respaldo, 'Persona');
-          return;
-        }
+        dialogRef.afterClosed().subscribe((result) => {
+          if (result?.agregarEstamento) {
+            this.abrirModalCrearEstamento(result.respaldo, 'Persona');
+            return;
+          }
 
-        if (result) {
-          this.svcPersona.createPersona(result).subscribe({
-            next: () => {
-              this.cargarDatosPer();
-              this.cargarNombres();
-              this.toastComplete(result.nomPersona);
-            },
-            error: (err) => {
-              this.toastError(err.error?.error);
-            },
-          });
-        }
-      });
-    },
-    error: (err) => {
-      console.error('Error al cargar estamentos:', err);
-      this.toastError('No se pudieron cargar los estamentos');
-    },
-  });
-}
-
+          if (result) {
+            this.svcPersona.createPersona(result).subscribe({
+              next: () => {
+                this.cargarDatosPer();
+                this.cargarNombres();
+                this.toastComplete(result.nomPersona);
+              },
+              error: (err) => {
+                this.toastError(err.error?.error);
+              },
+            });
+          }
+        });
+      },
+      error: (err) => {
+        console.error('Error al cargar estamentos:', err);
+        this.toastError('No se pudieron cargar los estamentos');
+      },
+    });
+  }
 
   //modal de editar y eliminar Persona
   abrirModalEditarPersona(persona: Persona) {
