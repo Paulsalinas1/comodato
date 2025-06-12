@@ -1,17 +1,17 @@
-<aside
+<aside [class.d-none]="!visible"
   class="sidenav navbar navbar-vertical navbar-expand-xs border-radius-lg fixed-start ms-2 bg-white my-2"
   id="sidenav-main"
   style="width: 200px;">
 
   <!-- Header -->
   <div class="sidenav-header px-2 py-2">
-    <i
-      class="fas fa-times p-2 cursor-pointer text-dark opacity-5 position-absolute end-0 top-0 d-none d-xl-none"
-      aria-hidden="true"
-      id="iconSidenav"></i>
-    <a class="navbar-brand d-flex align-items-center px-2 py-1 m-0" routerLink="/dashboard">
+    <a class="navbar-brand d-flex align-items-center px-2 py-1 m-0">
       <img src="assets/img/logo.png" width="24" height="24" alt="logo">
       <span class="ms-1 text-xs text-dark">Cebat</span>
+      <button type="button" class="btn position-absolute top-0 end-0 m-1 d-lg-none" aria-label="Close sidebar"
+        (click)="onClose()" style="z-index: 1050; font-size: 1.5rem;">
+        <span class="material-icons">close</span>
+      </button>
     </a>
   </div>
 

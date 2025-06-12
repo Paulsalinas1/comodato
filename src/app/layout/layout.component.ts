@@ -8,5 +8,10 @@ import { Component } from '@angular/core';
   
 })
 export class LayoutComponent {
+  sidebarVisible = false;
 
+  toggleSidebar() {
+    this.sidebarVisible = !this.sidebarVisible;
+    console.log('Sidebar visible:', this.sidebarVisible); // debug
+  }
 }
