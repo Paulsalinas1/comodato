@@ -1,18 +1,24 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm px-3 py-2">
   <div class="container-fluid">
-    <button class="btn d-lg-none me-3" (click)="onToggle()">
+    <!-- Botón menú móvil -->
+    <button class="btn d-lg-none" (click)="onToggle()" aria-label="Abrir menú">
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <nav aria-label="breadcrumb" class="d-none d-md-block">
-      <ol class="breadcrumb mb-0">
-        <li class="breadcrumb-item"><a href="#">Pages</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Tables</li>
+    <!-- Breadcrumb opcional -->
+    <nav aria-label="breadcrumb" class="d-none d-md-block ms-3">
+      <ol class="breadcrumb mb-0 small">
+        <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Panel</li>
       </ol>
     </nav>
 
+    <!-- Sección de usuario -->
     <div class="ms-auto d-flex align-items-center">
-      <span class="me-3">Usuario</span>
+      <span class="me-2 fw-semibold text-dark">Usuario</span>
+      <span class="material-symbols-outlined fs-3 text-dark" style="cursor: pointer;">
+        account_circle
+      </span>
     </div>
   </div>
 </nav>
