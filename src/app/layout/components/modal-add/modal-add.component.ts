@@ -146,4 +146,9 @@ export class ModalAddComponent {
       }));
     }
   }
+
+  irAlPaso(indice: number): void {
+  // Opcional: validación para evitar cambiar si hay errores
+    this.pasoActual = indice;
+ }
 }

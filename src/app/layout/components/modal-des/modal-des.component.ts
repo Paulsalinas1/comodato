@@ -155,4 +155,9 @@ export class ModalDesComponent implements OnInit {
     }
     
   }
+
+  irAlPaso(indice: number): void {
+  // Opcional: validación para evitar cambiar si hay errores
+    this.pasoActual = indice;
+ }
 }
