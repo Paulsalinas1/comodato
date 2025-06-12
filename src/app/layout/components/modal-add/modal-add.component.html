@@ -7,20 +7,15 @@
   <!-- Barra de pasos visual dinámica -->
   <div class="px-3 pt-3 pb-0">
     <ul class="nav nav-pills nav-justified mb-3 px-2">
-  <li class="nav-item" *ngFor="let paso of data.pasos; let i = index">
-    <button
-      type="button"
-      class="nav-link text-capitalize w-100"
-      [ngClass]="{
+      <li class="nav-item" *ngFor="let paso of data.pasos; let i = index">
+        <button type="button" class="nav-link text-capitalize w-100" [ngClass]="{
         'active bg-gradient-dark text-white': i === pasoActual,
         'bg-light text-secondary': i !== pasoActual
-      }"
-      (click)="irAlPaso(i)"
-    >
-      {{ paso }}
-    </button>
-  </li>
-</ul>
+      }" (click)="irAlPaso(i)">
+          {{ paso }}
+        </button>
+      </li>
+    </ul>
   </div>
   <div class="card-body px-3 pb-2">
     <form [formGroup]="form" class="row g-3">

@@ -7,7 +7,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
   styleUrl: './header.component.css',
 })
 export class HeaderComponent {
-@Output() toggleSidebar = new EventEmitter<void>();
+  @Output() toggleSidebar = new EventEmitter<void>();
 
   onToggle() {
     this.toggleSidebar.emit();

@@ -35,7 +35,7 @@ export class ModalAddComponent {
       categorias: Categoria[];
       modelos: Modelo[];
       marcas: Marca[];
-      respaldo?: any; 
+      respaldo?: any;
     }
   ) {}
 
@@ -48,7 +48,10 @@ export class ModalAddComponent {
 
     this.data.campos.forEach((campo) => {
       const validators = campo.obligatorio ? [Validators.required] : [];
-      group[campo.nombre] = this.fb.control(this.data.respaldo?.[campo.nombre] || '', validators);
+      group[campo.nombre] = this.fb.control(
+        this.data.respaldo?.[campo.nombre] || '',
+        validators
+      );
     });
     this.form = this.fb.group(group);
 
@@ -82,22 +85,32 @@ export class ModalAddComponent {
 
   agregarOpcion(campo: Campo) {
     if (campo.nombre === 'Categoria_idCategoria') {
-      this.dialogRef.close({ agregarCategoria: true, respaldo:this.form.getRawValue() });
+      this.dialogRef.close({
+        agregarCategoria: true,
+        respaldo: this.form.getRawValue(),
+      });
     }
 
     if (campo.nombre === 'Modelo_idModelo') {
-      this.dialogRef.close({ agregarModelo: true , respaldo:this.form.getRawValue()});
+      this.dialogRef.close({
+        agregarModelo: true,
+        respaldo: this.form.getRawValue(),
+      });
     }
 
     if (campo.nombre === 'Marca_idMarca') {
-      this.dialogRef.close({ agregarMarca: true, respaldo:this.form.getRawValue()});
+      this.dialogRef.close({
+        agregarMarca: true,
+        respaldo: this.form.getRawValue(),
+      });
     }
 
     if (campo.nombre === 'Estamento_idEstamento') {
-      this.dialogRef.close({ agregarEstamento: true, respaldo:this.form.getRawValue()});
+      this.dialogRef.close({
+        agregarEstamento: true,
+        respaldo: this.form.getRawValue(),
+      });
     }
-
-    
   }
 
   siguientePaso() {
@@ -148,7 +161,7 @@ export class ModalAddComponent {
   }
 
   irAlPaso(indice: number): void {
-  // Opcional: validación para evitar cambiar si hay errores
+    // Opcional: validación para evitar cambiar si hay errores
     this.pasoActual = indice;
- }
+  }
 }
