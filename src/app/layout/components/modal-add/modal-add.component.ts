@@ -92,6 +92,12 @@ export class ModalAddComponent {
     if (campo.nombre === 'Marca_idMarca') {
       this.dialogRef.close({ agregarMarca: true, respaldo:this.form.getRawValue()});
     }
+
+    if (campo.nombre === 'Estamento_idEstamento') {
+      this.dialogRef.close({ agregarEstamento: true, respaldo:this.form.getRawValue()});
+    }
+
+    
   }
 
   siguientePaso() {
