@@ -399,6 +399,8 @@ export class UsuariosComponent {
 
   //modal de editar y eliminar Persona
   abrirModalEditarPersona(persona: Persona) {
+    this.svcEstamento.getEstamentos().subscribe({
+      next: (estamentos) => {
     const dialogRef = this.dialog.open(ModalDesComponent, {
       width: '600px',
       height: '',
@@ -442,16 +444,16 @@ export class UsuariosComponent {
             paso: 1,
           },
           {
-            tipo: 'text',
-            nombre: 'Estamento_idEstamento',
-            etiqueta: 'Estamento',
-            obligatorio: true,
-            paso: 2,
-            opciones: this.estamentos.map((est) => ({
-              valor: est.idEstamento,
-              texto: est.nombreEstamento,
-            })),
-          },
+                tipo: 'select',
+                nombre: 'Estamento_idEstamento',
+                etiqueta: 'Estamento',
+                obligatorio: true,
+                paso: 2,
+                opciones: estamentos.map((est) => ({
+                  valor: est.idEstamento,
+                  texto: est.nombreEstamento,
+                })),
+              },
           {
             tipo: 'text',
             nombre: 'desPersona',
@@ -492,8 +494,16 @@ export class UsuariosComponent {
                 this.toastError(err.error.error);
               },
             });
+            
         }
       }
+      
+    });
+    },
+      error: (err) => {
+        console.error('Error al cargar estamentos:', err);
+        this.toastError('No se pudieron cargar los estamentos');
+      },
     });
   }
 
