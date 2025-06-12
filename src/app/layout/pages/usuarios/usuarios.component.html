@@ -107,7 +107,7 @@
                     <input type="text" [(ngModel)]="filtroPersonas" class="form-control mb-3 w-25 mx-3"
                         placeholder="Buscar...">
 
-                    <table class="table table-hover" >
+                    <table class="table table-hover">
                         <thead>
                             <tr>
                                 <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">
@@ -130,9 +130,9 @@
                             <!--Muestra las categorias paginadas -->
                             <tr class="text-capitalize" *ngFor="let per of PersonasPaginados"
                                 (click)="abrirModalEditarPersona(per)">
-                                <td scope="row">
-                                    <div class="d-flex px-3 py-1">
-                                        <div class="d-flex flex-column justify-content-center me-3">
+                                <td>
+                                    <div class="px-3 py-1">
+                                        <div class="d-flex flex-column justify-content-center">
                                             <h6 class="mb-0 text-sm">{{per.nomPersona + per.apPersona}}</h6>
                                             <p class="text-xs text-secondary mb-0">{{per.rutPersona}}</p>
                                         </div>
@@ -221,7 +221,7 @@
                                 (click)="abrirModalEditarEstamento(est)">
                                 <td scope="row">
                                     <div class="d-flex px-3 py-1">
-                                        <div class="d-flex flex-column justify-content-center me-3">
+                                        <div class="d-flex flex-column justify-content-center">
                                             <h6 class="mb-0 text-sm">{{est.nombreEstamento}}</h6>
                                         </div>
                                     </div>

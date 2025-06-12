@@ -54,7 +54,7 @@ export class UsuariosComponent {
 
   ngOnInit(): void {
     this.cargarDatosEst();
-
+    this.cargarDatosPer();
     this.cargarNombres();
   }
 
