@@ -1,5 +1,5 @@
 export interface Campo {
-  tipo: 'text' | 'textarea' | 'select';
+  tipo: 'text' | 'textarea' | 'select' | 'checkbox' | 'radio' | 'date' | 'multiselect';
   nombre: string;
   etiqueta: string;
   obligatorio: boolean;

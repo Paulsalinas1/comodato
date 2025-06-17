@@ -483,11 +483,10 @@ export class UsuariosComponent {
             },
           });
         } else {
-          this.svcEstamento
-            .updateEstamento(persona.idPersona, resultado)
+          this.svcPersona.updatePersona(persona.idPersona, resultado)
             .subscribe({
               next: () => {
-                this.cargarDatosEst();
+                this.cargarDatosPer();
                 this.toastComplete(persona.nomPersona);
               },
               error: (err) => {
@@ -501,7 +500,6 @@ export class UsuariosComponent {
     });
     },
       error: (err) => {
-        console.error('Error al cargar estamentos:', err);
         this.toastError('No se pudieron cargar los estamentos');
       },
     });
@@ -556,4 +554,5 @@ export class UsuariosComponent {
       this.abrirModalEditarPersona(respaldo);
     }
   }
+
 }

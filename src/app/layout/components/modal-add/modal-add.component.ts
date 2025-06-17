@@ -24,8 +24,8 @@ export class ModalAddComponent {
   modelosFiltrados: Modelo[] = [];
 
   constructor(
-    private fb: FormBuilder,
-    private categoriaService: CategoriaService,
+    private readonly fb: FormBuilder,
+    private readonly categoriaService: CategoriaService,
     public dialogRef: MatDialogRef<ModalAddComponent>,
     @Inject(MAT_DIALOG_DATA)
     public data: {
@@ -75,6 +75,7 @@ export class ModalAddComponent {
 
   guardar() {
     if (this.form.valid) {
+      console.log('Datos a enviar:', this.form.value);
       this.dialogRef.close(this.form.value);
     }
   }

@@ -49,6 +49,21 @@
             </div>
           </div>
 
+          <div *ngIf="campo.tipo === 'multiselect'">
+            <select class="form-select form-select-lg" [formControlName]="campo.nombre" multiple required>
+              <option *ngFor="let opcion of campo.opciones" [value]="opcion.valor">
+                {{ opcion.texto }}
+              </option>
+            </select>
+            <small class="text-muted">Mantén Ctrl o Cmd para seleccionar múltiples opciones</small>
+          </div>
+
+          <div *ngIf="campo.tipo === 'date'" class="col-md-12">
+            <!-- <label class="form-label fw-semibold text-capitalize" [for]="campo.etiqueta">{{ campo.etiqueta }}</label> -->
+            <input type="date" class="form-control glow-on-focus border p-2" [id]="campo.etiqueta"
+              [formControlName]="campo.nombre" [required]="campo.obligatorio" />
+          </div>
+
         </div>
       </ng-container>
     </form>
