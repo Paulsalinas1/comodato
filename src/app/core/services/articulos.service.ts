@@ -7,7 +7,7 @@ import { Articulo } from '../models/articulo';
   providedIn: 'root'
 })
 export class ArticulosService {
-  private apiUrl = 'http://10.9.2.33:3000/api/articulos'; // Cambia si tienes otro puerto o ruta base
+  private apiUrl = 'http://10.9.1.28:3000/api/articulos'; 
 
   constructor(private http: HttpClient) {}
 

@@ -8,7 +8,7 @@ import { Modelo } from '../models/Modelo';
 })
 export class ModeloService {
 
-  private apiUrl = 'http://10.9.2.33:3000/api/modelos'; // Cambia si usas otro puerto o dominio
+  private apiUrl = 'http://10.9.1.28:3000/api/modelos'; // Cambia si usas otro puerto o dominio
 
   constructor(private http: HttpClient) { }
 
