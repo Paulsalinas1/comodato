@@ -13,7 +13,6 @@ import { ModalAddComponent } from '../../components/modal-add/modal-add.componen
 import { ModalDesComponent } from '../../components/modal-des/modal-des.component';
 import { Articulo } from '../../../core/models/articulo';
 
-
 @Component({
   selector: 'app-comodatos',
   standalone: false,
@@ -188,6 +187,7 @@ export class ComodatosComponent implements OnInit {
       articulos: this.svArticulo.getArticulos(),
     }).subscribe({
       next: ({ personas, articulos }) => {
+        const articulosDisponibles = articulos.filter(articulo => articulo.dispArticulo == 'DISPONIBLE' );
         const dialogRef = this.dialog.open(ModalAddComponent, {
           width: '1000px',
           data: {
@@ -218,7 +218,7 @@ export class ComodatosComponent implements OnInit {
                 etiqueta: 'Artículos',
                 obligatorio: true,
                 paso: 1,
-                opciones: articulos.map((art: any) => ({
+                opciones: articulosDisponibles.map((art: any) => ({
                   valor: art.idArticulo,
                   texto: art.nombreArticulo, // ajusta según campo real
                 })),
@@ -253,7 +253,6 @@ export class ComodatosComponent implements OnInit {
               },
             ],
             respaldo: respaldo,
-            
           },
         });
 
@@ -294,7 +293,9 @@ export class ComodatosComponent implements OnInit {
                   next: () => {
                     // Actualizar dispArticulo a 'en_comodato' para cada artículo seleccionado
                     const actualizaciones = articulos.map((idArticulo) =>
-                      this.svArticulo.updateArticulo(idArticulo, { dispArticulo: 'EN_COMODATO' } as Articulo)
+                      this.svArticulo.updateArticulo(idArticulo, {
+                        dispArticulo: 'EN_COMODATO',
+                      } as Articulo)
                     );
 
                     forkJoin(actualizaciones).subscribe({
@@ -341,65 +342,67 @@ export class ComodatosComponent implements OnInit {
     }).subscribe({
       next: ({ personas, articulos, relaciones }) => {
         const dialogRef = this.dialog.open(ModalDesComponent, {
-          width: '1000px',
+          width: '600px',
           data: {
-            titulo: 'Editar Comodato',
-            pasos: [
-              'Seleccionar Usuario',
-              'Seleccionar Artículos',
-              'Fechas y Estado',
-            ],
+            titulo: 'Editar Estado del Comodato',
+            pasos: ['Datos del Comodato', 'Estado'],
             campos: [
-              // Paso 0 - Persona
+              // Paso 0 - Solo mostrar datos, deshabilitados
               {
                 tipo: 'select',
                 nombre: 'Persona_idPersona',
                 etiqueta: 'Persona Responsable',
-                obligatorio: true,
+                obligatorio: false,
                 paso: 0,
                 opciones: personas.map((per: any) => ({
                   valor: per.idPersona,
                   texto: `${per.nomPersona} ${per.apPersona}`,
                 })),
-                permitirCrear: true,
-                
+                valorInicial: comodato.Persona_idPersona,
+                soloLectura: true, // <-- deshabilitado
               },
-              // Paso 1 - Artículos
               {
                 tipo: 'multiselect',
                 nombre: 'articulosSeleccionados',
                 etiqueta: 'Artículos',
-                obligatorio: true,
-                paso: 1,
+                obligatorio: false,
+                paso: 0,
                 opciones: articulos.map((art: any) => ({
                   valor: art.idArticulo,
                   texto: art.nombreArticulo,
                 })),
-                
+                valorInicial: relaciones.map(
+                  (rel: any) => rel.Articulo_idArticulo
+                ),
+                soloLectura: true, // <-- deshabilitado
               },
-              // Paso 2 - Fechas y Estado
               {
                 tipo: 'date',
                 nombre: 'fechaInicioComodato',
                 etiqueta: 'Fecha de Inicio',
-                obligatorio: true,
-                paso: 2,
-                
+                obligatorio: false,
+                paso: 0,
+                valorInicial: this.formatearFecha(comodato.fechaInicioComodato),
+                soloLectura: true, // <-- deshabilitado
               },
               {
                 tipo: 'date',
                 nombre: 'fechaTerminoComodato',
                 etiqueta: 'Fecha de Término',
-                obligatorio: true,
-                paso: 2,
-                
+                obligatorio: false,
+                paso: 0,
+                valorInicial: this.formatearFecha(
+                  comodato.fechaTerminoComodatoD
+                ),
+                soloLectura: true, // <-- deshabilitado
               },
+              // Paso 1 - Solo editar estado
               {
                 tipo: 'select',
                 nombre: 'estadoComodato',
                 etiqueta: 'Estado',
                 obligatorio: true,
-                paso: 2,
+                paso: 1,
                 opciones: [
                   { valor: 'pendiente', texto: 'Pendiente' },
                   { valor: 'entregado', texto: 'Entregado' },
@@ -409,7 +412,7 @@ export class ComodatosComponent implements OnInit {
                 valorInicial: comodato.estadoComodato,
               },
             ],
-            respaldo: comodato, // importante para saber si es edición
+            respaldo: comodato,
             valoresIniciales: {
               Persona_idPersona: comodato.Persona_idPersona,
               fechaInicioComodato: this.formatearFecha(
@@ -422,78 +425,61 @@ export class ComodatosComponent implements OnInit {
               articulosSeleccionados: relaciones.map(
                 (rel: any) => rel.Articulo_idArticulo
               ),
-
-            
-          },
+            },
           },
         });
-        
 
         dialogRef.afterClosed().subscribe((result) => {
           if (!result) return;
 
-          // Eliminar comodato si vino la señal
-          if (result.eliminar) {
-            this.svComodato.deleteComodato(comodato.idComodato!).subscribe({
-              next: () => {
-                this.toastComplete('Comodato eliminado correctamente');
-                this.cargarDatosComodatos();
-              },
-              error: () => {
-                this.toastError('Error al eliminar comodato');
-              },
-            });
-            return;
-          }
-
-          // Actualización
-          const comodatoActualizado = {
-            fechaInicioComodato: result.fechaInicioComodato,
-            fechaTerminoComodatoD: result.fechaTerminoComodato,
+          // Solo actualizar el estado, pero pasando todos los campos requeridos
+          const comodatoActualizado: Comodato = {
+            idComodato: comodato.idComodato,
+            fechaInicioComodato: comodato.fechaInicioComodato,
+            fechaTerminoComodatoD: comodato.fechaTerminoComodatoD,
             estadoComodato: result.estadoComodato,
-            Persona_idPersona: result.Persona_idPersona,
+            Persona_idPersona: comodato.Persona_idPersona,
           };
 
           this.svComodato
             .updateComodato(comodato.idComodato!, comodatoActualizado)
             .subscribe({
               next: () => {
-                // Actualizar relaciones
-                this.svArticulo_Comodato
-                  .eliminarRelacionesPorComodato(comodato.idComodato!)
-                  .subscribe({
+                // Si el estado es "devuelto" o "cancelado", actualizar los artículos a DISPONIBLE
+                if (
+                  result.estadoComodato === 'devuelto' ||
+                  result.estadoComodato === 'cancelado'
+                ) {
+                  const articulosAsociados = relaciones.map(
+                    (rel: any) => rel.Articulo_idArticulo
+                  );
+                  const actualizaciones = articulosAsociados.map(
+                    (idArticulo: string) =>
+                      this.svArticulo.updateArticulo(idArticulo, {
+                        dispArticulo: 'DISPONIBLE',
+                      } as Articulo)
+                  );
+                  forkJoin(actualizaciones).subscribe({
                     next: () => {
-                      const nuevasRelaciones = (
-                        result.articulosSeleccionados || []
-                      ).map((idArticulo: string) => ({
-                        Comodato_idComodato: comodato.idComodato,
-                        Articulo_idArticulo: idArticulo,
-                      }));
-
-                      const solicitudes = nuevasRelaciones.map(
-                        (rel: RelacionArticuloComodato) =>
-                          this.svArticulo_Comodato.crearRelacion(rel)
+                      this.toastEdit(
+                        'Estado del comodato y artículos actualizados'
                       );
-
-                      forkJoin(solicitudes).subscribe({
-                        next: () => {
-                          this.toastComplete(
-                            'Comodato actualizado correctamente'
-                          );
-                          this.cargarDatosComodatos();
-                        },
-                        error: () => {
-                          this.toastError('Error al asociar artículos');
-                        },
-                      });
+                      this.cargarDatosComodatos();
                     },
                     error: () => {
-                      this.toastError('Error al eliminar relaciones previas');
+                      this.toastError(
+                        'Error al actualizar estado de los artículos'
+                      );
+                      this.cargarDatosComodatos();
                     },
                   });
+                } else {
+                  this.toastEdit('Estado del comodato');
+                  this.cargarDatosComodatos();
+                }
               },
               error: () => {
-                this.toastError('Error al actualizar comodato');
+                this.toastError('Error al actualizar el estado del comodato');
               },
             });
         });

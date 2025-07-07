@@ -25,7 +25,7 @@ export class ModalDesComponent implements OnInit {
   modelosFiltrados: Modelo[] = [];
 
   constructor(
-    private fb: FormBuilder,
+    private readonly fb: FormBuilder,
     public dialogRef: MatDialogRef<ModalDesComponent>,
     @Inject(MAT_DIALOG_DATA)
     public data: {
@@ -49,7 +49,10 @@ export class ModalDesComponent implements OnInit {
     this.campos.forEach((campo) => {
       const validators = campo.obligatorio ? [Validators.required] : [];
       const valorInicial = this.data.valoresIniciales?.[campo.nombre] ?? '';
-      group[campo.nombre] = this.fb.control(valorInicial, validators);
+      group[campo.nombre] = this.fb.control(
+        { value: valorInicial, disabled: campo.soloLectura === true },
+      validators
+  );
     });
 
     this.form = this.fb.group(group);
