@@ -43,7 +43,7 @@ export class ComodatosComponent implements OnInit {
   nombresResponsables: { [IdPersona: string]: string } = {};
   rutResponsables: { [IdPersona: string]: string } = {};
   nombresArticulos: { [comodatoId: string]: string[]} = {};
-
+  comodatosTotales: number = 0; 
   // Filtros
   filtroComodatos: string = '';
 
@@ -51,6 +51,13 @@ export class ComodatosComponent implements OnInit {
     this.cargarDatosComodatos();
     this.construirResponsables();
     this.construirNombresArticulosAgrupados()
+    this.CalcularTotalComodatos();
+  }
+
+  CalcularTotalComodatos(): void {
+    this.svComodato.getComodatos().subscribe(c => {
+       this.comodatosTotales = c.length 
+    });
   }
 
   construirNombresArticulosAgrupados(): void {

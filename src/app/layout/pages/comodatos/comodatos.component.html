@@ -12,7 +12,7 @@
                     <div class="d-flex justify-content-between">
                         <div>
                             <p class="text-sm mb-0 text-capitalize">Comodatos Totales</p>
-                            <h4 class="mb-0">200</h4>
+                            <h4 class="mb-0">{{comodatosTotales}}</h4>
                         </div>
                         <div
                             class="icon icon-md icon-shape bg-gradient bg-danger shadow-dark shadow text-center border-radius-lg">
@@ -91,7 +91,7 @@
     <!-- seccion de comodatos registrados -->
      
     <div class="row">
-        <div class="col-lg-12 col-md-12 col-sm-12" id="tabla-Comodatos">
+        <div class="col-lg-12 col-md-12 col-sm-12" id="tabla-Comodatos ">
             <div class="card my-5">
                 <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                     <div
@@ -106,7 +106,7 @@
                 </div>
 
                 <div class="card-body px-0 pb-2 table-responsive"
-                    style="overflow-y: auto; scrollbar-width: none; -ms-overflow-style: none;">
+                    >
                     <!-- Filtro -->
                     <input type="text" [(ngModel)]="filtroComodatos" class="form-control mb-3 w-25 mx-3"
                         placeholder="Buscar...">
@@ -131,7 +131,7 @@
                         </thead>
                         <tbody>
                             <tr class="text-capitalize" *ngFor="let com of comodatosPaginados" 
-                                (Click)="abrirModalEditarComodatoCompleto(com)">
+                                (click)="abrirModalEditarComodatoCompleto(com)">
                                 <td>
                                     <div class="px-3 py-1">
                                         <div class="d-flex flex-column justify-content-center">
