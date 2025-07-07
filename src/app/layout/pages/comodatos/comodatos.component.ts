@@ -622,4 +622,5 @@ export class ComodatosComponent implements OnInit {
     const day = String(d.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
   }
+  
 }
