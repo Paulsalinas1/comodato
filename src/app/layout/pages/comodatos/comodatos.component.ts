@@ -12,7 +12,7 @@ import { RelacionArticuloComodato } from '../../../core/models/RelacionArticuloC
 import { ModalAddComponent } from '../../components/modal-add/modal-add.component';
 import { ModalDesComponent } from '../../components/modal-des/modal-des.component';
 import { Articulo } from '../../../core/models/articulo';
-import { switchMap } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-comodatos',
@@ -37,7 +37,7 @@ export class ComodatosComponent implements OnInit {
   articulos2Map: { [comodatoId: string]: string[] } = {};
   nombresResponsables: { [IdPersona: string]: string } = {};
   rutResponsables: { [IdPersona: string]: string } = {};
-
+  nombresArticulos: { [comodatoId: string]: string[] } = {}; 
   // Filtros
   filtroComodatos: string = '';
 
@@ -70,6 +70,26 @@ export class ComodatosComponent implements OnInit {
       this.articulos2Map[comodatoId].push(nombreArticulo);
     });
   }
+
+  construirNombresArticulosAgrupados(): void {
+  this.svComodato.getComodatos().subscribe((comodatos) => {
+    const observables = comodatos.map((comodato: any) =>
+      this.svArticulo_Comodato.obtenerArticulosPorComodato(comodato.idComodato).pipe(
+        map((articulos: any[]) => ({
+          comodatoId: comodato.idComodato,
+          nombres: articulos.map((art) => art.nombreArticulo),
+        }))
+      )
+    );
+
+    forkJoin(observables).subscribe((resultados) => {
+      this.nombresArticulos = Object.fromEntries(
+        resultados.map((res) => [res.comodatoId, res.nombres])
+      );
+    });
+  });
+}
+
 
   construirNombresResponsables(): void {
     this.svPersona.getPersonas().subscribe((per) => {
@@ -342,10 +362,8 @@ export class ComodatosComponent implements OnInit {
       articulos: this.svArticulo_Comodato.obtenerArticulosPorComodato(
         comodato.idComodato!
       ),
-      
     }).subscribe({
       next: ({ personas, articulos }) => {
-        
         const dialogRef = this.dialog.open(ModalDesComponent, {
           width: '600px',
           data: {
@@ -436,8 +454,14 @@ export class ComodatosComponent implements OnInit {
 
         dialogRef.afterClosed().subscribe((result) => {
           if (!result) return;
-          const fechaInicioFormateada = new Date(comodato.fechaInicioComodato).toISOString().split('T')[0];
-          const fechaTerminoFormateada = new Date(comodato.fechaTerminoComodatoD).toISOString().split('T')[0];
+          const fechaInicioFormateada = new Date(comodato.fechaInicioComodato)
+            .toISOString()
+            .split('T')[0];
+          const fechaTerminoFormateada = new Date(
+            comodato.fechaTerminoComodatoD
+          )
+            .toISOString()
+            .split('T')[0];
           const comodatoActualizado: Comodato = {
             idComodato: comodato.idComodato,
             fechaInicioComodato: fechaInicioFormateada,
@@ -457,21 +481,25 @@ export class ComodatosComponent implements OnInit {
                 ) {
                   const actualizaciones = articulos.map(
                     (idArticulo: Articulo) =>
-                  this.svArticulo.getArticulo(idArticulo.idArticulo!).pipe(
-                    switchMap((arti) => {
-                      const arti2: Articulo = {
-                        Categoria_idCategoria: arti.Categoria_idCategoria,
-                        dispArticulo: 'DISPONIBLE',
-                        estadoArticulo: arti.estadoArticulo,
-                        desArticulo: arti.desArticulo,
-                        Marca_idMarca: arti.Marca_idMarca,
-                        Modelo_idModelo: arti.Modelo_idModelo,
-                        nombreArticulo: arti.nombreArticulo,
-                        numSerieArticulo: arti.numSerieArticulo,
-                        idArticulo: arti.idArticulo,
-                      };
-                      return this.svArticulo.updateArticulo(idArticulo.idArticulo!, arti2);
-                      }))
+                      this.svArticulo.getArticulo(idArticulo.idArticulo!).pipe(
+                        switchMap((arti) => {
+                          const arti2: Articulo = {
+                            Categoria_idCategoria: arti.Categoria_idCategoria,
+                            dispArticulo: 'DISPONIBLE',
+                            estadoArticulo: arti.estadoArticulo,
+                            desArticulo: arti.desArticulo,
+                            Marca_idMarca: arti.Marca_idMarca,
+                            Modelo_idModelo: arti.Modelo_idModelo,
+                            nombreArticulo: arti.nombreArticulo,
+                            numSerieArticulo: arti.numSerieArticulo,
+                            idArticulo: arti.idArticulo,
+                          };
+                          return this.svArticulo.updateArticulo(
+                            idArticulo.idArticulo!,
+                            arti2
+                          );
+                        })
+                      )
                   );
                   forkJoin(actualizaciones).subscribe({
                     next: () => {
@@ -493,7 +521,9 @@ export class ComodatosComponent implements OnInit {
                 }
               },
               error: (err) => {
-                this.toastError('Error al actualizar el estado del comodato: ' + err.err);
+                this.toastError(
+                  'Error al actualizar el estado del comodato: ' + err.err
+                );
               },
             });
         });
@@ -511,6 +541,4 @@ export class ComodatosComponent implements OnInit {
     const day = String(d.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
   }
-
-  
 }
