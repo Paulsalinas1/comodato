@@ -9,9 +9,9 @@ import { RelacionArticuloComodato } from '../models/RelacionArticuloComodato ';
 })
 export class ArticuloComodatoService {
 
-  private baseUrl = 'http://localhost:3000/api/articulo_has_comodato'; // Ajusta si tu ruta cambia
+  private readonly baseUrl = 'http://localhost:3000/api/articulo_has_comodato'; // Ajusta si tu ruta cambia
 
-  constructor(private http: HttpClient) {}
+  constructor(private readonly http: HttpClient) {}
 
   // Crear relación entre artículo y comodato
   crearRelacion(data: RelacionArticuloComodato): Observable<any> {
