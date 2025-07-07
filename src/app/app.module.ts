@@ -8,7 +8,7 @@ import { LayoutModule } from './layout/layout.module';
 import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 import { MatPaginatorIntl } from '@angular/material/paginator';
 import { CustomPaginator } from './layout/components/paginator/paginator.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 
 
@@ -21,10 +21,10 @@ import { HttpClientModule } from '@angular/common/http';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    LayoutModule,
-    HttpClientModule  
+    LayoutModule  
   ],
-  providers: [provideCharts(withDefaultRegisterables()), { provide: MatPaginatorIntl, useValue: CustomPaginator() }],
+  
+  providers: [provideCharts(withDefaultRegisterables()), { provide: MatPaginatorIntl, useValue: CustomPaginator() }, provideHttpClient(withInterceptorsFromDi())],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

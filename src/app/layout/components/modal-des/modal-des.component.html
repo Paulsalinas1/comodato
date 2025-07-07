@@ -59,7 +59,6 @@
           </div>
 
           <div *ngIf="campo.tipo === 'date'" class="col-md-12">
-            <!-- <label class="form-label fw-semibold text-capitalize" [for]="campo.etiqueta">{{ campo.etiqueta }}</label> -->
             <input type="date" class="form-control glow-on-focus border p-2" [id]="campo.etiqueta"
               [formControlName]="campo.nombre" [required]="campo.obligatorio" />
           </div>
