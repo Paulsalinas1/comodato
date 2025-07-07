@@ -37,7 +37,7 @@ export class ComodatosComponent implements OnInit {
   articulos2Map: { [comodatoId: string]: string[] } = {};
   nombresResponsables: { [IdPersona: string]: string } = {};
   rutResponsables: { [IdPersona: string]: string } = {};
-  nombresArticulos: { [comodatoId: string]: string[] } = {}; 
+  nombresArticulos: { [comodatoId: string]: string[] } = {};
   // Filtros
   filtroComodatos: string = '';
 
@@ -72,24 +72,25 @@ export class ComodatosComponent implements OnInit {
   }
 
   construirNombresArticulosAgrupados(): void {
-  this.svComodato.getComodatos().subscribe((comodatos) => {
-    const observables = comodatos.map((comodato: any) =>
-      this.svArticulo_Comodato.obtenerArticulosPorComodato(comodato.idComodato).pipe(
-        map((articulos: any[]) => ({
-          comodatoId: comodato.idComodato,
-          nombres: articulos.map((art) => art.nombreArticulo),
-        }))
-      )
-    );
-
-    forkJoin(observables).subscribe((resultados) => {
-      this.nombresArticulos = Object.fromEntries(
-        resultados.map((res) => [res.comodatoId, res.nombres])
+    this.svComodato.getComodatos().subscribe((comodatos) => {
+      const observables = comodatos.map((comodato: any) =>
+        this.svArticulo_Comodato
+          .obtenerArticulosPorComodato(comodato.idComodato)
+          .pipe(
+            map((articulos: any[]) => ({
+              comodatoId: comodato.idComodato,
+              nombres: articulos.map((art) => art.nombreArticulo),
+            }))
+          )
       );
-    });
-  });
-}
 
+      forkJoin(observables).subscribe((resultados) => {
+        this.nombresArticulos = Object.fromEntries(
+          resultados.map((res) => [res.comodatoId, res.nombres])
+        );
+      });
+    });
+  }
 
   construirNombresResponsables(): void {
     this.svPersona.getPersonas().subscribe((per) => {
@@ -308,76 +309,79 @@ export class ComodatosComponent implements OnInit {
                   };
                   return this.svArticulo_Comodato.crearRelacion(aso);
                 });
-                if (comodatoData.estadoComodato == 'entregado'){
+                if (comodatoData.estadoComodato == 'entregado') {
                   const actualizaciones$ = articulos.map((idArticulo: string) =>
-                  this.svArticulo.getArticulo(idArticulo).pipe(
-                    switchMap((arti) => {
-                      const arti2: Articulo = {
-                        Categoria_idCategoria: arti.Categoria_idCategoria,
-                        dispArticulo: 'EN_COMODATO',
-                        estadoArticulo: arti.estadoArticulo,
-                        desArticulo: arti.desArticulo,
-                        Marca_idMarca: arti.Marca_idMarca,
-                        Modelo_idModelo: arti.Modelo_idModelo,
-                        nombreArticulo: arti.nombreArticulo,
-                        numSerieArticulo: arti.numSerieArticulo,
-                        idArticulo: arti.idArticulo,
-                      };
-                      return this.svArticulo.updateArticulo(idArticulo, arti2);
-                    })
-                  )
-                );
-                forkJoin([...relaciones$, ...actualizaciones$]).subscribe({
-                  next: () => {
-                    this.toastComplete(
-                      'Comodato y artículos asociados correctamente'
-                    );
-                    this.cargarDatosComodatos();
-                  },
-                  error: (err) => {
-                    this.toastError(
-                      'Error al asociar artículos o actualizar estado' + err
-                    );
-                    this.cargarDatosComodatos();
-                  },
-                });
-                }else if(comodatoData.estadoComodato == 'pendiente') {
+                    this.svArticulo.getArticulo(idArticulo).pipe(
+                      switchMap((arti) => {
+                        const arti2: Articulo = {
+                          Categoria_idCategoria: arti.Categoria_idCategoria,
+                          dispArticulo: 'EN_COMODATO',
+                          estadoArticulo: arti.estadoArticulo,
+                          desArticulo: arti.desArticulo,
+                          Marca_idMarca: arti.Marca_idMarca,
+                          Modelo_idModelo: arti.Modelo_idModelo,
+                          nombreArticulo: arti.nombreArticulo,
+                          numSerieArticulo: arti.numSerieArticulo,
+                          idArticulo: arti.idArticulo,
+                        };
+                        return this.svArticulo.updateArticulo(
+                          idArticulo,
+                          arti2
+                        );
+                      })
+                    )
+                  );
+                  forkJoin([...relaciones$, ...actualizaciones$]).subscribe({
+                    next: () => {
+                      this.toastComplete(
+                        'Comodato y artículos asociados correctamente'
+                      );
+                      this.cargarDatosComodatos();
+                    },
+                    error: (err) => {
+                      this.toastError(
+                        'Error al asociar artículos o actualizar estado' + err
+                      );
+                      this.cargarDatosComodatos();
+                    },
+                  });
+                } else if (comodatoData.estadoComodato == 'pendiente') {
                   const actualizaciones$ = articulos.map((idArticulo: string) =>
-                  this.svArticulo.getArticulo(idArticulo).pipe(
-                    switchMap((arti) => {
-                      const arti2: Articulo = {
-                        Categoria_idCategoria: arti.Categoria_idCategoria,
-                        dispArticulo: 'RESERVADO',
-                        estadoArticulo: arti.estadoArticulo,
-                        desArticulo: arti.desArticulo,
-                        Marca_idMarca: arti.Marca_idMarca,
-                        Modelo_idModelo: arti.Modelo_idModelo,
-                        nombreArticulo: arti.nombreArticulo,
-                        numSerieArticulo: arti.numSerieArticulo,
-                        idArticulo: arti.idArticulo,
-                      };
-                      return this.svArticulo.updateArticulo(idArticulo, arti2);
-                    })
-                  )
-                );
-                forkJoin([...relaciones$, ...actualizaciones$]).subscribe({
-                  next: () => {
-                    this.toastComplete(
-                      'Comodato y artículos asociados correctamente'
-                    );
-                    this.cargarDatosComodatos();
-                  },
-                  error: (err) => {
-                    this.toastError(
-                      'Error al asociar artículos o actualizar estado' + err
-                    );
-                    this.cargarDatosComodatos();
-                  },
-                });
+                    this.svArticulo.getArticulo(idArticulo).pipe(
+                      switchMap((arti) => {
+                        const arti2: Articulo = {
+                          Categoria_idCategoria: arti.Categoria_idCategoria,
+                          dispArticulo: 'RESERVADO',
+                          estadoArticulo: arti.estadoArticulo,
+                          desArticulo: arti.desArticulo,
+                          Marca_idMarca: arti.Marca_idMarca,
+                          Modelo_idModelo: arti.Modelo_idModelo,
+                          nombreArticulo: arti.nombreArticulo,
+                          numSerieArticulo: arti.numSerieArticulo,
+                          idArticulo: arti.idArticulo,
+                        };
+                        return this.svArticulo.updateArticulo(
+                          idArticulo,
+                          arti2
+                        );
+                      })
+                    )
+                  );
+                  forkJoin([...relaciones$, ...actualizaciones$]).subscribe({
+                    next: () => {
+                      this.toastComplete(
+                        'Comodato y artículos asociados correctamente'
+                      );
+                      this.cargarDatosComodatos();
+                    },
+                    error: (err) => {
+                      this.toastError(
+                        'Error al asociar artículos o actualizar estado' + err
+                      );
+                      this.cargarDatosComodatos();
+                    },
+                  });
                 }
-                
-
-                
               },
               error: () => {
                 this.toastError('Error al crear comodato');
@@ -469,7 +473,9 @@ export class ComodatosComponent implements OnInit {
                   { valor: 'cancelado', texto: 'Cancelado' },
                 ],
                 valorInicial: comodato.estadoComodato,
-                soloLectura: ['devuelto', 'cancelado'].includes(comodato.estadoComodato),
+                soloLectura: ['devuelto', 'cancelado'].includes(
+                  comodato.estadoComodato
+                ),
               },
             ],
             respaldo: comodato,
@@ -512,7 +518,9 @@ export class ComodatosComponent implements OnInit {
             .subscribe({
               next: () => {
                 // Si el estado es "devuelto" o "cancelado", actualizar los artículos a DISPONIBLE
-                if (result.estadoComodato === 'devuelto' || result.estadoComodato === 'cancelado'
+                if (
+                  result.estadoComodato === 'devuelto' ||
+                  result.estadoComodato === 'cancelado'
                 ) {
                   const actualizaciones = articulos.map(
                     (idArticulo: Articulo) =>
