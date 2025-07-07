@@ -455,7 +455,6 @@ export class ComodatosComponent implements OnInit {
                   result.estadoComodato === 'devuelto' ||
                   result.estadoComodato === 'cancelado'
                 ) {
-                  
                   const actualizaciones = articulos.map(
                     (idArticulo: Articulo) =>
                   this.svArticulo.getArticulo(idArticulo.idArticulo!).pipe(
