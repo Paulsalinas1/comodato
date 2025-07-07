@@ -11,6 +11,7 @@ import { ArticuloComodatoService } from '../../../core/services/articulo_comodat
 import { RelacionArticuloComodato } from '../../../core/models/RelacionArticuloComodato ';
 import { ModalAddComponent } from '../../components/modal-add/modal-add.component';
 import { ModalDesComponent } from '../../components/modal-des/modal-des.component';
+import { Articulo } from '../../../core/models/articulo';
 
 
 @Component({
@@ -291,10 +292,25 @@ export class ComodatosComponent implements OnInit {
 
                 forkJoin(solicitudes).subscribe({
                   next: () => {
-                    this.toastComplete(
-                      'Comodato y artículos asociados correctamente'
+                    // Actualizar dispArticulo a 'en_comodato' para cada artículo seleccionado
+                    const actualizaciones = articulos.map((idArticulo) =>
+                      this.svArticulo.updateArticulo(idArticulo, { dispArticulo: 'EN_COMODATO' } as Articulo)
                     );
-                    this.cargarDatosComodatos();
+
+                    forkJoin(actualizaciones).subscribe({
+                      next: () => {
+                        this.toastComplete(
+                          'Comodato y artículos asociados correctamente'
+                        );
+                        this.cargarDatosComodatos();
+                      },
+                      error: () => {
+                        this.toastError(
+                          'Error al actualizar estado de los artículos'
+                        );
+                        this.cargarDatosComodatos();
+                      },
+                    });
                   },
                   error: (err) => {
                     this.toastError('Error al asociar artículos');
