@@ -308,8 +308,41 @@ export class ComodatosComponent implements OnInit {
                   };
                   return this.svArticulo_Comodato.crearRelacion(aso);
                 });
-
-                const actualizaciones$ = articulos.map((idArticulo: string) =>
+                if (comodatoData.estadoComodato == 'entregado'){
+                  const actualizaciones$ = articulos.map((idArticulo: string) =>
+                  this.svArticulo.getArticulo(idArticulo).pipe(
+                    switchMap((arti) => {
+                      const arti2: Articulo = {
+                        Categoria_idCategoria: arti.Categoria_idCategoria,
+                        dispArticulo: 'EN_COMODATO',
+                        estadoArticulo: arti.estadoArticulo,
+                        desArticulo: arti.desArticulo,
+                        Marca_idMarca: arti.Marca_idMarca,
+                        Modelo_idModelo: arti.Modelo_idModelo,
+                        nombreArticulo: arti.nombreArticulo,
+                        numSerieArticulo: arti.numSerieArticulo,
+                        idArticulo: arti.idArticulo,
+                      };
+                      return this.svArticulo.updateArticulo(idArticulo, arti2);
+                    })
+                  )
+                );
+                forkJoin([...relaciones$, ...actualizaciones$]).subscribe({
+                  next: () => {
+                    this.toastComplete(
+                      'Comodato y artículos asociados correctamente'
+                    );
+                    this.cargarDatosComodatos();
+                  },
+                  error: (err) => {
+                    this.toastError(
+                      'Error al asociar artículos o actualizar estado' + err
+                    );
+                    this.cargarDatosComodatos();
+                  },
+                });
+                }else if(comodatoData.estadoComodato == 'pendiente') {
+                  const actualizaciones$ = articulos.map((idArticulo: string) =>
                   this.svArticulo.getArticulo(idArticulo).pipe(
                     switchMap((arti) => {
                       const arti2: Articulo = {
@@ -327,7 +360,6 @@ export class ComodatosComponent implements OnInit {
                     })
                   )
                 );
-
                 forkJoin([...relaciones$, ...actualizaciones$]).subscribe({
                   next: () => {
                     this.toastComplete(
@@ -342,6 +374,10 @@ export class ComodatosComponent implements OnInit {
                     this.cargarDatosComodatos();
                   },
                 });
+                }
+                
+
+                
               },
               error: () => {
                 this.toastError('Error al crear comodato');
@@ -433,6 +469,7 @@ export class ComodatosComponent implements OnInit {
                   { valor: 'cancelado', texto: 'Cancelado' },
                 ],
                 valorInicial: comodato.estadoComodato,
+                soloLectura: ['devuelto', 'cancelado'].includes(comodato.estadoComodato),
               },
             ],
             respaldo: comodato,
@@ -475,9 +512,7 @@ export class ComodatosComponent implements OnInit {
             .subscribe({
               next: () => {
                 // Si el estado es "devuelto" o "cancelado", actualizar los artículos a DISPONIBLE
-                if (
-                  result.estadoComodato === 'devuelto' ||
-                  result.estadoComodato === 'cancelado'
+                if (result.estadoComodato === 'devuelto' || result.estadoComodato === 'cancelado'
                 ) {
                   const actualizaciones = articulos.map(
                     (idArticulo: Articulo) =>
@@ -515,9 +550,80 @@ export class ComodatosComponent implements OnInit {
                       this.cargarDatosComodatos();
                     },
                   });
-                } else {
-                  this.toastEdit('Estado del comodato');
-                  this.cargarDatosComodatos();
+                } else if (result.estadoComodato === 'entregado') {
+                  const actualizaciones = articulos.map(
+                    (idArticulo: Articulo) =>
+                      this.svArticulo.getArticulo(idArticulo.idArticulo!).pipe(
+                        switchMap((arti) => {
+                          const arti2: Articulo = {
+                            Categoria_idCategoria: arti.Categoria_idCategoria,
+                            dispArticulo: 'EN_COMODATO',
+                            estadoArticulo: arti.estadoArticulo,
+                            desArticulo: arti.desArticulo,
+                            Marca_idMarca: arti.Marca_idMarca,
+                            Modelo_idModelo: arti.Modelo_idModelo,
+                            nombreArticulo: arti.nombreArticulo,
+                            numSerieArticulo: arti.numSerieArticulo,
+                            idArticulo: arti.idArticulo,
+                          };
+                          return this.svArticulo.updateArticulo(
+                            idArticulo.idArticulo!,
+                            arti2
+                          );
+                        })
+                      )
+                  );
+                  forkJoin(actualizaciones).subscribe({
+                    next: () => {
+                      this.toastEdit(
+                        'Estado del comodato y artículos actualizados'
+                      );
+                      this.cargarDatosComodatos();
+                    },
+                    error: () => {
+                      this.toastError(
+                        'Error al actualizar estado de los artículos'
+                      );
+                      this.cargarDatosComodatos();
+                    },
+                  });
+                } else if (result.estadoComodato === 'pendiente') {
+                  const actualizaciones = articulos.map(
+                    (idArticulo: Articulo) =>
+                      this.svArticulo.getArticulo(idArticulo.idArticulo!).pipe(
+                        switchMap((arti) => {
+                          const arti2: Articulo = {
+                            Categoria_idCategoria: arti.Categoria_idCategoria,
+                            dispArticulo: 'RESERVADO',
+                            estadoArticulo: arti.estadoArticulo,
+                            desArticulo: arti.desArticulo,
+                            Marca_idMarca: arti.Marca_idMarca,
+                            Modelo_idModelo: arti.Modelo_idModelo,
+                            nombreArticulo: arti.nombreArticulo,
+                            numSerieArticulo: arti.numSerieArticulo,
+                            idArticulo: arti.idArticulo,
+                          };
+                          return this.svArticulo.updateArticulo(
+                            idArticulo.idArticulo!,
+                            arti2
+                          );
+                        })
+                      )
+                  );
+                  forkJoin(actualizaciones).subscribe({
+                    next: () => {
+                      this.toastEdit(
+                        'Estado del comodato y artículos actualizados'
+                      );
+                      this.cargarDatosComodatos();
+                    },
+                    error: () => {
+                      this.toastError(
+                        'Error al actualizar estado de los artículos'
+                      );
+                      this.cargarDatosComodatos();
+                    },
+                  });
                 }
               },
               error: (err) => {
