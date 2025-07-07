@@ -339,12 +339,13 @@ export class ComodatosComponent implements OnInit {
   abrirModalEditarComodatoCompleto(comodato: Comodato): void {
     forkJoin({
       personas: this.svPersona.getPersonas(),
-      articulos: this.svArticulo.getArticulos(),
-      relaciones: this.svArticulo_Comodato.obtenerArticulosPorComodato(
+      articulos: this.svArticulo_Comodato.obtenerArticulosPorComodato(
         comodato.idComodato!
       ),
+      
     }).subscribe({
-      next: ({ personas, articulos, relaciones }) => {
+      next: ({ personas, articulos }) => {
+        
         const dialogRef = this.dialog.open(ModalDesComponent, {
           width: '600px',
           data: {
@@ -375,7 +376,7 @@ export class ComodatosComponent implements OnInit {
                   valor: art.idArticulo,
                   texto: art.nombreArticulo,
                 })),
-                valorInicial: relaciones.map(
+                valorInicial: articulos.map(
                   (rel: any) => rel.Articulo_idArticulo
                 ),
                 soloLectura: true, // <-- deshabilitado
@@ -426,7 +427,7 @@ export class ComodatosComponent implements OnInit {
                 comodato.fechaTerminoComodatoD
               ),
               estadoComodato: comodato.estadoComodato,
-              articulosSeleccionados: relaciones.map(
+              articulosSeleccionados: articulos.map(
                 (rel: any) => rel.Articulo_idArticulo
               ),
             },
@@ -435,12 +436,12 @@ export class ComodatosComponent implements OnInit {
 
         dialogRef.afterClosed().subscribe((result) => {
           if (!result) return;
-
-          // Solo actualizar el estado, pero pasando todos los campos requeridos
+          const fechaInicioFormateada = new Date(comodato.fechaInicioComodato).toISOString().split('T')[0];
+          const fechaTerminoFormateada = new Date(comodato.fechaTerminoComodatoD).toISOString().split('T')[0];
           const comodatoActualizado: Comodato = {
             idComodato: comodato.idComodato,
-            fechaInicioComodato: comodato.fechaInicioComodato,
-            fechaTerminoComodatoD: comodato.fechaTerminoComodatoD,
+            fechaInicioComodato: fechaInicioFormateada,
+            fechaTerminoComodatoD: fechaTerminoFormateada,
             estadoComodato: result.estadoComodato,
             Persona_idPersona: comodato.Persona_idPersona,
           };
@@ -454,14 +455,24 @@ export class ComodatosComponent implements OnInit {
                   result.estadoComodato === 'devuelto' ||
                   result.estadoComodato === 'cancelado'
                 ) {
-                  const articulosAsociados = relaciones.map(
-                    (rel: any) => rel.Articulo_idArticulo
-                  );
-                  const actualizaciones = articulosAsociados.map(
-                    (idArticulo: string) =>
-                      this.svArticulo.updateArticulo(idArticulo, {
+                  
+                  const actualizaciones = articulos.map(
+                    (idArticulo: Articulo) =>
+                  this.svArticulo.getArticulo(idArticulo.idArticulo!).pipe(
+                    switchMap((arti) => {
+                      const arti2: Articulo = {
+                        Categoria_idCategoria: arti.Categoria_idCategoria,
                         dispArticulo: 'DISPONIBLE',
-                      } as Articulo)
+                        estadoArticulo: arti.estadoArticulo,
+                        desArticulo: arti.desArticulo,
+                        Marca_idMarca: arti.Marca_idMarca,
+                        Modelo_idModelo: arti.Modelo_idModelo,
+                        nombreArticulo: arti.nombreArticulo,
+                        numSerieArticulo: arti.numSerieArticulo,
+                        idArticulo: arti.idArticulo,
+                      };
+                      return this.svArticulo.updateArticulo(idArticulo.idArticulo!, arti2);
+                      }))
                   );
                   forkJoin(actualizaciones).subscribe({
                     next: () => {
@@ -482,8 +493,8 @@ export class ComodatosComponent implements OnInit {
                   this.cargarDatosComodatos();
                 }
               },
-              error: () => {
-                this.toastError('Error al actualizar el estado del comodato');
+              error: (err) => {
+                this.toastError('Error al actualizar el estado del comodato: ' + err.err);
               },
             });
         });
@@ -502,12 +513,5 @@ export class ComodatosComponent implements OnInit {
     return `${year}-${month}-${day}`;
   }
 
-  actualizarArticulos(idArticulos: string[]) {
-    const actualizaciones = idArticulos.map((id) =>
-      this.svArticulo.updateArticulo(id, {
-        dispArticulo: 'EN_COMODATO',
-      } as Articulo)
-    );
-    return forkJoin(actualizaciones);
-  }
+  
 }
