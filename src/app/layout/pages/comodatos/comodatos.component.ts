@@ -12,6 +12,7 @@ import { RelacionArticuloComodato } from '../../../core/models/RelacionArticuloC
 import { ModalAddComponent } from '../../components/modal-add/modal-add.component';
 import { ModalDesComponent } from '../../components/modal-des/modal-des.component';
 import { Articulo } from '../../../core/models/articulo';
+import { switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-comodatos',
@@ -187,7 +188,11 @@ export class ComodatosComponent implements OnInit {
       articulos: this.svArticulo.getArticulos(),
     }).subscribe({
       next: ({ personas, articulos }) => {
-        const articulosDisponibles = articulos.filter(articulo => articulo.dispArticulo == 'DISPONIBLE' );
+        const articulosDisponibles = articulos.filter(
+          (articulo) =>
+            articulo.dispArticulo == 'DISPONIBLE' &&
+            articulo.estadoArticulo == 'FUNCIONAL'
+        );
         const dialogRef = this.dialog.open(ModalAddComponent, {
           width: '1000px',
           data: {
@@ -268,58 +273,57 @@ export class ComodatosComponent implements OnInit {
 
             this.svComodato.createComodato(comodatoData).subscribe({
               next: (resp: any) => {
-                const idComodato = resp.idComodato; // asumiendo que backend responde con el id
+                const idComodato = resp.idComodato;
+                const articulos: string[] = result.articulosSeleccionados ?? [];
 
-                // 2. Asociar artículos
-                const articulos: string[] = result.articulosSeleccionados || [];
-                const asociaciones = articulos.map((idArticulo) => ({
-                  Comodato_idComodato: idComodato,
-                  Articulo_idArticulo: idArticulo,
-                }));
-
-                // Llama a tu servicio que haga el POST para cada asociación
-                // O usa forkJoin para hacer todas las peticiones simultáneas
-                if (asociaciones.length === 0) {
-                  this.toastComplete('Comodato creado sin artículos');
+                if (articulos.length === 0) {
+                  this.toastError('Sin artículos');
                   this.cargarDatosComodatos();
                   return;
                 }
+                const relaciones$ = articulos.map((art) => {
+                  const aso: RelacionArticuloComodato = {
+                    Comodato_idComodato: idComodato,
+                    Articulo_idArticulo: art,
+                  };
+                  return this.svArticulo_Comodato.crearRelacion(aso);
+                });
 
-                const solicitudes = asociaciones.map((asoc) =>
-                  this.svArticulo_Comodato.crearRelacion(asoc)
+                const actualizaciones$ = articulos.map((idArticulo: string) =>
+                  this.svArticulo.getArticulo(idArticulo).pipe(
+                    switchMap((arti) => {
+                      const arti2: Articulo = {
+                        Categoria_idCategoria: arti.Categoria_idCategoria,
+                        dispArticulo: 'RESERVADO',
+                        estadoArticulo: arti.estadoArticulo,
+                        desArticulo: arti.desArticulo,
+                        Marca_idMarca: arti.Marca_idMarca,
+                        Modelo_idModelo: arti.Modelo_idModelo,
+                        nombreArticulo: arti.nombreArticulo,
+                        numSerieArticulo: arti.numSerieArticulo,
+                        idArticulo: arti.idArticulo,
+                      };
+                      return this.svArticulo.updateArticulo(idArticulo, arti2);
+                    })
+                  )
                 );
 
-                forkJoin(solicitudes).subscribe({
+                forkJoin([...relaciones$, ...actualizaciones$]).subscribe({
                   next: () => {
-                    // Actualizar dispArticulo a 'en_comodato' para cada artículo seleccionado
-                    const actualizaciones = articulos.map((idArticulo) =>
-                      this.svArticulo.updateArticulo(idArticulo, {
-                        dispArticulo: 'EN_COMODATO',
-                      } as Articulo)
+                    this.toastComplete(
+                      'Comodato y artículos asociados correctamente'
                     );
-
-                    forkJoin(actualizaciones).subscribe({
-                      next: () => {
-                        this.toastComplete(
-                          'Comodato y artículos asociados correctamente'
-                        );
-                        this.cargarDatosComodatos();
-                      },
-                      error: () => {
-                        this.toastError(
-                          'Error al actualizar estado de los artículos'
-                        );
-                        this.cargarDatosComodatos();
-                      },
-                    });
+                    this.cargarDatosComodatos();
                   },
                   error: (err) => {
-                    this.toastError('Error al asociar artículos');
+                    this.toastError(
+                      'Error al asociar artículos o actualizar estado' + err
+                    );
                     this.cargarDatosComodatos();
                   },
                 });
               },
-              error: (err) => {
+              error: () => {
                 this.toastError('Error al crear comodato');
               },
             });
@@ -496,5 +500,14 @@ export class ComodatosComponent implements OnInit {
     const month = String(d.getMonth() + 1).padStart(2, '0');
     const day = String(d.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
+  }
+
+  actualizarArticulos(idArticulos: string[]) {
+    const actualizaciones = idArticulos.map((id) =>
+      this.svArticulo.updateArticulo(id, {
+        dispArticulo: 'EN_COMODATO',
+      } as Articulo)
+    );
+    return forkJoin(actualizaciones);
   }
 }

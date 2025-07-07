@@ -15,6 +15,7 @@ export class ArticuloComodatoService {
 
   // Crear relación entre artículo y comodato
   crearRelacion(data: RelacionArticuloComodato): Observable<any> {
+    console.log('aqui estoy 3')
     return this.http.post(`${this.baseUrl}`, data);
   }
 
