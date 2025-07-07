@@ -32,12 +32,11 @@ export class ComodatosComponent implements OnInit {
 
   // Datos
   comodatos: Comodato[] = [];
-  relaciones: any[] = [];
   articulosMap: { [id: string]: string } = {};
   articulos2Map: { [comodatoId: string]: string[] } = {};
   nombresResponsables: { [IdPersona: string]: string } = {};
   rutResponsables: { [IdPersona: string]: string } = {};
-  nombresArticulos: { [comodatoId: string]: string[] } = {};
+  nombresArticulos: { [comodatoId: string]: string[]} = {};
   // Filtros
   filtroComodatos: string = '';
 
@@ -52,24 +51,11 @@ export class ComodatosComponent implements OnInit {
 
   ngOnInit(): void {
     this.cargarDatosComodatos();
-    this.cargarNombresArticulos();
     this.construirNombresResponsables();
     this.construirRutResponsables();
+    this.construirNombresArticulosAgrupados()
   }
 
-  construirArticulosMap(): void {
-    this.articulos2Map = {};
-
-    this.relaciones.forEach((rel) => {
-      const comodatoId = rel.Comodato_idComodato;
-      const nombreArticulo = rel.nombreArticulo;
-
-      if (!this.articulos2Map[comodatoId]) {
-        this.articulos2Map[comodatoId] = [];
-      }
-      this.articulos2Map[comodatoId].push(nombreArticulo);
-    });
-  }
 
   construirNombresArticulosAgrupados(): void {
     this.svComodato.getComodatos().subscribe((comodatos) => {
@@ -77,14 +63,14 @@ export class ComodatosComponent implements OnInit {
         this.svArticulo_Comodato
           .obtenerArticulosPorComodato(comodato.idComodato)
           .pipe(
-            map((articulos: any[]) => ({
+            map((articulos: Articulo[]) => ({
               comodatoId: comodato.idComodato,
               nombres: articulos.map((art) => art.nombreArticulo),
             }))
           )
       );
 
-      forkJoin(observables).subscribe((resultados) => {
+      forkJoin(observables).subscribe(resultados => {
         this.nombresArticulos = Object.fromEntries(
           resultados.map((res) => [res.comodatoId, res.nombres])
         );
@@ -104,14 +90,6 @@ export class ComodatosComponent implements OnInit {
     this.svPersona.getPersonas().subscribe((per) => {
       this.rutResponsables = Object.fromEntries(
         per.map((p) => [p.idPersona, p.rutPersona])
-      );
-    });
-  }
-
-  cargarNombresArticulos() {
-    this.svArticulo.getArticulos().subscribe((art) => {
-      this.articulosMap = Object.fromEntries(
-        art.map((e) => [e.idArticulo, e.nombreArticulo])
       );
     });
   }
