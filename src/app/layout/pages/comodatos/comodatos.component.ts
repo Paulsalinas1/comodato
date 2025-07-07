@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { Comodato } from '../../../core/models/Comodato';
 import { MatDialog } from '@angular/material/dialog';
@@ -21,9 +21,17 @@ import { map, switchMap } from 'rxjs/operators';
   styleUrl: './comodatos.component.css',
 })
 export class ComodatosComponent implements OnInit {
-  pageSizeOptions = [1, 5, 10, 25];
 
-  // Configuración de paginación para estamento
+  private readonly svComodato = inject(ComodatoService);
+  private readonly svArticulo_Comodato = inject(ArticuloComodatoService);
+  private readonly svPersona = inject(PersonaService);
+  private readonly svArticulo = inject(ArticulosService);
+  private readonly dialog = inject(MatDialog);
+  private readonly snackBar = inject(MatSnackBar);
+  
+
+  // Configuración de paginación para comodato
+  pageSizeOptions = [1, 5, 10, 25];
   comodatoPaginator = {
     pageIndex: 0,
     pageSize: 5,
@@ -32,30 +40,18 @@ export class ComodatosComponent implements OnInit {
 
   // Datos
   comodatos: Comodato[] = [];
-  articulosMap: { [id: string]: string } = {};
-  articulos2Map: { [comodatoId: string]: string[] } = {};
   nombresResponsables: { [IdPersona: string]: string } = {};
   rutResponsables: { [IdPersona: string]: string } = {};
   nombresArticulos: { [comodatoId: string]: string[]} = {};
+
   // Filtros
   filtroComodatos: string = '';
 
-  constructor(
-    private readonly svComodato: ComodatoService,
-    private readonly svArticulo_Comodato: ArticuloComodatoService,
-    private readonly svPersona: PersonaService,
-    private readonly svArticulo: ArticulosService,
-    private readonly dialog: MatDialog,
-    private readonly snackBar: MatSnackBar
-  ) {}
-
   ngOnInit(): void {
     this.cargarDatosComodatos();
-    this.construirNombresResponsables();
-    this.construirRutResponsables();
+    this.construirResponsables();
     this.construirNombresArticulosAgrupados()
   }
-
 
   construirNombresArticulosAgrupados(): void {
     this.svComodato.getComodatos().subscribe((comodatos) => {
@@ -65,11 +61,9 @@ export class ComodatosComponent implements OnInit {
           .pipe(
             map((articulos: Articulo[]) => ({
               comodatoId: comodato.idComodato,
-              nombres: articulos.map((art) => art.nombreArticulo),
-            }))
-          )
-      );
-
+              nombres: articulos.map(art => art.nombreArticulo),
+            })))
+        );
       forkJoin(observables).subscribe(resultados => {
         this.nombresArticulos = Object.fromEntries(
           resultados.map((res) => [res.comodatoId, res.nombres])
@@ -78,16 +72,11 @@ export class ComodatosComponent implements OnInit {
     });
   }
 
-  construirNombresResponsables(): void {
+  construirResponsables(): void {
     this.svPersona.getPersonas().subscribe((per) => {
       this.nombresResponsables = Object.fromEntries(
         per.map((p) => [p.idPersona, p.nomPersona + ' ' + p.apPersona])
       );
-    });
-  }
-
-  construirRutResponsables(): void {
-    this.svPersona.getPersonas().subscribe((per) => {
       this.rutResponsables = Object.fromEntries(
         per.map((p) => [p.idPersona, p.rutPersona])
       );
@@ -146,7 +135,7 @@ export class ComodatosComponent implements OnInit {
     this.comodatoPaginator.length = this.comodatos.length;
   }
 
-  // Filtrado y paginación de Estamentos
+  // Filtrado y paginación de comodatos
   get ComodatoFiltrados(): Comodato[] {
     const texto = this.filtroComodatos.trim().toLowerCase();
     if (!texto) return this.comodatos;
