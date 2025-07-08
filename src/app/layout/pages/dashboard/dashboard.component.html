@@ -12,8 +12,8 @@
         <div class="card-header p-2 ps-3">
           <div class="d-flex justify-content-between">
             <div>
-              <p class="text-sm mb-0 text-capitalize">Comodatos Totales</p>
-              <h4 class="mb-0">20</h4>
+              <p class="text-sm mb-0 text-capitalize">Comodatos activos</p>
+              <h4 class="mb-0">{{activos}}</h4>
             </div>
             <div class="icon icon-md icon-shape bg-gradient bg-danger shadow-dark shadow text-center border-radius-lg">
               <i class="material-symbols-rounded opacity-10">weekend</i>
@@ -32,7 +32,7 @@
           <div class="d-flex justify-content-between">
             <div>
               <p class="text-sm mb-0 text-capitalize">Usuarios totales</p>
-              <h4 class="mb-0">200</h4>
+              <h4 class="mb-0">{{usuarioTotal}}</h4>
             </div>
             <div class="icon icon-md icon-shape bg-gradient bg-primary shadow-dark shadow text-center border-radius-lg">
               <i class="material-symbols-rounded opacity-10">person</i>
@@ -50,8 +50,8 @@
         <div class="card-header p-2 ps-3">
           <div class="d-flex justify-content-between">
             <div>
-              <p class="text-sm mb-0 text-capitalize">categorias Totales</p>
-              <h4 class="mb-0">3,462</h4>
+              <p class="text-sm mb-0 text-capitalize">Articulos Totales</p>
+              <h4 class="mb-0">{{articulosTotales}}</h4>
             </div>
             <div
               class="icon icon-md icon-shape bg-gradient bg-secondary shadow-dark shadow text-center border-radius-lg">
@@ -70,8 +70,8 @@
         <div class="card-header p-2 ps-3">
           <div class="d-flex justify-content-between">
             <div>
-              <p class="text-sm mb-0 text-capitalize">Otros</p>
-              <h4 class="mb-0">X</h4>
+              <p class="text-sm mb-0 text-capitalize">Articulos disponibles</p>
+              <h4 class="mb-0">{{articulosDispo}}</h4>
             </div>
             <div class="icon icon-md icon-shape bg-gradient bg-success shadow-dark shadow text-center border-radius-lg">
               <i class="material-symbols-rounded opacity-10">weekend</i>
@@ -97,11 +97,13 @@
           <p class="text-sm">{{pieChart2D.description}}</p>
         </div>
         <div class="card-body">
-          <div>
+          
+          <div *ngIf="totalEstados > 0; else sinDatos">
             <google-chart [type]="pieChart2D.type" [data]="pieChart2D.data" [columns]="pieChart2D.columns"
               [options]="pieChart2D.options" style="width: 100%; height: 300px;">
             </google-chart>
           </div>
+
           <hr class="dark horizontal">
           <div class="d-flex">
             <i class="material-symbols-rounded text-sm my-auto me-1">schedule</i>
@@ -114,13 +116,13 @@
     <div class="col-lg-6 mt-4 mb-3">
       <div class="card">
         <div class="card-header pb-0">
-          <h6 class="mb-0">{{stackedColumnChart.title}}</h6>
-          <p class="text-sm ">{{stackedColumnChart.description}}</p>
+          <h6 class="mb-0">{{barChart.title}}</h6>
+          <p class="text-sm ">{{barChart.description}}</p>
         </div>
         <div class="card-body">
           <div class="">
-            <google-chart [type]="stackedColumnChart.type" [data]="stackedColumnChart.data"
-              [columns]="stackedColumnChart.columns" [options]="stackedColumnChart.options"
+            <google-chart [type]="barChart.type" [data]="barChart.data"
+              [columns]="barChart.columns" [options]="barChart.options"
               style="width: 100%; height: 300px;">
             </google-chart>
           </div>
@@ -137,30 +139,16 @@
   <!-- seccion de lista usuarios -->
 
   <div class="row mb-4">
-    <div class="col-lg-8 col-md-6 mb-md-0 mb-4">
+    <div class="col-lg-12 col-md-6 mb-md-0 mb-4">
       <div class="card">
         <div class="card-header pb-0">
           <div class="row">
             <!-- titulo de la seccion -->
-            <div class="col-lg-6 col-7">
-              <h6>Lista Usuarios</h6>
+            <div class="col-lg-12 col-7">
+              <h6>Comodatos Por Finalizar</h6>
               <p class="text-sm mb-0">
-                <i class="fa fa-check text-info" aria-hidden="true"></i>
-                <span class="font-weight-bold ms-1">agregados resientemente: 3 </span>
+                <span class="font-weight-bold ms-1">Muestra los comodatos que finalizan en 10 dias o menos  </span>
               </p>
-            </div>
-            <!-- opciones de la seccion: un dropdown actualmente no funcional-->
-            <div class="col-lg-6 col-5 my-auto text-end">
-              <div class="dropdown float-lg-end pe-4">
-                <a class="cursor-pointer" id="dropdownTable" data-bs-toggle="dropdown" aria-expanded="false">
-                  <i class="fa fa-ellipsis-v text-secondary"></i>
-                </a>
-                <ul class="dropdown-menu px-2 py-3 ms-sm-n4 ms-n5" aria-labelledby="dropdownTable">
-                  <li><a class="dropdown-item border-radius-md" href="javascript:;">Action</a></li>
-                  <li><a class="dropdown-item border-radius-md" href="javascript:;">Another action</a></li>
-                  <li><a class="dropdown-item border-radius-md" href="javascript:;">Something else here</a></li>
-                </ul>
-              </div>
             </div>
           </div>
         </div>
@@ -171,58 +159,16 @@
 
               <thead>
                 <tr>
-                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Usuarios</th>
-                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Rut</th>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ">Usuarios</th>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-3">Fecha termino</th>
                   <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Telefono
                   </th>
-                  <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Estamento
+                  <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Articulos
                   </th>
                 </tr>
               </thead>
 
               <tbody>
-                <tr>
-                  <td>
-                    <div class="d-flex px-2 py-1">
-                      <div>
-                        <i class="material-symbols-rounded opacity-50 sm-2 me-3">person</i>
-                      </div>
-                      <div class="d-flex flex-column justify-content-center">
-                        <h6 class="mb-0 text-sm">Usuario 1 </h6>
-                      </div>
-                    </div>
-                  </td>
-                  <td class="align-middle text-center text-sm">
-                    <span class="text-xs font-weight-bold"> 12345678-9 </span>
-                  </td>
-                  <td class="align-middle text-center text-sm">
-                    <span class="text-xs font-weight-bold"> 9 63514691 </span>
-                  </td>
-                  <td class="align-middle text-center text-sm">
-                    <span class="text-xs font-weight-bold"> Docente </span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <div class="d-flex px-2 py-1">
-                      <div>
-                        <i class="material-symbols-rounded opacity-50 sm-2 me-3">person</i>
-                      </div>
-                      <div class="d-flex flex-column justify-content-center">
-                        <h6 class="mb-0 text-sm">Usuario 2 </h6>
-                      </div>
-                    </div>
-                  </td>
-                  <td class="align-middle text-center text-sm">
-                    <span class="text-xs font-weight-bold"> 12345678-9 </span>
-                  </td>
-                  <td class="align-middle text-center text-sm">
-                    <span class="text-xs font-weight-bold"> 9 87452015 </span>
-                  </td>
-                  <td class="align-middle text-center text-sm">
-                    <span class="text-xs font-weight-bold"> Directora </span>
-                  </td>
-                </tr>
                 <tr>
                   <td>
                     <div class="d-flex px-2 py-1">
@@ -251,22 +197,6 @@
         </div>
       </div>
     </div>
-    <!-- seccion de ordenes de comodatos -->
-
-    <div class="col-lg-4 col-md-6">
-      <div class="card h-100">
-        <div class="card-header pb-0">
-          <h6>Comodatos recientes</h6>
-          <p class="text-sm">
-            <i class="fa fa-arrow-up text-success" aria-hidden="true"></i>
-            <span class="font-weight-bold">24%</span> Este mes
-          </p>
-        </div>
-        <div class="card-body p-3">
-
-        </div>
-      </div>
-    </div>
   </div>
 
 
@@ -286,3 +216,9 @@
       </div>
     </div>
   </footer>
+
+<ng-template #sinDatos>
+  <div class="mensaje-vacio">
+    No hay datos disponibles para mostrar el gráfico.
+  </div>
+</ng-template>

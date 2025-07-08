@@ -1,5 +1,25 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { ChartType } from 'angular-google-charts';
+import { ComodatoService } from '../../../core/services/comodato.service';
+import { PersonaService } from '../../../core/services/persona.service';
+import { ArticulosService } from '../../../core/services/articulos.service';
+import { Articulo } from '../../../core/models/articulo';
+import { CategoriaService } from '../../../core/services/categoria.service';
+import { forkJoin, map, Observable, of } from 'rxjs';
+
+interface CatosChars {
+  nombre: string ,
+  cantidad: number 
+}
+
+interface ChartDefinition {
+  title: string;
+  description?: string;
+  type: ChartType;
+  data: (string | number)[][];
+  columns: string[];
+  options: object; 
+}
 
 
 @Component({
@@ -8,84 +28,115 @@ import { ChartType } from 'angular-google-charts';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
+  //inyectando datos
+
+  private readonly svComo = inject(ComodatoService);
+  private readonly svUsu = inject(PersonaService);
+  private readonly svArt = inject(ArticulosService);
+  private readonly svCat = inject(CategoriaService);
+  //datos
+  activos: number = 0;
+  usuarioTotal: number = 0;
+  articulosTotales: number = 0;
+  articulosDispo: number = 0;
+
+  // datos pieChar
+  entregados: number = 0;
+  pendiente: number = 0;
+  cancelado: number = 0;
+  devuelto: number = 0;
+
   today = new Date();
-  // Gráfico de pastel 3D
-  pieChart3D = {
-    title: 'Comodatos Por Mes',
-    description: 'descripcion',
+  barChart!: ChartDefinition;
+  pieChart2D!: ChartDefinition;
+  // o tipo que estés usando
+
+  datosBarChar: CatosChars[] = [];
+
+  ngOnInit() {
+    this.svComo.getComodatos().subscribe((comoD) => {
+      const entregados = comoD.filter((c) => c.estadoComodato === 'entregado');
+      const pendiente = comoD.filter((c) => c.estadoComodato === 'pendiente');
+      const cancelado = comoD.filter((c) => c.estadoComodato === 'cancelado');
+      const devuelto = comoD.filter((c) => c.estadoComodato === 'devuelto');
+      this.entregados = entregados.length;
+      this.pendiente = pendiente.length;
+      this.cancelado = cancelado.length;
+      this.devuelto = devuelto.length;
+      this.activos = entregados.length;
+      // Gráfico de pastel 2D
+  this.pieChart2D = {
+    title: 'Comodatos Por Estado',
+    description: 'muestra los diferentes estados de comodatos',
     type: ChartType.PieChart,
     data: [
-      ['Enero', 8],
-      ['Febrero', 8],
-      ['Marzo', 4],
-      ['Abril', 2],
-      ['Mayo', 5],
+      ['Entregado', this.entregados],
+      ['Pendiente', this.pendiente],
+      ['Cancelado', this.cancelado],
+      ['Devuelto', this.devuelto],
     ],
-    options: { is3D: true, legend: { position: 'bottom' } },
+    columns: ['Estado', 'Cantidad'],
+    options: { legend: { position: 'bottom' } },
   };
-  // Gráfico de pastel 2D
-  pieChart2D = {
-    title: 'Comodatos Por Mes',
-    description: 'descripcion',
-    type: ChartType.PieChart,
-    data: [
-      ['Enero', 8],
-      ['Febrero', 8],
-      ['Marzo', 4],
-      ['Abril', 2],
-      ['Mayo', 5],
-    ],
-    columns: ['Mes', 'Cantidad'],
-    options: { legend: { position: 'bottom' }, responsive: true },
-  };
+    });
+    this.svUsu.getPersonas().subscribe((p) => {
+      const totalp = p.length;
+      this.usuarioTotal = totalp;
+    });
+    this.svArt.getArticulos().subscribe((art) => {
+      const artdisp = art.filter((a) => a.dispArticulo === 'DISPONIBLE');
+      this.generarDatosPorTipo(art).subscribe((datosAgrupados) => {
+        this.datosBarChar = datosAgrupados;
+        // Gráfico de barras
 
-  // Gráfico de barras
-  barChart = {
-    title: 'Ventas por producto',
-    description: 'descripcion',
-    type: ChartType.BarChart,
-    data: [
-      ['Laptop', 120],
-      ['Tablet', 80],
-      ['Teléfono', 150],
-    ],
-    columns: ['Producto', 'Ventas'],
-    options: { colors: ['#4285F4'], legend: { position: 'bottom' } },
-  };
+        this.barChart = {
+          title: 'Categoria por Articulo',
+          description: 'Se muestran la cantidad de articulos por categoria',
+          type: ChartType.BarChart,
+          data: this.datosBarChar.map((dato) => [dato.nombre, dato.cantidad]),
+          columns: ['Categoria', 'Cantidad'],
+          options: { colors: ['#4285F4'], legend: { position: 'bottom' } },
+        };
+      });
+      const cantart = art.length;
+      const artdistotal = artdisp.length;
+      this.articulosTotales = cantart;
+      this.articulosDispo = artdistotal;
+    });
+  }
 
-  // Gráfico de líneas
-  lineChart = {
-    title: 'Crecimiento de usuarios',
-    type: ChartType.LineChart,
-    description: 'descripcion',
-    data: [
-      ['Enero', 100],
-      ['Febrero', 120],
-      ['Marzo', 150],
-      ['Abril', 170],
-    ],
-    columns: ['Mes', 'Usuarios'],
-    options: { curveType: 'function', legend: { position: 'bottom' } },
-  };
 
-  stackedColumnChart = {
-    title: 'Usuarios por región (apilado)',
-    type: ChartType.ColumnChart,
-    description: 'descripcion',
-    data: [
-      ['2021', 100, 80, 50],
-      ['2022', 120, 90, 60],
-      ['2023', 150, 100, 70],
-    ],
-    columns: ['Año', 'Norte', 'Sur', 'Este'],
-    options: {
-      isStacked: false,
-      colors: ['#3366cc', '#dc3912', '#ff9900'],
-      legend: { position: 'bottom' },
-    },
-  };
+  get totalEstados(): number {
+    return this.entregados + this.pendiente + this.cancelado + this.devuelto;
+  }
 
-  
+  generarDatosPorTipo(
+    articulos: Articulo[]
+  ): Observable<{ nombre: string; cantidad: number }[]> {
+    if (articulos.length === 0) {
+      return of([]);
+    }
 
+    const peticiones = articulos.map((art) =>
+      this.svCat
+        .obtenerPorId(art.Categoria_idCategoria)
+        .pipe(map((cat) => cat?.nombreCategoria || 'Sin categoría'))
+    );
+
+    return forkJoin(peticiones).pipe(
+      map((categorias) => {
+        const conteo: { [nombre: string]: number } = {};
+
+        categorias.forEach((nombre) => {
+          conteo[nombre] = (conteo[nombre] || 0) + 1;
+        });
+
+        return Object.entries(conteo).map(([nombre, cantidad]) => ({
+          nombre,
+          cantidad,
+        }));
+      })
+    );
+  }
 }
