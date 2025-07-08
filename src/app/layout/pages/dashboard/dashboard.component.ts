@@ -66,19 +66,19 @@ export class DashboardComponent implements OnInit {
       this.devuelto = devuelto.length;
       this.activos = entregados.length;
       // Gráfico de pastel 2D
-  this.pieChart2D = {
-    title: 'Comodatos Por Estado',
-    description: 'muestra los diferentes estados de comodatos',
-    type: ChartType.PieChart,
-    data: [
-      ['Entregado', this.entregados],
-      ['Pendiente', this.pendiente],
-      ['Cancelado', this.cancelado],
-      ['Devuelto', this.devuelto],
-    ],
-    columns: ['Estado', 'Cantidad'],
-    options: { legend: { position: 'bottom' } },
-  };
+      this.pieChart2D = {
+        title: 'Comodatos Por Estado',
+        description: 'muestra los diferentes estados de comodatos',
+        type: ChartType.PieChart,
+        data: [
+          ['Entregado', this.entregados],
+          ['Pendiente', this.pendiente],
+          ['Cancelado', this.cancelado],
+          ['Devuelto', this.devuelto],
+        ],
+        columns: ['Estado', 'Cantidad'],
+        options: { legend: { position: 'bottom' } },
+      };
     });
     this.svUsu.getPersonas().subscribe((p) => {
       const totalp = p.length;
@@ -105,7 +105,6 @@ export class DashboardComponent implements OnInit {
       this.articulosDispo = artdistotal;
     });
   }
-
 
   get totalEstados(): number {
     return this.entregados + this.pendiente + this.cancelado + this.devuelto;
