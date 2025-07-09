@@ -1,0 +1,254 @@
+<div class="container-fluid py-2">
+    <!-- segcion de presentacion  -->
+    <div class="row">
+        <div class="ms-3">
+            <h3 class="mb-0 h2 font-weight-bolder">Bienvenido a los Usarios</h3>
+            <p class="mb-4">
+            </p>
+        </div>
+        <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+            <div class="card">
+                <div class="card-header p-2 ps-3">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <p class="text-sm mb-0 text-capitalize">Usuarios Totales</p>
+                            <h4 class="mb-0">200</h4>
+                        </div>
+                        <div
+                            class="icon icon-md icon-shape bg-gradient bg-danger shadow-dark shadow text-center border-radius-lg">
+                            <i class="material-symbols-rounded opacity-10">weekend</i>
+                        </div>
+                    </div>
+                </div>
+                <hr class="dark horizontal my-0">
+                <div class="card-footer p-2 ps-3">
+                    <p class="mb-0 text-sm">Aumento de: <span class="text-success font-weight-bolder">+55% </span></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+            <div class="card">
+                <div class="card-header p-2 ps-3">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <p class="text-sm mb-0 text-capitalize">Usuarios A</p>
+                            <h4 class="mb-0">100</h4>
+                        </div>
+                        <div
+                            class="icon icon-md icon-shape bg-gradient bg-primary shadow-dark shadow text-center border-radius-lg">
+                            <i class="material-symbols-rounded opacity-10">person</i>
+                        </div>
+                    </div>
+                </div>
+                <hr class="dark horizontal my-0">
+                <div class="card-footer p-2 ps-3">
+                    <p class="mb-0 text-sm">Mes pasado:<span class="text-success font-weight-bolder"> +3% </span></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+            <div class="card">
+                <div class="card-header p-2 ps-3">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <p class="text-sm mb-0 text-capitalize">Usuarios B</p>
+                            <h4 class="mb-0">67</h4>
+                        </div>
+                        <div
+                            class="icon icon-md icon-shape bg-gradient bg-secondary shadow-dark shadow text-center border-radius-lg">
+                            <i class="material-symbols-rounded opacity-10">leaderboard</i>
+                        </div>
+                    </div>
+                </div>
+                <hr class="dark horizontal my-0">
+                <div class="card-footer p-2 ps-3">
+                    <p class="mb-0 text-sm">Año pasado: <span class="text-danger font-weight-bolder">-2% </span></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-sm-6">
+            <div class="card">
+                <div class="card-header p-2 ps-3">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <p class="text-sm mb-0 text-capitalize">Usuarios C</p>
+                            <h4 class="mb-0">33</h4>
+                        </div>
+                        <div
+                            class="icon icon-md icon-shape bg-gradient bg-success shadow-dark shadow text-center border-radius-lg">
+                            <i class="material-symbols-rounded opacity-10">weekend</i>
+                        </div>
+                    </div>
+                </div>
+                <hr class="dark horizontal my-0">
+                <div class="card-footer p-2 ps-3">
+                    <p class="mb-0 text-sm">Actual <span class="text-success font-weight-bolder">0% </span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- segcion de tabla de usuarios  -->
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 " id="tabla-personas">
+            <div class="card my-5">
+                <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                    <div class="bg-gradient-dark shadow-dark border-radius-lg pt-2 pb-2 px-3 d-flex justify-content-between align-items-center">
+                        <p class="text-white text-uppercase m-0" >Usuarios Registrados</p>
+                        <button type="button" class="btn btn-secondary btn-lg shadow-sm d-flex align-items-center mt-2 px-2"
+                            (click)="abrirModalNuevaPersona()">
+                            <mat-icon class="me-1">add</mat-icon>Nuevo usuario
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card-body px-0 pb-2 table-responsive">
+                    <!-- Filtro -->
+                    <input type="text" [(ngModel)]="filtroPersonas" class="form-control mb-3 w-25 mx-3"
+                        placeholder="Buscar...">
+
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">
+                                    Persona
+                                </th>
+                                <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">
+                                    Estamento
+                                </th>
+                                <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">
+                                    Direccion
+                                </th>
+                                <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">
+                                     Telefono 
+                                </th>
+                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!--Muestra las categorias paginadas -->
+                            <tr class="text-capitalize" *ngFor="let per of PersonasPaginados"
+                                (click)="abrirModalEditarPersona(per)">
+                                <td>
+                                    <div class="px-3 py-1">
+                                        <div class="d-flex flex-column justify-content-center">
+                                            <h6 class="mb-0 text-sm">{{per.nomPersona + per.apPersona}}</h6>
+                                            <p class="text-xs text-secondary mb-0">{{per.rutPersona}}</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <p class="text-xs font-weight-bold mb-0 py-2 text-wrap">{{ estamentosMap[per.Estamento_idEstamento] }}</p>
+                                </td>
+                                <td>
+                                    <p class="text-xs font-weight-bold mb-0 py-2 text-wrap">{{per.directPersona}}</p>
+                                </td>
+                                <td>
+                                    <p class="text-xs font-weight-bold mb-0 py-2 text-wrap">{{per.telefPersona}}</p>
+                                </td>
+                                <td class="align-middle text-start text-sm">
+                                    <mat-icon>chevron_right</mat-icon>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer px-4 bg-white">
+                    <div class="row">
+                        <div class="col-12 d-flex justify-content-start px-0">
+                            <!-- propiedades del paginador -->
+                            <mat-paginator class="bg-white" [length]="personasPaginator.length"
+                                [pageSize]="personasPaginator.pageSize" [pageIndex]="personasPaginator.pageIndex"
+                                [pageSizeOptions]="pageSizeOptions" showFirstLastButtons
+                                (page)="onPageChangePersonas($event)">
+                            </mat-paginator>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            
+        </div>
+    </div>
+
+    <!-- segcion de tabla complementos de usuarios   -->
+    <div class="m-3">
+        <h2 class="mb-0 h3 font-weight-bolder text-center">Complementos de los usuarios</h2>
+        <p class="mb-2">
+        </p>
+    </div>
+
+    <div class="row">
+        <!-- segcion de tabla de Estamentos  -->
+        <div class="col-lg-12 col-md-12 col-sm-12" id="tabla-Estamento">
+            <div class="card my-5">
+                <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                    <div
+                        class="bg-gradient-dark shadow-dark border-radius-lg pt-2 pb-2 px-3 d-flex justify-content-between align-items-center">
+                        <p class="text-white text-uppercase m-0">Estamentos Registrados</p>
+                        <button type="button"
+                            class="btn btn-secondary btn-lg shadow-sm d-flex align-items-center mt-2 px-2"
+                            (click)="abrirModalNuevaEstamento()">
+                            <mat-icon class="me-1">add</mat-icon>Nuevo Estamento
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card-body px-0 pb-2 table-responsive"
+                    style="overflow-y: auto; scrollbar-width: none; -ms-overflow-style: none;">
+                    <!-- Filtro -->
+                    <input type="text" [(ngModel)]="filtroEstamentos" class="form-control mb-3 w-25 mx-3"
+                        placeholder="Buscar...">
+
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">
+                                    Estamentos
+                                </th>
+                                <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">
+                                    Detalles
+                                </th>
+                                <th
+                                    class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!--Muestra las categorias paginadas -->
+                            <tr class="text-capitalize" *ngFor="let est of estamentosPaginados"
+                                (click)="abrirModalEditarEstamento(est)">
+                                <td scope="row">
+                                    <div class="d-flex px-3 py-1">
+                                        <div class="d-flex flex-column justify-content-center">
+                                            <h6 class="mb-0 text-sm">{{est.nombreEstamento}}</h6>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <p class="text-xs font-weight-bold mb-0 py-2 text-wrap">{{est.desEstamento}}</p>
+                                </td>
+                                <td class="align-middle text-start text-sm">
+                                    <mat-icon>chevron_right</mat-icon>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer px-4 bg-white">
+                    <div class="row">
+                        <div class="col-12 d-flex justify-content-start px-0">
+                            <!-- propiedades del paginador -->
+                            <mat-paginator class="bg-white" [length]="estamentosPaginator.length"
+                                [pageSize]="estamentosPaginator.pageSize" [pageIndex]="estamentosPaginator.pageIndex"
+                                [pageSizeOptions]="pageSizeOptions" showFirstLastButtons
+                                (page)="onPageChangeEstamentos($event)">
+                            </mat-paginator>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,17 +1,16 @@
-<aside
+<aside [class.d-none]="!visible"
   class="sidenav navbar navbar-vertical navbar-expand-xs border-radius-lg fixed-start ms-2 bg-white my-2"
-  id="sidenav-main"
-  style="width: 200px;">
+  id="sidenav-main" style="width: 200px;">
 
   <!-- Header -->
   <div class="sidenav-header px-2 py-2">
-    <i
-      class="fas fa-times p-2 cursor-pointer text-dark opacity-5 position-absolute end-0 top-0 d-none d-xl-none"
-      aria-hidden="true"
-      id="iconSidenav"></i>
-    <a class="navbar-brand d-flex align-items-center px-2 py-1 m-0" routerLink="/dashboard">
+    <a class="navbar-brand d-flex align-items-center px-2 py-1 m-0">
       <img src="assets/img/logo.png" width="24" height="24" alt="logo">
       <span class="ms-1 text-xs text-dark">Cebat</span>
+      <button type="button" class="btn position-absolute top-0 end-0 m-1 d-lg-none" aria-label="Close sidebar"
+        (click)="onClose()" style="z-index: 1050; font-size: 1.5rem;">
+        <span class="material-icons">close</span>
+      </button>
     </a>
   </div>
 
@@ -22,9 +21,7 @@
     <ul class="navbar-nav flex-column">
 
       <li class="nav-item mb-1">
-        <a
-          class="nav-link text-dark py-1 d-flex align-items-center"
-          routerLink="/dashboard"
+        <a class="nav-link text-dark py-1 d-flex align-items-center" routerLink="/dashboard"
           routerLinkActive="active bg-gradient-dark text-white rounded">
           <i class="material-symbols-rounded opacity-5" style="font-size: 18px;">dashboard</i>
           <span class="ms-1 text-xs">Dashboard</span>
@@ -32,9 +29,15 @@
       </li>
 
       <li class="nav-item mb-1">
-        <a
-          class="nav-link text-dark py-1 d-flex align-items-center"
-          routerLink="/articulos"
+        <a class="nav-link text-dark py-1 d-flex align-items-center" routerLink="/comodatos"
+          routerLinkActive="active bg-gradient-dark text-white rounded">
+          <i class="material-symbols-rounded opacity-5" style="font-size: 18px;">library_books</i>
+          <span class="ms-1 text-xs">Comodatos</span>
+        </a>
+      </li>
+
+      <li class="nav-item mb-1">
+        <a class="nav-link text-dark py-1 d-flex align-items-center" routerLink="/articulos"
           routerLinkActive="active bg-gradient-dark text-white rounded">
           <i class="material-symbols-rounded opacity-5" style="font-size: 18px;">inventory</i>
           <span class="ms-1 text-xs">Artículos</span>
@@ -42,27 +45,19 @@
       </li>
 
       <li class="nav-item mb-1">
-        <a class="nav-link text-dark py-1 d-flex align-items-center" href="#">
-          <i class="material-symbols-rounded opacity-5" style="font-size: 18px;">library_books</i>
-          <span class="ms-1 text-xs">Comodatos</span>
+        <a class="nav-link text-dark py-1 d-flex align-items-center" routerLink="/usuarios"
+          routerLinkActive="active bg-gradient-dark text-white rounded">
+          <i class="material-symbols-rounded opacity-5" style="font-size: 18px;">person</i>
+          <span class="ms-1 text-xs">Usuarios</span>
         </a>
       </li>
 
       <li class="nav-item mt-3 mb-1">
-        <h6 class="ps-3 text-uppercase text-xxs text-dark opacity-5">Account pages</h6>
+        <h6 class="ps-3 text-uppercase text-xxs text-dark opacity-5">Páginas de cuenta</h6>
       </li>
 
       <li class="nav-item mb-1">
-        <a class="nav-link text-dark py-1 d-flex align-items-center" href="#">
-          <i class="material-symbols-rounded opacity-5" style="font-size: 18px;">login</i>
-          <span class="ms-1 text-xs">Iniciar sesión</span>
-        </a>
-      </li>
-
-      <li class="nav-item mb-1">
-        <a
-          class="nav-link text-dark py-1 d-flex align-items-center"
-          routerLink="/login"
+        <a class="nav-link text-dark py-1 d-flex align-items-center" routerLink="/login"
           routerLinkActive="active bg-gradient-dark text-white rounded">
           <i class="material-symbols-rounded opacity-5" style="font-size: 18px;">logout</i>
           <span class="ms-1 text-xs">Cerrar sesión</span>
@@ -75,10 +70,8 @@
   <!-- Footer -->
   <div class="sidenav-footer position-absolute w-100 bottom-0">
     <div class="mx-2 mb-2">
-      <a class="btn btn-outline-dark w-100 py-1 mb-1 text-xs" href="#" type="button">Configuración</a>
-      <a class="btn bg-gradient-dark w-100 py-1 text-xs" href="#" type="button">Admin</a>
+      <a class="btn bg-gradient-dark w-100 py-1 text-xs" routerLink="/admin" type="button">Admin</a>
     </div>
   </div>
 
 </aside>
-<!-- End Sidebar -->

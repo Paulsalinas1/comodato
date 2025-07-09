@@ -1,5 +1,392 @@
-<div class="container-fluid py-2 vh-100">
-    <button class="btn btn-primary" routerLink="/articulos/lista">
-        Lista de Articulos
-    </button>
+<div class="container-fluid py-2">
+    <!-- segcion de presentacion  -->
+    <div class="row">
+        <div class="ms-3">
+            <h2 class="mb-0 h2 font-weight-bolder">Bienvenido a los Articulos</h2>
+            <p class="mb-4">
+            </p>
+        </div>
+        <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+            <div class="card">
+                <div class="card-header p-2 ps-3">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <p class="text-sm mb-0 text-capitalize">Articulos Totales</p>
+                            <h4 class="mb-0">200</h4>
+                        </div>
+                        <div
+                            class="icon icon-md icon-shape bg-gradient bg-danger shadow-dark shadow text-center border-radius-lg">
+                            <i class="material-symbols-rounded opacity-10">weekend</i>
+                        </div>
+                    </div>
+                </div>
+                <hr class="dark horizontal my-0">
+                <div class="card-footer p-2 ps-3">
+                    <p class="mb-0 text-sm">Aumento de: <span class="text-success font-weight-bolder">+55% </span></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+            <div class="card">
+                <div class="card-header p-2 ps-3">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <p class="text-sm mb-0 text-capitalize">Articulos A</p>
+                            <h4 class="mb-0">100</h4>
+                        </div>
+                        <div
+                            class="icon icon-md icon-shape bg-gradient bg-primary shadow-dark shadow text-center border-radius-lg">
+                            <i class="material-symbols-rounded opacity-10">person</i>
+                        </div>
+                    </div>
+                </div>
+                <hr class="dark horizontal my-0">
+                <div class="card-footer p-2 ps-3">
+                    <p class="mb-0 text-sm">Mes pasado:<span class="text-success font-weight-bolder"> +3% </span></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+            <div class="card">
+                <div class="card-header p-2 ps-3">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <p class="text-sm mb-0 text-capitalize">Articulos B</p>
+                            <h4 class="mb-0">67</h4>
+                        </div>
+                        <div
+                            class="icon icon-md icon-shape bg-gradient bg-secondary shadow-dark shadow text-center border-radius-lg">
+                            <i class="material-symbols-rounded opacity-10">leaderboard</i>
+                        </div>
+                    </div>
+                </div>
+                <hr class="dark horizontal my-0">
+                <div class="card-footer p-2 ps-3">
+                    <p class="mb-0 text-sm">Año pasado: <span class="text-danger font-weight-bolder">-2% </span></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-sm-6">
+            <div class="card">
+                <div class="card-header p-2 ps-3">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <p class="text-sm mb-0 text-capitalize">Articulos C</p>
+                            <h4 class="mb-0">33</h4>
+                        </div>
+                        <div
+                            class="icon icon-md icon-shape bg-gradient bg-success shadow-dark shadow text-center border-radius-lg">
+                            <i class="material-symbols-rounded opacity-10">weekend</i>
+                        </div>
+                    </div>
+                </div>
+                <hr class="dark horizontal my-0">
+                <div class="card-footer p-2 ps-3">
+                    <p class="mb-0 text-sm">Actual <span class="text-success font-weight-bolder">0% </span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- segcion de tabla de Articulos  -->
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 " id="tabla-articulos">
+            <div class="card my-5">
+                <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                    <div class="bg-gradient-dark shadow-dark border-radius-lg pt-2 pb-2 px-3 d-flex justify-content-between align-items-center">
+                        <p class="text-white text-uppercase m-0" >Articulos Registrados</p>
+                        <button type="button" class="btn btn-secondary btn-lg shadow-sm d-flex align-items-center mt-2 px-2"
+                            (click)="abrirModalNuevoArticulo()">
+                            <mat-icon class="me-1">add</mat-icon>Nuevo Articulo
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card-body px-0 pb-2 table-responsive"  style="overflow-y: auto; scrollbar-width: none; -ms-overflow-style: none;">
+                    <!-- Filtro -->
+                    <input type="text" [(ngModel)]="filtroArticulos" class="form-control mb-3 w-25 mx-3"
+                        placeholder="Buscar...">
+
+                    <table class="table table-hover" >
+                        <thead>
+                            <tr>
+                                <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">
+                                    Articulo
+                                </th>
+                                <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">
+                                    Categoria
+                                </th>
+                                <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">
+                                    Marca/Modelo
+                                </th>
+                                <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">
+                                    Estado
+                                </th>
+                                <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">
+                                     Disponibilidad 
+                                </th>
+                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!--Muestra las categorias paginadas -->
+                            <tr class="text-capitalize" *ngFor="let art of articulosPaginadas"
+                                (click)="abrirModalEditarArticulo(art)">
+                                <td scope="row">
+                                    <div class="d-flex px-3 py-1">
+                                        <div class="d-flex flex-column justify-content-center me-3">
+                                            <h6 class="mb-0 text-sm">{{art.nombreArticulo}}</h6>
+                                            <p class="text-xs text-secondary mb-0">{{art.numSerieArticulo}}</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <p class="text-xs font-weight-bold mb-0 py-2 text-wrap">{{ categoriasMap[art.Categoria_idCategoria] }}</p>
+                                </td>
+                                <td>
+                                    <div class="d-flex py-1">
+                                        <div class="d-flex flex-column justify-content-center me-3">
+                                            <p class="text-xs font-weight-bold mb-0 text-wrap">{{ marcasMap[art.Marca_idMarca] }}</p>
+                                            <p class="text-xs text-secondary mb-0">{{ modelosMap[art.Modelo_idModelo] }}</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <p class="text-xs font-weight-bold mb-0 py-2 text-wrap">{{art.estadoArticulo}}</p>
+                                </td>
+                                <td>
+                                    <p class="text-xs font-weight-bold mb-0 py-2 text-wrap">{{art.dispArticulo}}</p>
+                                </td>
+                                <td class="align-middle text-start text-sm">
+                                    <mat-icon>chevron_right</mat-icon>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer px-4 bg-white">
+                    <div class="row">
+                        <div class="col-12 d-flex justify-content-start px-0">
+                            <!-- propiedades del paginador -->
+                            <mat-paginator class="bg-white" [length]="articulosPaginator.length"
+                                [pageSize]="articulosPaginator.pageSize" [pageIndex]="articulosPaginator.pageIndex"
+                                [pageSizeOptions]="pageSizeOptions" showFirstLastButtons
+                                (page)="onPageChangeArticulos($event)">
+                            </mat-paginator>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            
+        </div>
+    </div>
+    
+    <!-- segcion de tabla complementos de articulos   -->
+    <div class="ms-3">
+        <h2 class="mb-0 h3 font-weight-bolder text-center">Complementos de los Articulos</h2>
+        <p class="mb-4">
+        </p>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12" id="tabla-categorias">
+            <div class="card my-5">
+                <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                    <div class="bg-gradient-dark shadow-dark border-radius-lg pt-2 pb-2 px-3 d-flex justify-content-between align-items-center">
+                        <p class="text-white text-uppercase m-0" >Categorías Registradas</p>
+                        <button type="button" class="btn btn-secondary btn-lg shadow-sm d-flex align-items-center mt-2 px-2"
+                            (click)="abrirModalNuevaCategoria()">
+                            <mat-icon class="me-1">add</mat-icon>Nueva Categoría
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card-body px-0 pb-2 table-responsive"  style="overflow-y: auto; scrollbar-width: none; -ms-overflow-style: none;">
+                    <!-- Filtro -->
+                    <input type="text" [(ngModel)]="filtroCategorias" class="form-control mb-3 w-25 mx-3"
+                        placeholder="Buscar...">
+
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">
+                                    Categorias
+                                </th>
+                                <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">
+                                    Detalles
+                                </th>
+                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!--Muestra las categorias paginadas -->
+                            <tr class="text-capitalize" *ngFor="let cat of categoriasPaginadas"
+                                (click)="abrirModalEditarCategoria(cat)">
+                                <td scope="row">
+                                    <div class="d-flex px-3 py-1">
+                                        <div class="d-flex flex-column justify-content-center me-3">
+                                            <h6 class="mb-0 text-sm">{{cat.nombreCategoria}}</h6>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td >
+                                    <p class="text-xs font-weight-bold mb-0 py-2 text-wrap">{{cat.desCategoria}}</p>
+                                </td>
+                                <td class="align-middle text-start text-sm">
+                                    <mat-icon>chevron_right</mat-icon>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer px-4 bg-white">
+                    <div class="row">
+                        <div class="col-12 d-flex justify-content-start px-0">
+                            <!-- propiedades del paginador -->
+                            <mat-paginator class="bg-white" [length]="categoriasPaginator.length"
+                                [pageSize]="categoriasPaginator.pageSize" [pageIndex]="categoriasPaginator.pageIndex"
+                                [pageSizeOptions]="pageSizeOptions" showFirstLastButtons
+                                (page)="onPageChangeCategorias($event)">
+                            </mat-paginator>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+
+        <div class="col-lg-6 col-md-6 col-sm-12" id="tabla-marcas">
+            <div class="card my-5">
+                <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                    <div class="bg-gradient-dark shadow-dark border-radius-lg pt-2 pb-2 px-3 d-flex justify-content-between align-items-center">
+                        <p class="text-white text-uppercase m-0">Marcas Registradas</p>
+                        <button type="button" class="btn btn-secondary btn-lg shadow-sm d-flex align-items-center mt-2 px-2"
+                            (click)="abrirModalNuevaMarca()">
+                            <mat-icon class="me-1">add</mat-icon>Nueva Marca
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body px-0 pb-2 table-responsive"  style="overflow-y: auto; scrollbar-width: none; -ms-overflow-style: none;">
+                    <!-- Filtro -->
+                    <input type="text" [(ngModel)]="filtroMarcas" class="form-control mb-3 w-25 mx-3"
+                        placeholder="Buscar...">
+
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">
+                                    Marcas
+                                </th>
+                                <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">
+                                    Detalles
+                                </th>
+                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!--Muestra las categorias paginadas -->
+                            <tr class="text-capitalize" *ngFor="let mar of marcasPaginadas"
+                                (click)="abrirModalEditarMarca(mar)">
+                                <td scope="row">
+                                    <div class="d-flex px-3 py-1">
+                                        <div class="d-flex flex-column justify-content-center me-3">
+                                            <h6 class="mb-0 text-sm">{{mar.nombreMarca}}</h6>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td >
+                                    <p class="text-xs font-weight-bold mb-0 py-2 text-wrap">{{mar.desMarca}}</p>
+                                </td>
+                                <td class="align-middle text-start text-sm">
+                                    <mat-icon>chevron_right</mat-icon>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer px-4 bg-white">
+                    <div class="row">
+                        <div class="col-12 d-flex justify-content-start px-0">
+                            <!-- propiedades del paginador -->
+                            <mat-paginator class="bg-white" [length]="marcasPaginator.length"
+                                [pageSize]="marcasPaginator.pageSize" [pageIndex]="marcasPaginator.pageIndex"
+                                [pageSizeOptions]="pageSizeOptions" showFirstLastButtons
+                                (page)="onPageChangeMarcas($event)">
+                            </mat-paginator>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> 
+
+        <div class="col-lg-6 col-md-6 col-sm-12" id="tabla-modelos">
+            <div class="card my-5">
+                <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                    <div class="bg-gradient-dark shadow-dark border-radius-lg pt-2 pb-2 px-3 d-flex justify-content-between align-items-center">
+                        <p class="text-white text-uppercase m-0">Modelos Registrados</p>
+                        <button type="button" class="btn btn-secondary btn-lg shadow-sm d-flex align-items-center mt-2 px-2"
+                            (click)="abrirModalNuevaModelo()">
+                            <mat-icon class="me-1">add</mat-icon>Nuevo Modelo
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body px-0 pb-2 table-responsive"  style="overflow-y: auto; scrollbar-width: none; -ms-overflow-style: none;">
+                    <!-- Filtro -->
+                    <input type="text" [(ngModel)]="filtroModelos" class="form-control mb-3 w-25 mx-3"
+                        placeholder="Buscar...">
+
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">
+                                    Modelos
+                                </th>
+                                <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">
+                                    Detalles
+                                </th>
+                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!--Muestra las categorias paginadas -->
+                            <tr class="text-capitalize" *ngFor="let mod of modelosPaginadas"
+                                (click)="abrirModalEditarModelo(mod)">
+                                <td scope="row">
+                                    <div class="d-flex px-3 py-1">
+                                        <div class="d-flex flex-column justify-content-center me-3">
+                                            <h6 class="mb-0 text-sm">{{mod.nombreModelo}}</h6>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td >
+                                    <p class="text-xs font-weight-bold mb-0 py-2 text-wrap">{{mod.desModelo}}</p>
+                                </td>
+                                <td class="align-middle text-start text-sm">
+                                    <mat-icon>chevron_right</mat-icon>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer px-4 bg-white">
+                    <div class="row">
+                        <div class="col-12 d-flex justify-content-start px-0">
+                            <!-- propiedades del paginador -->
+                            <mat-paginator class="bg-white" [length]="modelosPaginator.length"
+                                [pageSize]="modelosPaginator.pageSize" [pageIndex]="modelosPaginator.pageIndex"
+                                [pageSizeOptions]="pageSizeOptions" showFirstLastButtons
+                                (page)="onPageChangeModelos($event)">
+                            </mat-paginator>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> 
+    </div>
+    
 </div>
