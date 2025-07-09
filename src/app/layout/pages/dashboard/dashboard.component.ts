@@ -36,7 +36,7 @@ export class DashboardComponent {
       ['Mayo', 5],
     ],
     columns: ['Mes', 'Cantidad'],
-    options: { legend: { position: 'bottom' }},
+    options: { legend: { position:'bottom' }, Response:true },
   };
 
   // Gráfico de barras
