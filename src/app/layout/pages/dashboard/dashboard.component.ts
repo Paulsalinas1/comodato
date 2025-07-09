@@ -48,41 +48,9 @@ export class DashboardComponent implements OnInit {
   devuelto: number = 0;
 
   today = new Date();
-<<<<<<< HEAD
-  // Gráfico de pastel 3D
-  pieChart3D = {
-    title: 'Comodatos Por Mes',
-    description: 'descripcion',
-    type: ChartType.PieChart,
-    data: [
-      ['Enero', 8],
-      ['Febrero', 8],
-      ['Marzo', 4],
-      ['Abril', 2],
-      ['Mayo', 5],
-    ],
-    options: { is3D: true, legend: { position: 'bottom' } },
-  };
-  // Gráfico de pastel 2D
-  pieChart2D = {
-    title: 'Comodatos Por Mes',
-    description: 'descripcion',
-    type: ChartType.PieChart,
-    data: [
-      ['Enero', 8],
-      ['Febrero', 8],
-      ['Marzo', 4],
-      ['Abril', 2],
-      ['Mayo', 5],
-    ],
-    columns: ['Mes', 'Cantidad'],
-    options: { legend: { position:'bottom' }, Response:true },
-  };
-=======
   barChart!: ChartDefinition;
   pieChart2D!: ChartDefinition;
   // o tipo que estés usando
->>>>>>> 23f62a9a007d0ef41724594efaafe1849e7763a0
 
   datosBarChar: CatosChars[] = [];
 
