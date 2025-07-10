@@ -14,6 +14,9 @@ import { ModalDesComponent } from '../../components/modal-des/modal-des.componen
 import { Articulo } from '../../../core/models/articulo';
 import { map, switchMap } from 'rxjs/operators';
 import { ModalComodatoComponent } from '../../components/modal-comodato/modal-comodato.component';
+import Swal from 'sweetalert2';
+
+
 
 @Component({
   selector: 'app-comodatos',
@@ -22,14 +25,12 @@ import { ModalComodatoComponent } from '../../components/modal-comodato/modal-co
   styleUrl: './comodatos.component.css',
 })
 export class ComodatosComponent implements OnInit {
-
   private readonly svComodato = inject(ComodatoService);
   private readonly svArticulo_Comodato = inject(ArticuloComodatoService);
   private readonly svPersona = inject(PersonaService);
   private readonly svArticulo = inject(ArticulosService);
   private readonly dialog = inject(MatDialog);
   private readonly snackBar = inject(MatSnackBar);
-  
 
   // Configuración de paginación para comodato
   pageSizeOptions = [1, 5, 10, 25];
@@ -43,21 +44,20 @@ export class ComodatosComponent implements OnInit {
   comodatos: Comodato[] = [];
   nombresResponsables: { [IdPersona: string]: string } = {};
   rutResponsables: { [IdPersona: string]: string } = {};
-  nombresArticulos: { [comodatoId: string]: string[]} = {};
-  comodatosTotales: number = 0; 
+  nombresArticulos: { [comodatoId: string]: string[] } = {};
+  comodatosTotales: number = 0;
   // Filtros
   filtroComodatos: string = '';
 
   ngOnInit(): void {
     this.cargarDatosComodatos();
-    this.construirResponsables();
-    this.construirNombresArticulosAgrupados()
+    
     this.CalcularTotalComodatos();
   }
 
   CalcularTotalComodatos(): void {
-    this.svComodato.getComodatos().subscribe(c => {
-       this.comodatosTotales = c.length 
+    this.svComodato.getComodatos().subscribe((c) => {
+      this.comodatosTotales = c.length;
     });
   }
 
@@ -69,10 +69,11 @@ export class ComodatosComponent implements OnInit {
           .pipe(
             map((articulos: Articulo[]) => ({
               comodatoId: comodato.idComodato,
-              nombres: articulos.map(art => art.nombreArticulo),
-            })))
-        );
-      forkJoin(observables).subscribe(resultados => {
+              nombres: articulos.map((art) => art.nombreArticulo),
+            }))
+          )
+      );
+      forkJoin(observables).subscribe((resultados) => {
         this.nombresArticulos = Object.fromEntries(
           resultados.map((res) => [res.comodatoId, res.nombres])
         );
@@ -137,6 +138,8 @@ export class ComodatosComponent implements OnInit {
         console.error('Error al cargar los estamentos:', err);
       },
     });
+    this.construirResponsables();
+    this.construirNombresArticulosAgrupados();
   }
 
   private actualizarLongitudComodatos(): void {
@@ -248,8 +251,6 @@ export class ComodatosComponent implements OnInit {
                 opciones: [
                   { valor: 'pendiente', texto: 'Pendiente' },
                   { valor: 'entregado', texto: 'Entregado' },
-                  { valor: 'devuelto', texto: 'Devuelto' },
-                  { valor: 'cancelado', texto: 'Cancelado' },
                 ],
               },
             ],
@@ -311,12 +312,17 @@ export class ComodatosComponent implements OnInit {
                       this.toastComplete(
                         'Comodato y artículos asociados correctamente'
                       );
+                      this.dialog.closeAll();
                       this.cargarDatosComodatos();
+                      if (comodatoData.estadoComodato === 'entregado') {
+                        this.confirmarDescarga(idComodato , comodatoData);
+                      }
                     },
                     error: (err) => {
                       this.toastError(
                         'Error al asociar artículos o actualizar estado' + err
                       );
+                      this.dialog.closeAll();
                       this.cargarDatosComodatos();
                     },
                   });
@@ -347,12 +353,14 @@ export class ComodatosComponent implements OnInit {
                       this.toastComplete(
                         'Comodato y artículos asociados correctamente'
                       );
+                      this.dialog.closeAll();
                       this.cargarDatosComodatos();
                     },
                     error: (err) => {
                       this.toastError(
                         'Error al asociar artículos o actualizar estado' + err
                       );
+                      this.dialog.closeAll();
                       this.cargarDatosComodatos();
                     },
                   });
@@ -362,7 +370,7 @@ export class ComodatosComponent implements OnInit {
                 this.toastError('Error al crear comodato');
               },
             });
-          }
+          } 
         });
       },
       error: () => {
@@ -449,9 +457,12 @@ export class ComodatosComponent implements OnInit {
                   { valor: 'cancelado', texto: 'Cancelado' },
                 ],
                 valorInicial: comodato.estadoComodato,
-                soloLectura: ['devuelto', 'cancelado' , 'entregado', 'pendiente' ].includes(
-                  comodato.estadoComodato
-                ),
+                soloLectura: [
+                  'devuelto',
+                  'cancelado',
+                  'entregado',
+                  'pendiente',
+                ].includes(comodato.estadoComodato),
               },
             ],
             respaldo: comodato,
@@ -494,10 +505,7 @@ export class ComodatosComponent implements OnInit {
             .subscribe({
               next: () => {
                 // Si el estado es "devuelto" o "cancelado", actualizar los artículos a DISPONIBLE
-                if (
-                  result === 'devuelto' ||
-                  result === 'cancelado'
-                ) {
+                if (result === 'devuelto' || result === 'cancelado') {
                   const actualizaciones = articulos.map(
                     (idArticulo: Articulo) =>
                       this.svArticulo.getArticulo(idArticulo.idArticulo!).pipe(
@@ -616,6 +624,10 @@ export class ComodatosComponent implements OnInit {
                 );
               },
             });
+            if (comodatoActualizado.estadoComodato === 'devuelto') {
+                  this.confirmarDescarga(comodatoActualizado.idComodato! ,comodatoActualizado);
+                  this.cargarDatosComodatos();
+                }
         });
       },
       error: () => {
@@ -631,5 +643,38 @@ export class ComodatosComponent implements OnInit {
     const day = String(d.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
   }
-  
+
+  descargarComprobante(idComodato: string): void {
+    window.open(`http://localhost:3000/api/comprobante/descargar/${idComodato}`, '_blank');
+  }
+
+  confirmarDescarga( id: string ,comodato: Comodato): void {
+    if (comodato.estadoComodato === 'entregado') {
+      Swal.fire({
+      title: '¿Deseas descargar el comprobante?',
+      text: 'El comodato fue entregado correctamente.',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, descargar',
+      cancelButtonText: 'No, gracias',
+    }).then((result: any) => {
+      if (result.isConfirmed) {
+        this.descargarComprobante(id);
+      }
+    });
+    }else {
+      Swal.fire({
+      title: '¿Deseas descargar el comprobante de devolución?',
+      text: 'El comodato fue devuelto correctamente.',
+      icon: 'success',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, descargar',
+      cancelButtonText: 'No, gracias',
+    }).then((result: any) => {
+      if (result.isConfirmed) {
+        this.descargarComprobante(id);
+      }
+    });
+    }
+  }
 }
