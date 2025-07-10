@@ -7,7 +7,8 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class EstamentoService {
-  private apiUrl = 'http://localhost:3000/api/estamentos';
+  /* private apiUrl = 'http://localhost:3000/api/estamentos'; */
+  private apiUrl = 'http://10.9.1.28:3000/api/estamentos';
 
   constructor(private http: HttpClient) {}
 

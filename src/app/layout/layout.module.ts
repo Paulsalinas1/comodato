@@ -14,6 +14,7 @@ import { HeaderComponent } from './components/header/header.component';
 import { ModalAddComponent } from './components/modal-add/modal-add.component';
 import { ModalDesComponent } from './components/modal-des/modal-des.component';
 import { MatSelectModule } from '@angular/material/select';
+import { ModalComodatoComponent } from './components/modal-comodato/modal-comodato.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { MatSelectModule } from '@angular/material/select';
     HeaderComponent,
     ModalAddComponent,
     ModalDesComponent,
+    ModalComodatoComponent,
     
   ],
   imports: [

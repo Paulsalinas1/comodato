@@ -13,6 +13,7 @@ import { ModalAddComponent } from '../../components/modal-add/modal-add.componen
 import { ModalDesComponent } from '../../components/modal-des/modal-des.component';
 import { Articulo } from '../../../core/models/articulo';
 import { map, switchMap } from 'rxjs/operators';
+import { ModalComodatoComponent } from '../../components/modal-comodato/modal-comodato.component';
 
 @Component({
   selector: 'app-comodatos',
@@ -378,7 +379,7 @@ export class ComodatosComponent implements OnInit {
       ),
     }).subscribe({
       next: ({ personas, articulos }) => {
-        const dialogRef = this.dialog.open(ModalDesComponent, {
+        const dialogRef = this.dialog.open(ModalComodatoComponent, {
           width: '600px',
           data: {
             titulo: 'Editar Estado del Comodato',
@@ -435,8 +436,9 @@ export class ComodatosComponent implements OnInit {
               },
               // Paso 1 - Solo editar estado
               {
-                tipo: 'select',
+                tipo: 'selectEstado',
                 nombre: 'estadoComodato',
+                valorA: comodato.estadoComodato,
                 etiqueta: 'Estado',
                 obligatorio: true,
                 paso: 1,
@@ -447,7 +449,7 @@ export class ComodatosComponent implements OnInit {
                   { valor: 'cancelado', texto: 'Cancelado' },
                 ],
                 valorInicial: comodato.estadoComodato,
-                soloLectura: ['devuelto', 'cancelado'].includes(
+                soloLectura: ['devuelto', 'cancelado' , 'entregado', 'pendiente' ].includes(
                   comodato.estadoComodato
                 ),
               },
@@ -483,7 +485,7 @@ export class ComodatosComponent implements OnInit {
             idComodato: comodato.idComodato,
             fechaInicioComodato: fechaInicioFormateada,
             fechaTerminoComodatoD: fechaTerminoFormateada,
-            estadoComodato: result.estadoComodato,
+            estadoComodato: result,
             Persona_idPersona: comodato.Persona_idPersona,
           };
 
@@ -493,8 +495,8 @@ export class ComodatosComponent implements OnInit {
               next: () => {
                 // Si el estado es "devuelto" o "cancelado", actualizar los artículos a DISPONIBLE
                 if (
-                  result.estadoComodato === 'devuelto' ||
-                  result.estadoComodato === 'cancelado'
+                  result === 'devuelto' ||
+                  result === 'cancelado'
                 ) {
                   const actualizaciones = articulos.map(
                     (idArticulo: Articulo) =>
@@ -532,7 +534,7 @@ export class ComodatosComponent implements OnInit {
                       this.cargarDatosComodatos();
                     },
                   });
-                } else if (result.estadoComodato === 'entregado') {
+                } else if (result === 'entregado') {
                   const actualizaciones = articulos.map(
                     (idArticulo: Articulo) =>
                       this.svArticulo.getArticulo(idArticulo.idArticulo!).pipe(
@@ -569,7 +571,7 @@ export class ComodatosComponent implements OnInit {
                       this.cargarDatosComodatos();
                     },
                   });
-                } else if (result.estadoComodato === 'pendiente') {
+                } else if (result === 'pendiente') {
                   const actualizaciones = articulos.map(
                     (idArticulo: Articulo) =>
                       this.svArticulo.getArticulo(idArticulo.idArticulo!).pipe(

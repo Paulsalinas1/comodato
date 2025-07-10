@@ -1,0 +1,115 @@
+<div class="card my-0 shadow-sm">
+    <div class="card-header p-0 position-relative mt-4 mx-3 z-index-2">
+        <div class="bg-gradient-dark shadow-dark border-radius-lg pt-2 pb-2 px-3 ">
+            <p class="text-white text-uppercase text-center m-0">{{ data.titulo }}</p>
+        </div>
+    </div>
+
+    <!-- Barra de pasos visual dinámica -->
+    <div class="px-3 pt-3 pb-0">
+        <ul class="nav nav-pills nav-justified mb-3 px-2">
+            <li class="nav-item" *ngFor="let paso of data.pasos; let i = index">
+                <button type="button" class="nav-link text-capitalize w-100" [ngClass]="{
+        'active bg-gradient-dark text-white': i === pasoActual,
+        'bg-light text-secondary': i !== pasoActual
+      }" (click)="irAlPaso(i)">
+                    {{ paso }}
+                </button>
+            </li>
+        </ul>
+    </div>
+
+    <div class="card-body px-3 pb-2">
+        <form [formGroup]="form" class="row g-3">
+            <ng-container *ngFor="let campo of data.campos">
+                <div *ngIf="campo.paso === pasoActual" class="col-md-12">
+                    <label class="form-label fw-semibold text-capitalize" [for]="campo.etiqueta">{{ campo.etiqueta
+                        }}</label>
+
+                    <input *ngIf="campo.tipo === 'text'" type="text" class="form-control glow-on-focus border p-2 "
+                        [id]="campo.etiqueta" [formControlName]="campo.nombre" [required]="campo.obligatorio" />
+
+                    <textarea *ngIf="campo.tipo === 'textarea'" class="form-control glow-on-focus border p-2" rows="3"
+                        [id]="campo.etiqueta" [formControlName]="campo.nombre"
+                        [required]="campo.obligatorio"></textarea>
+
+
+                    <div *ngIf="campo.tipo === 'select'">
+                        <div class="input-group ">
+                            <select class="form-select form-select-lg rounded-start" [id]="campo.etiqueta"
+                                [formControlName]="campo.nombre" [required]="campo.obligatorio">
+                                <option *ngFor="let opcion of campo.opciones" [value]="opcion.valor">
+                                    {{ opcion.texto }}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div *ngIf="campo.tipo === 'selectEstado'">
+                        <div class="input-group ">
+                            <select class="form-select form-select-lg rounded-start" [id]="campo.etiqueta"
+                                [formControlName]="campo.nombre" [required]="campo.obligatorio">
+                                <option *ngFor="let opcion of campo.opciones" [value]="opcion.valor">
+                                    {{ opcion.texto }}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="pt-3 d-flex justify-content-center flex-wrap">
+                        
+                            <!-- Mostrar solo si el estado actual NO es 'entregado' -->
+                            <button *ngIf="campo.valorA == 'pendiente'" class="btn btn-outline-success me-2"
+                                (click)="actualizarEstado('entregado')">
+                                Entregado
+                            </button>
+                        
+                            <!-- Mostrar solo si el estado actual NO es 'devuelto' -->
+                            <button *ngIf="campo.valorA == 'entregado'" class="btn btn-outline-info me-2"
+                                (click)="actualizarEstado('devuelto')">
+                                Devuelto
+                            </button>
+                        
+                            <!-- Mostrar solo si el estado actual NO es 'cancelado' -->
+                            <button *ngIf="campo.valorA == 'pendiente'" class="btn btn-outline-danger" (click)="actualizarEstado('cancelado')">
+                                Cancelado
+                            </button>
+                        
+                        </div>
+                        
+                    </div>
+
+                    <div *ngIf="campo.tipo === 'multiselect'">
+                        <select class="form-select form-select-lg" [formControlName]="campo.nombre" multiple required>
+                            <option *ngFor="let opcion of campo.opciones" [value]="opcion.valor">
+                                {{ opcion.texto }}
+                            </option>
+                        </select>
+
+                        <small class="text-muted">Mantén Ctrl o Cmd para seleccionar múltiples opciones</small>
+                    </div>
+
+                    <div *ngIf="campo.tipo === 'date'" class="col-md-12">
+                        <input type="date" class="form-control glow-on-focus border p-2" [id]="campo.etiqueta"
+                            [formControlName]="campo.nombre" [required]="campo.obligatorio" />
+                    </div>
+
+                </div>
+
+                <div class="text-center">
+
+                </div>
+
+            </ng-container>
+        </form>
+    </div>
+
+    <div class="card-footer row gap-3 p-2 m-0 px-5">
+        <hr class="horizontal opacity-75 dark mt-0 mb-0">
+        <button *ngIf="pasoActual > 0" class="col btn btn-sm btn-outline-secondary"
+            (click)="anteriorPaso()">Anterior</button>
+        <button *ngIf="pasoActual < data.pasos.length - 1" class="col btn btn-sm btn-outline-primary"
+            (click)="siguientePaso()">Siguiente</button>
+
+        <button type="button" class="col btn btn-sm btn-light" (click)="cancelar()">Cerrar</button>
+    </div>
+
+</div>
