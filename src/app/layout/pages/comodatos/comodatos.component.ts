@@ -645,7 +645,7 @@ export class ComodatosComponent implements OnInit {
   }
 
   descargarComprobante(idComodato: string): void {
-    window.open(`http://localhost:3000/api/comprobante/descargar/${idComodato}`, '_blank');
+    window.open(`http://10.9.1.28:3000/api/comprobante/descargar/${idComodato}`, '_blank');
   }
 
   confirmarDescarga( id: string ,comodato: Comodato): void {
