@@ -4,3 +4,15 @@
   outline: none;
 }
 
+.modal-body-scrollable {
+  max-height: 80vh;   /* O el alto que prefieras */
+  overflow-y: auto;
+   /* Opcional, para evitar que tape el scroll */
+}
+
+.card-footer {
+  position: sticky;
+  bottom: 0;
+  background: white;
+  z-index: 10;
+}
