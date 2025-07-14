@@ -117,7 +117,7 @@ export class ModalDes3Component implements OnInit {
   }
 
   guardar() {
-    if (this.soloLectura) return; // 👈 evitar guardar si es solo lectura
+    if (this.soloLectura) return; 
     if (this.form.valid) {
       this.dialogRef.close(this.form.value);
     }
@@ -125,6 +125,10 @@ export class ModalDes3Component implements OnInit {
 
   cancelar() {
     this.dialogRef.close();
+  }
+
+  descargar(tipodescarga: string ){
+    this.dialogRef.close(tipodescarga);
   }
 
   siguientePaso() {

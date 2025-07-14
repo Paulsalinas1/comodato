@@ -81,6 +81,14 @@
               [readonly]="soloLectura || campo.soloLectura" />
           </div>
 
+          <!-- Campo de los botones -->
+           <div *ngIf="campo.tipo === 'botonesDescargas'" class="d-flex justify-content-between mt-3">
+            <button class="col btn btn-sm btn-outline-primary"
+              (click)="descargar('comodato')">Entrega Comodato</button>
+            <button class="col btn btn-sm btn-outline-info"
+              (click)="descargar('devolucion')">Devolucion Comodato</button>
+           </div>
+
         </div>
       </ng-container>
     </form>

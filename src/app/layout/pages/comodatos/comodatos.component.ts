@@ -165,7 +165,6 @@ export class ComodatosComponent implements OnInit {
         console.error('Error al cargar las devoluciones:', err);
       },
     });
-
   }
 
   private actualizarLongitudComodatos(): void {
@@ -179,29 +178,32 @@ export class ComodatosComponent implements OnInit {
   // Filtrado y paginación de comodatos
   get ComodatoFiltrados() {
     const texto = this.filtroComodatos.trim().toLowerCase();
-    if (!texto) return this.comodatos.filter(c => c.estadoComodato !== 'devuelto');
+    if (!texto)
+      return this.comodatos.filter((c) => c.estadoComodato !== 'devuelto');
 
-    return this.comodatos.filter(c => c.estadoComodato !== 'devuelto').filter((comodato) => {
-      // Buscar en campos directos del comodato
-      const enCampos = Object.values(comodato).some((val) =>
-        String(val).toLowerCase().includes(texto)
-      );
-      // Buscar en nombre del responsable
-      const nombreResponsable =
-        this.nombresResponsables[comodato.Persona_idPersona] || '';
-      const enNombre = nombreResponsable.toLowerCase().includes(texto);
-      // Buscar en rut del responsable
-      const rutResponsable =
-        this.rutResponsables[comodato.Persona_idPersona] || '';
-      const enRut = rutResponsable.toLowerCase().includes(texto);
-      // Buscar en nombres de artículos asociados
-      const articulos = this.nombresArticulos[comodato.idComodato!] || [];
-      const enArticulos = articulos.some((nombre: string) =>
-        nombre.toLowerCase().includes(texto)
-      );
+    return this.comodatos
+      .filter((c) => c.estadoComodato !== 'devuelto')
+      .filter((comodato) => {
+        // Buscar en campos directos del comodato
+        const enCampos = Object.values(comodato).some((val) =>
+          String(val).toLowerCase().includes(texto)
+        );
+        // Buscar en nombre del responsable
+        const nombreResponsable =
+          this.nombresResponsables[comodato.Persona_idPersona] || '';
+        const enNombre = nombreResponsable.toLowerCase().includes(texto);
+        // Buscar en rut del responsable
+        const rutResponsable =
+          this.rutResponsables[comodato.Persona_idPersona] || '';
+        const enRut = rutResponsable.toLowerCase().includes(texto);
+        // Buscar en nombres de artículos asociados
+        const articulos = this.nombresArticulos[comodato.idComodato!] || [];
+        const enArticulos = articulos.some((nombre: string) =>
+          nombre.toLowerCase().includes(texto)
+        );
 
-      return enCampos || enNombre || enRut || enArticulos;
-    });
+        return enCampos || enNombre || enRut || enArticulos;
+      });
   }
 
   get devolucionFiltrados() {
@@ -897,16 +899,21 @@ export class ComodatosComponent implements OnInit {
                     const comodatoActualizado: Comodato = {
                       ...comodato,
                       estadoComodato: 'devuelto',
-                      fechaInicioComodato: this.formatearFecha(new Date(comodato.fechaInicioComodato)),
-                      fechaTerminoComodatoD: this.formatearFecha(result.fecha_d),
-
+                      fechaInicioComodato: this.formatearFecha(
+                        new Date(comodato.fechaInicioComodato)
+                      ),
+                      fechaTerminoComodatoD: this.formatearFecha(
+                        result.fecha_d
+                      ),
                     };
 
                     this.svComodato
                       .updateComodato(comodatoId, comodatoActualizado)
                       .subscribe({
                         next: () => {
-                          this.toastComplete('Devolución realizada correctamente');
+                          this.toastComplete(
+                            'Devolución realizada correctamente'
+                          );
                           this.cargarDatosComodatos();
                           this.confirmarDescarga(
                             comodatoId,
@@ -914,9 +921,7 @@ export class ComodatosComponent implements OnInit {
                           );
                         },
                         error: (err) => {
-                          this.toastError(
-                            'Error: ' + err.err
-                          );
+                          this.toastError('Error: ' + err.err);
                         },
                       });
                   },
@@ -984,112 +989,124 @@ export class ComodatosComponent implements OnInit {
   }
 
   abrirModalVerDevolucionComodato(devo: DevolucionComodato): void {
-  forkJoin({
-    personas: this.svPersona.getPersonas(),
-    articulos: this.svArticulo.getArticulos(),
-  }).subscribe({
-    next: ({ personas, articulos }) => {
-      const dialogRef = this.dialog.open(ModalDes3Component, {
-        width: '1000px',
-        data: {
-          titulo: 'Ver Devolución de Comodato',
-          soloLectura: true,
-          pasos: [
-            'Datos del Responsable',
-            'Artículos Devueltos',
-            'Motivo y Observación',
-            'Recepción y Fecha',
-          ],
-          campos: [
-            {
-              tipo: 'text',
-              nombre: 'nombre_completo_d',
-              etiqueta: 'Nombre Completo',
-              paso: 0,
-            },
-            {
-              tipo: 'text',
-              nombre: 'rut_p_d',
-              etiqueta: 'RUT',
-              paso: 0,
-            },
-            {
-              tipo: 'text',
-              nombre: 'cargo_d',
-              etiqueta: 'Cargo',
-              paso: 0,
-            },
-            {
-              tipo: 'list',
-              nombre: 'articulosDevueltos',
-              etiqueta: 'Artículos Devueltos',
-              paso: 1,
-            },
-            {
-              nombre: 'estadosArticulos',
-            },
-            {
-              tipo: 'textarea',
-              nombre: 'motivo_d',
-              etiqueta: 'Motivo de Devolución',
-              paso: 2,
-              deshabilitado: true,
-            },
-            {
-              tipo: 'textarea',
-              nombre: 'observacion_d',
-              etiqueta: 'Observación',
-              paso: 2,
-              deshabilitado: true,
-            },
-            {
-              tipo: 'text',
-              nombre: 'nombre_r_d',
-              etiqueta: 'Recibido por',
-              paso: 3,
-              deshabilitado: true,
-            },
-            {
-              tipo: 'date',
-              nombre: 'fecha_d',
-              etiqueta: 'Fecha de Devolución',
-              paso: 3,
+    forkJoin({
+      personas: this.svPersona.getPersonas(),
+      articulos: this.svArticulo.getArticulos(),
+    }).subscribe({
+      next: ({ personas, articulos }) => {
+        const dialogRef = this.dialog.open(ModalDes3Component, {
+          width: '1000px',
+          data: {
+            titulo: 'Ver Devolución de Comodato',
+            soloLectura: true,
+            pasos: [
+              'Datos del Responsable',
+              'Artículos Devueltos',
+              'Motivo y Observación',
+              'Recepción y Fecha',
+            ],
+            campos: [
+              {
+                tipo: 'text',
+                nombre: 'nombre_completo_d',
+                etiqueta: 'Nombre Completo',
+                paso: 0,
               },
-          ],
-          valoresIniciales: {
-            nombre_completo_d: devo.nombre_completo_d,
-            rut_p_d: devo.rut_p_d,
-            cargo_d: devo.cargo_d,
-            articulosDevueltos: [
-              devo.nombre_articulo_1,
-              devo.nombre_articulo_2,
-              devo.nombre_articulo_3,
-              devo.nombre_articulo_4,
-              devo.nombre_articulo_5,
-              devo.nombre_articulo_6,
-            ].filter(Boolean),
-            estadosArticulos: [
-              devo.estado_a_1,
-              devo.estado_a_2,
-              devo.estado_a_3,
-              devo.estado_a_4,
-              devo.estado_a_5,
-              devo.estado_a_6,
-            ].filter(Boolean),
-            motivo_d: devo.motivo_d,
-            observacion_d: devo.obsevacion_d,
-            nombre_r_d: devo.nombre_r_d,
-            fecha_d: this.formatearFecha(devo.fecha_d),
+              {
+                tipo: 'text',
+                nombre: 'rut_p_d',
+                etiqueta: 'RUT',
+                paso: 0,
+              },
+              {
+                tipo: 'text',
+                nombre: 'cargo_d',
+                etiqueta: 'Cargo',
+                paso: 0,
+              },
+              {
+                tipo: 'list',
+                nombre: 'articulosDevueltos',
+                etiqueta: 'Artículos Devueltos',
+                paso: 1,
+              },
+              {
+                nombre: 'estadosArticulos',
+              },
+              {
+                tipo: 'textarea',
+                nombre: 'motivo_d',
+                etiqueta: 'Motivo de Devolución',
+                paso: 2,
+                deshabilitado: true,
+              },
+              {
+                tipo: 'textarea',
+                nombre: 'observacion_d',
+                etiqueta: 'Observación',
+                paso: 2,
+                deshabilitado: true,
+              },
+              {
+                tipo: 'text',
+                nombre: 'nombre_r_d',
+                etiqueta: 'Recibido por',
+                paso: 3,
+                deshabilitado: true,
+              },
+              {
+                tipo: 'date',
+                nombre: 'fecha_d',
+                etiqueta: 'Fecha de Devolución',
+                paso: 3,
+              },
+              {
+                tipo: 'botonesDescargas',
+                nombre: 'sin nombre',
+                etiqueta: 'Opciones de los documentos',
+                paso: 3,
+              },
+            ],
+            valoresIniciales: {
+              nombre_completo_d: devo.nombre_completo_d,
+              rut_p_d: devo.rut_p_d,
+              cargo_d: devo.cargo_d,
+              articulosDevueltos: [
+                devo.nombre_articulo_1,
+                devo.nombre_articulo_2,
+                devo.nombre_articulo_3,
+                devo.nombre_articulo_4,
+                devo.nombre_articulo_5,
+                devo.nombre_articulo_6,
+              ].filter(Boolean),
+              estadosArticulos: [
+                devo.estado_a_1,
+                devo.estado_a_2,
+                devo.estado_a_3,
+                devo.estado_a_4,
+                devo.estado_a_5,
+                devo.estado_a_6,
+              ].filter(Boolean),
+              motivo_d: devo.motivo_d,
+              observacion_d: devo.obsevacion_d,
+              nombre_r_d: devo.nombre_r_d,
+              fecha_d: this.formatearFecha(devo.fecha_d),
+            },
           },
-        },
-      });
-      dialogRef.afterClosed().subscribe(() => {
-        this.dialog.closeAll();
-      });
-    },
-    error: () => {
-      this.toastError('Error al cargar datos para visualización');
-    },
-  });
-}
+        });
+        dialogRef.afterClosed().subscribe((resut) => {
+          console.log(resut);
+          if(resut === 'comodato'){
+            this.descargarComprobante(devo.Comodato_idComodato);
+            console.log('Descargando comprobante del comodato');
+          }else if(resut === 'devolucion'){
+            console.log('Se descargó el comprobante de devolución');
+          }
+        });
+      },
+      error: () => {
+        this.toastError('Error al cargar datos para visualización');
+      },
+    });
+  }
 }
