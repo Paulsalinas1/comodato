@@ -15,6 +15,10 @@ import { Articulo } from '../../../core/models/articulo';
 import { map, switchMap } from 'rxjs/operators';
 import { ModalComodatoComponent } from '../../components/modal-comodato/modal-comodato.component';
 import Swal from 'sweetalert2';
+import { DevolucionComodato } from '../../../core/models/Devolucion';
+import { DevolucionComodatoService } from '../../../core/services/devolucion_comodato.service';
+import { EstamentoService } from '../../../core/services/estamento.service';
+import { ModalDes2Component } from '../../components/modal-des2/modal-des2.component';
 
 
 
@@ -31,6 +35,8 @@ export class ComodatosComponent implements OnInit {
   private readonly svArticulo = inject(ArticulosService);
   private readonly dialog = inject(MatDialog);
   private readonly snackBar = inject(MatSnackBar);
+  private readonly svDevolucionComodato = inject(DevolucionComodatoService);
+  private readonly svEstamento = inject(EstamentoService);
 
   // Configuración de paginación para comodato
   pageSizeOptions = [1, 5, 10, 25];
@@ -51,7 +57,7 @@ export class ComodatosComponent implements OnInit {
 
   ngOnInit(): void {
     this.cargarDatosComodatos();
-    
+
     this.CalcularTotalComodatos();
   }
 
@@ -140,7 +146,6 @@ export class ComodatosComponent implements OnInit {
         console.error('Error al cargar los estamentos:', err);
       },
     });
-    
   }
 
   private actualizarLongitudComodatos(): void {
@@ -149,29 +154,31 @@ export class ComodatosComponent implements OnInit {
 
   // Filtrado y paginación de comodatos
   get ComodatoFiltrados() {
-  const texto = this.filtroComodatos.trim().toLowerCase();
-  if (!texto) return this.comodatos;
+    const texto = this.filtroComodatos.trim().toLowerCase();
+    if (!texto) return this.comodatos;
 
-  return this.comodatos.filter((comodato) => {
-    // Buscar en campos directos del comodato
-    const enCampos = Object.values(comodato).some((val) =>
-      String(val).toLowerCase().includes(texto)
-    );
-    // Buscar en nombre del responsable
-    const nombreResponsable = this.nombresResponsables[comodato.Persona_idPersona] || '';
-    const enNombre = nombreResponsable.toLowerCase().includes(texto);
-    // Buscar en rut del responsable
-    const rutResponsable = this.rutResponsables[comodato.Persona_idPersona] || '';
-    const enRut = rutResponsable.toLowerCase().includes(texto);
-    // Buscar en nombres de artículos asociados
-    const articulos = this.nombresArticulos[comodato.idComodato!] || [];
-    const enArticulos = articulos.some((nombre: string) =>
-      nombre.toLowerCase().includes(texto)
-    );
+    return this.comodatos.filter((comodato) => {
+      // Buscar en campos directos del comodato
+      const enCampos = Object.values(comodato).some((val) =>
+        String(val).toLowerCase().includes(texto)
+      );
+      // Buscar en nombre del responsable
+      const nombreResponsable =
+        this.nombresResponsables[comodato.Persona_idPersona] || '';
+      const enNombre = nombreResponsable.toLowerCase().includes(texto);
+      // Buscar en rut del responsable
+      const rutResponsable =
+        this.rutResponsables[comodato.Persona_idPersona] || '';
+      const enRut = rutResponsable.toLowerCase().includes(texto);
+      // Buscar en nombres de artículos asociados
+      const articulos = this.nombresArticulos[comodato.idComodato!] || [];
+      const enArticulos = articulos.some((nombre: string) =>
+        nombre.toLowerCase().includes(texto)
+      );
 
-    return enCampos || enNombre || enRut || enArticulos;
-  });
-}
+      return enCampos || enNombre || enRut || enArticulos;
+    });
+  }
 
   get comodatosPaginados(): Comodato[] {
     this.comodatoPaginator.length = this.ComodatoFiltrados.length;
@@ -330,7 +337,7 @@ export class ComodatosComponent implements OnInit {
                       this.dialog.closeAll();
                       this.cargarDatosComodatos();
                       if (comodatoData.estadoComodato === 'entregado') {
-                        this.confirmarDescarga(idComodato , comodatoData);
+                        this.confirmarDescarga(idComodato, comodatoData);
                       }
                     },
                     error: (err) => {
@@ -385,7 +392,7 @@ export class ComodatosComponent implements OnInit {
                 this.toastError('Error al crear comodato');
               },
             });
-          } 
+          }
         });
       },
       error: () => {
@@ -515,12 +522,17 @@ export class ComodatosComponent implements OnInit {
             Persona_idPersona: comodato.Persona_idPersona,
           };
 
-          this.svComodato
+          
+            if (comodatoActualizado.estadoComodato === 'devuelto') {
+            // Si el comodato fue devuelto, abrir modal de devolución
+              this.abrirModalNuevaDevolucion(comodatoActualizado.idComodato!);
+            }else {
+              this.svComodato
             .updateComodato(comodato.idComodato!, comodatoActualizado)
             .subscribe({
               next: () => {
                 // Si el estado es "devuelto" o "cancelado", actualizar los artículos a DISPONIBLE
-                if (result === 'devuelto' || result === 'cancelado') {
+                if (result === 'cancelado') {
                   const actualizaciones = articulos.map(
                     (idArticulo: Articulo) =>
                       this.svArticulo.getArticulo(idArticulo.idArticulo!).pipe(
@@ -639,14 +651,172 @@ export class ComodatosComponent implements OnInit {
                 );
               },
             });
-            if (comodatoActualizado.estadoComodato === 'devuelto') {
-                  this.confirmarDescarga(comodatoActualizado.idComodato! ,comodatoActualizado);
-                  this.cargarDatosComodatos();
-                }
+            }
         });
       },
       error: () => {
         this.toastError('Error al cargar datos para edición');
+      },
+    });
+  }
+
+  abrirModalNuevaDevolucion(comodatoId: string): void {
+    forkJoin({
+      comodato: this.svComodato.getComodatoById(comodatoId),
+      articulos:
+        this.svArticulo_Comodato.obtenerArticulosPorComodato(comodatoId),
+      personas: this.svPersona.getPersonas(),
+    }).subscribe({
+      next: ({ comodato, articulos, personas }) => {
+        const persona = personas.find(
+          (p: any) => p.idPersona === comodato.Persona_idPersona
+        );
+
+        const camposArticulos = articulos
+          .map((art: Articulo, index: number) => [
+            {
+              tipo: 'text',
+              nombre: `nombre_articulo_${index + 1}`,
+              etiqueta: `Artículo ${index + 1}`,
+              valorInicial: art.nombreArticulo,
+              soloLectura: true,
+              paso: 1,
+            },
+            {
+              tipo: 'select',
+              nombre: `estado_a_${index + 1}`,
+              etiqueta: `Estado Artículo ${index + 1}`,
+              obligatorio: true,
+              paso: 1,
+              opciones: [
+                { valor: 'FUNCIONAL', texto: 'Funcional' },
+                { valor: 'DAÑADO', texto: 'Dañado' },
+                { valor: 'PERDIDO', texto: 'Perdido' },
+              ],
+            },
+          ])
+          .flat();
+        const valoresIniciales = {
+          nombre_completo_d: `${persona!.nomPersona} ${persona!.apPersona}`,
+          rut_p_d: persona!.rutPersona,
+          cargo_d: persona!.Estamento_idEstamento,
+          ...Object.fromEntries(
+            articulos.map((art, i) => [
+              `nombre_articulo_${i + 1}`,
+              art.nombreArticulo,
+            ])
+          ),
+        };
+        // Obtener cargo del responsable
+        let cargo = '';
+        this.svEstamento
+          .getEstamentoById(persona!.Estamento_idEstamento)
+          .subscribe((c) => {
+            cargo = c.nombreEstamento;
+          });
+
+        const dialogRef = this.dialog.open(ModalDes2Component, {
+          width: '1000px',
+          data: {
+            titulo: 'Registrar Devolución de Comodato',
+            pasos: [
+              'Datos del Responsable',
+              'Estado de Artículos',
+              'Confirmación',
+            ],
+            campos: [
+              {
+                tipo: 'text',
+                nombre: 'nombre_completo_d',
+                etiqueta: 'Nombre Responsable',
+                valorInicial: `${persona!.nomPersona} ${persona!.apPersona}`,
+                soloLectura: true,
+                paso: 0,
+              },
+              {
+                tipo: 'text',
+                nombre: 'rut_p_d',
+                etiqueta: 'RUT',
+                valorInicial: persona!.rutPersona,
+                soloLectura: true,
+                paso: 0,
+              },
+              ...camposArticulos,
+              {
+                tipo: 'textarea',
+                nombre: 'motivo_d',
+                etiqueta: 'Motivo de Devolución',
+                obligatorio: true,
+                paso: 2,
+              },
+              {
+                tipo: 'textarea',
+                nombre: 'obsevacion_d',
+                etiqueta: 'Observaciones generales',
+                obligatorio: false,
+                paso: 2,
+              },
+              {
+                tipo: 'text',
+                nombre: 'nombre_r_d',
+                etiqueta: 'Responsable Recepción',
+                obligatorio: true,
+                paso: 2,
+              },
+              {
+                tipo: 'date',
+                nombre: 'fecha_d',
+                etiqueta: 'Fecha de Devolución',
+                obligatorio: true,
+                paso: 2,
+              },
+            ],
+            valoresIniciales: valoresIniciales,
+          },
+        });
+
+        dialogRef.afterClosed().subscribe((result) => {
+          if (result) {
+            // Preparar datos de devolución
+            const devolucion: any = {
+              nombre_completo_d: persona?.nomPersona + ' ' + persona?.apPersona,
+              rut_p_d: persona?.rutPersona,
+              cargo_d: cargo,
+              motivo_d: result.motivo_d,
+              obsevacion_d: result.obsevacion_d,
+              nombre_r_d: result.nombre_r_d,
+              fecha_d: result.fecha_d,
+              Comodato_idComodato: comodatoId,
+              ...Object.fromEntries(
+                articulos.map((art, i) => [
+                  `nombre_articulo_${i + 1}`,
+                  art.nombreArticulo,
+                ])
+              ),
+              ...Object.fromEntries(
+                articulos.map((_, i) => [
+                  `estado_a_${i + 1}`,
+                  result[`estado_a_${i + 1}`],
+                ])
+              ),
+            };
+
+            this.svDevolucionComodato.createDevolucion(devolucion).subscribe({
+              next: (resp) => {
+                this.toastComplete('Devolución registrada correctamente');
+                this.dialog.closeAll();
+                this.confirmarDescarga(resp.idDevolucion_comodato, comodato);
+                this.cargarDatosComodatos();
+              },
+              error: (err) => {
+                this.toastError('Error al registrar devolución: ' + err);
+              },
+            });
+          }
+        });
+      },
+      error: () => {
+        this.toastError('Error al cargar datos del comodato');
       },
     });
   }
@@ -660,36 +830,39 @@ export class ComodatosComponent implements OnInit {
   }
 
   descargarComprobante(idComodato: string): void {
-    window.open(`http://10.9.1.28:3000/api/comprobante/descargar/${idComodato}`, '_blank');
+    window.open(
+      `http://10.9.1.28:3000/api/comprobante/descargar/${idComodato}`,
+      '_blank'
+    );
   }
 
-  confirmarDescarga( id: string ,comodato: Comodato): void {
+  confirmarDescarga(id: string, comodato: Comodato): void {
     if (comodato.estadoComodato === 'entregado') {
       Swal.fire({
-      title: '¿Deseas descargar el comprobante?',
-      text: 'El comodato fue entregado correctamente.',
-      icon: 'question',
-      showCancelButton: true,
-      confirmButtonText: 'Sí, descargar',
-      cancelButtonText: 'No, gracias',
-    }).then((result: any) => {
-      if (result.isConfirmed) {
-        this.descargarComprobante(id);
-      }
-    });
-    }else {
+        title: '¿Deseas descargar el comprobante?',
+        text: 'El comodato fue entregado correctamente.',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, descargar',
+        cancelButtonText: 'No, gracias',
+      }).then((result: any) => {
+        if (result.isConfirmed) {
+          this.descargarComprobante(id);
+        }
+      });
+    } else {
       Swal.fire({
-      title: '¿Deseas descargar el comprobante de devolución?',
-      text: 'El comodato fue devuelto correctamente.',
-      icon: 'success',
-      showCancelButton: true,
-      confirmButtonText: 'Sí, descargar',
-      cancelButtonText: 'No, gracias',
-    }).then((result: any) => {
-      if (result.isConfirmed) {
-        this.descargarComprobante(id);
-      }
-    });
+        title: '¿Deseas descargar el comprobante de devolución?',
+        text: 'El comodato fue devuelto correctamente.',
+        icon: 'success',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, descargar',
+        cancelButtonText: 'No, gracias',
+      }).then((result: any) => {
+        if (result.isConfirmed) {
+          this.descargarComprobante(id);
+        }
+      });
     }
   }
 }
