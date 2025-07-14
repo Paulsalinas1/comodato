@@ -760,6 +760,9 @@ export class ArticulosComponent {
                   { valor: 'FUNCIONAL', texto: 'Funcional' },
                   { valor: 'MANTENIMIENTO', texto: 'Mantenimiento' },
                   { valor: 'DEFECTUOSO', texto: 'Defectuoso' },
+                  { valor: 'PERDIDO', texto: 'Perdido' },
+                  { valor: 'ROBADO', texto: 'Robado' },
+                  { valor: 'DANADO' , texto: 'Dañado' },
                 ],
               },
               {
@@ -772,6 +775,7 @@ export class ArticulosComponent {
                   { valor: 'DISPONIBLE', texto: 'Disponible' },
                   { valor: 'EN_COMODATO', texto: 'En Comodato' },
                   { valor: 'RESERVADO', texto: 'Reservado' },
+                  { valor: 'NO_DISPONIBLE', texto: 'No Disponible' },
                 ],
               },
               {
@@ -884,8 +888,11 @@ export class ArticulosComponent {
               paso: 1,
               opciones: [
                 { valor: 'FUNCIONAL', texto: 'Funcional' },
-                { valor: 'MANTENIMIENTO', texto: 'Mantenimiento' },
-                { valor: 'DEFECTUOSO', texto: 'Defectuoso' },
+                  { valor: 'MANTENIMIENTO', texto: 'Mantenimiento' },
+                  { valor: 'DEFECTUOSO', texto: 'Defectuoso' },
+                  { valor: 'PERDIDO', texto: 'Perdido' },
+                  { valor: 'ROBADO', texto: 'Robado' },
+                  { valor: 'DANADO' , texto: 'Dañado' },
               ],
             },
             {
@@ -898,6 +905,7 @@ export class ArticulosComponent {
                 { valor: 'DISPONIBLE', texto: 'Disponible' },
                 { valor: 'EN_COMODATO', texto: 'En Comodato' },
                 { valor: 'RESERVADO', texto: 'Reservado' },
+                { valor: 'NO_DISPONIBLE', texto: 'No Disponible' },
               ],
             },
             {

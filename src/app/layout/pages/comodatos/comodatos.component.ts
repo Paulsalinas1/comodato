@@ -35,10 +35,16 @@ export class ComodatosComponent implements OnInit {
   private readonly snackBar = inject(MatSnackBar);
   private readonly svDevolucionComodato = inject(DevolucionComodatoService);
   private readonly svEstamento = inject(EstamentoService);
-
+  private readonly svDevueltos = inject(DevolucionComodatoService);
   // Configuración de paginación para comodato
   pageSizeOptions = [1, 5, 10, 25];
   comodatoPaginator = {
+    pageIndex: 0,
+    pageSize: 5,
+    length: 0,
+  };
+
+  comodatoDevoludor = {
     pageIndex: 0,
     pageSize: 5,
     length: 0,
@@ -50,8 +56,10 @@ export class ComodatosComponent implements OnInit {
   rutResponsables: { [IdPersona: string]: string } = {};
   nombresArticulos: { [comodatoId: string]: string[] } = {};
   comodatosTotales: number = 0;
+  devoluciones: DevolucionComodato[] = [];
   // Filtros
   filtroComodatos: string = '';
+  filtroDevoluciones: string = '';
 
   ngOnInit(): void {
     this.cargarDatosComodatos();
@@ -144,18 +152,35 @@ export class ComodatosComponent implements OnInit {
         console.error('Error al cargar los estamentos:', err);
       },
     });
+    // Cargar devoluciones para poder usarlas en el modal de devolución
+    this.svDevolucionComodato.getDevoluciones().subscribe({
+      next: (data) => {
+        // Aquí podrías procesar las devoluciones si es necesario
+        this.devoluciones = data;
+        this.actualizarLongitudDevolucion();
+        console.log('Devoluciones cargadas:', data);
+      },
+      error: (err) => {
+        console.error('Error al cargar las devoluciones:', err);
+      },
+    });
+
   }
 
   private actualizarLongitudComodatos(): void {
     this.comodatoPaginator.length = this.comodatos.length;
   }
 
+  private actualizarLongitudDevolucion(): void {
+    this.comodatoDevoludor.length = this.devoluciones.length;
+  }
+
   // Filtrado y paginación de comodatos
   get ComodatoFiltrados() {
     const texto = this.filtroComodatos.trim().toLowerCase();
-    if (!texto) return this.comodatos;
+    if (!texto) return this.comodatos.filter(c => c.estadoComodato !== 'devuelto');
 
-    return this.comodatos.filter((comodato) => {
+    return this.comodatos.filter(c => c.estadoComodato !== 'devuelto').filter((comodato) => {
       // Buscar en campos directos del comodato
       const enCampos = Object.values(comodato).some((val) =>
         String(val).toLowerCase().includes(texto)
@@ -178,6 +203,19 @@ export class ComodatosComponent implements OnInit {
     });
   }
 
+  get devolucionFiltrados() {
+    const texto = this.filtroDevoluciones.trim().toLowerCase();
+    if (!texto) return this.devoluciones;
+
+    return this.devoluciones.filter((dev) => {
+      // Buscar en campos directos del comodato
+      const enCampos = Object.values(dev).some((val) =>
+        String(val).toLowerCase().includes(texto)
+      );
+      return enCampos;
+    });
+  }
+
   get comodatosPaginados(): Comodato[] {
     this.comodatoPaginator.length = this.ComodatoFiltrados.length;
     const startIndex =
@@ -185,6 +223,16 @@ export class ComodatosComponent implements OnInit {
     return this.ComodatoFiltrados.slice(
       startIndex,
       startIndex + this.comodatoPaginator.pageSize
+    );
+  }
+
+  get devolucionesPaginados(): DevolucionComodato[] {
+    this.comodatoDevoludor.length = this.devolucionFiltrados.length;
+    const startIndex =
+      this.comodatoDevoludor.pageIndex * this.comodatoDevoludor.pageSize;
+    return this.devolucionFiltrados.slice(
+      startIndex,
+      startIndex + this.comodatoDevoludor.pageSize
     );
   }
 
@@ -196,6 +244,18 @@ export class ComodatosComponent implements OnInit {
     setTimeout(() => {
       document
         .getElementById('tabla-Comodatos')
+        ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 0);
+  }
+
+  onPageChangeDevoluciones(event: PageEvent): void {
+    this.comodatoDevoludor.pageIndex = event.pageIndex;
+    this.comodatoDevoludor.pageSize = event.pageSize;
+
+    // Opcional: scroll al inicio de la tabla
+    setTimeout(() => {
+      document
+        .getElementById('tabla-Devoluciones')
         ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }, 0);
   }
@@ -696,8 +756,10 @@ export class ComodatosComponent implements OnInit {
               paso: 1,
               opciones: [
                 { valor: 'FUNCIONAL', texto: 'Funcional' },
-                { valor: 'DAÑADO', texto: 'Dañado' },
+                { valor: 'DANADO', texto: 'Dañado' },
                 { valor: 'PERDIDO', texto: 'Perdido' },
+                { valor: 'ROBADO', texto: 'Robado' },
+                { valor: 'DEFECTUOSO', texto: 'Defectuoso' },
               ],
             },
           ])
@@ -919,4 +981,6 @@ export class ComodatosComponent implements OnInit {
       });
     }
   }
+
+
 }
