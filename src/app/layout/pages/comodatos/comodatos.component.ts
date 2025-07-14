@@ -133,13 +133,14 @@ export class ComodatosComponent implements OnInit {
       next: (data) => {
         this.comodatos = data;
         this.actualizarLongitudComodatos();
+        this.construirResponsables();
+        this.construirNombresArticulosAgrupados();
       },
       error: (err) => {
         console.error('Error al cargar los estamentos:', err);
       },
     });
-    this.construirResponsables();
-    this.construirNombresArticulosAgrupados();
+    
   }
 
   private actualizarLongitudComodatos(): void {
@@ -147,16 +148,30 @@ export class ComodatosComponent implements OnInit {
   }
 
   // Filtrado y paginación de comodatos
-  get ComodatoFiltrados(): Comodato[] {
-    const texto = this.filtroComodatos.trim().toLowerCase();
-    if (!texto) return this.comodatos;
+  get ComodatoFiltrados() {
+  const texto = this.filtroComodatos.trim().toLowerCase();
+  if (!texto) return this.comodatos;
 
-    return this.comodatos.filter((Comodato) =>
-      Object.values(Comodato).some((val) =>
-        String(val).toLowerCase().includes(texto)
-      )
+  return this.comodatos.filter((comodato) => {
+    // Buscar en campos directos del comodato
+    const enCampos = Object.values(comodato).some((val) =>
+      String(val).toLowerCase().includes(texto)
     );
-  }
+    // Buscar en nombre del responsable
+    const nombreResponsable = this.nombresResponsables[comodato.Persona_idPersona] || '';
+    const enNombre = nombreResponsable.toLowerCase().includes(texto);
+    // Buscar en rut del responsable
+    const rutResponsable = this.rutResponsables[comodato.Persona_idPersona] || '';
+    const enRut = rutResponsable.toLowerCase().includes(texto);
+    // Buscar en nombres de artículos asociados
+    const articulos = this.nombresArticulos[comodato.idComodato!] || [];
+    const enArticulos = articulos.some((nombre: string) =>
+      nombre.toLowerCase().includes(texto)
+    );
+
+    return enCampos || enNombre || enRut || enArticulos;
+  });
+}
 
   get comodatosPaginados(): Comodato[] {
     this.comodatoPaginator.length = this.ComodatoFiltrados.length;
