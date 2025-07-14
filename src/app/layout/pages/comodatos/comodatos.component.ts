@@ -20,8 +20,6 @@ import { DevolucionComodatoService } from '../../../core/services/devolucion_com
 import { EstamentoService } from '../../../core/services/estamento.service';
 import { ModalDes2Component } from '../../components/modal-des2/modal-des2.component';
 
-
-
 @Component({
   selector: 'app-comodatos',
   standalone: false,
@@ -522,136 +520,144 @@ export class ComodatosComponent implements OnInit {
             Persona_idPersona: comodato.Persona_idPersona,
           };
 
-          
-            if (comodatoActualizado.estadoComodato === 'devuelto') {
+          if (comodatoActualizado.estadoComodato === 'devuelto') {
             // Si el comodato fue devuelto, abrir modal de devolución
-              this.abrirModalNuevaDevolucion(comodatoActualizado.idComodato!);
-            }else {
-              this.svComodato
-            .updateComodato(comodato.idComodato!, comodatoActualizado)
-            .subscribe({
-              next: () => {
-                // Si el estado es "devuelto" o "cancelado", actualizar los artículos a DISPONIBLE
-                if (result === 'cancelado') {
-                  const actualizaciones = articulos.map(
-                    (idArticulo: Articulo) =>
-                      this.svArticulo.getArticulo(idArticulo.idArticulo!).pipe(
-                        switchMap((arti) => {
-                          const arti2: Articulo = {
-                            Categoria_idCategoria: arti.Categoria_idCategoria,
-                            dispArticulo: 'DISPONIBLE',
-                            estadoArticulo: arti.estadoArticulo,
-                            desArticulo: arti.desArticulo,
-                            Marca_idMarca: arti.Marca_idMarca,
-                            Modelo_idModelo: arti.Modelo_idModelo,
-                            nombreArticulo: arti.nombreArticulo,
-                            numSerieArticulo: arti.numSerieArticulo,
-                            idArticulo: arti.idArticulo,
-                          };
-                          return this.svArticulo.updateArticulo(
-                            idArticulo.idArticulo!,
-                            arti2
-                          );
-                        })
-                      )
+            this.abrirModalNuevaDevolucion(comodatoActualizado.idComodato!);
+          } else {
+            this.svComodato
+              .updateComodato(comodato.idComodato!, comodatoActualizado)
+              .subscribe({
+                next: () => {
+                  // Si el estado es "devuelto" o "cancelado", actualizar los artículos a DISPONIBLE
+                  if (result === 'cancelado') {
+                    const actualizaciones = articulos.map(
+                      (idArticulo: Articulo) =>
+                        this.svArticulo
+                          .getArticulo(idArticulo.idArticulo!)
+                          .pipe(
+                            switchMap((arti) => {
+                              const arti2: Articulo = {
+                                Categoria_idCategoria:
+                                  arti.Categoria_idCategoria,
+                                dispArticulo: 'DISPONIBLE',
+                                estadoArticulo: arti.estadoArticulo,
+                                desArticulo: arti.desArticulo,
+                                Marca_idMarca: arti.Marca_idMarca,
+                                Modelo_idModelo: arti.Modelo_idModelo,
+                                nombreArticulo: arti.nombreArticulo,
+                                numSerieArticulo: arti.numSerieArticulo,
+                                idArticulo: arti.idArticulo,
+                              };
+                              return this.svArticulo.updateArticulo(
+                                idArticulo.idArticulo!,
+                                arti2
+                              );
+                            })
+                          )
+                    );
+                    forkJoin(actualizaciones).subscribe({
+                      next: () => {
+                        this.toastEdit(
+                          'Estado del comodato y artículos actualizados'
+                        );
+                        this.cargarDatosComodatos();
+                      },
+                      error: () => {
+                        this.toastError(
+                          'Error al actualizar estado de los artículos'
+                        );
+                        this.cargarDatosComodatos();
+                      },
+                    });
+                  } else if (result === 'entregado') {
+                    const actualizaciones = articulos.map(
+                      (idArticulo: Articulo) =>
+                        this.svArticulo
+                          .getArticulo(idArticulo.idArticulo!)
+                          .pipe(
+                            switchMap((arti) => {
+                              const arti2: Articulo = {
+                                Categoria_idCategoria:
+                                  arti.Categoria_idCategoria,
+                                dispArticulo: 'EN_COMODATO',
+                                estadoArticulo: arti.estadoArticulo,
+                                desArticulo: arti.desArticulo,
+                                Marca_idMarca: arti.Marca_idMarca,
+                                Modelo_idModelo: arti.Modelo_idModelo,
+                                nombreArticulo: arti.nombreArticulo,
+                                numSerieArticulo: arti.numSerieArticulo,
+                                idArticulo: arti.idArticulo,
+                              };
+                              return this.svArticulo.updateArticulo(
+                                idArticulo.idArticulo!,
+                                arti2
+                              );
+                            })
+                          )
+                    );
+                    forkJoin(actualizaciones).subscribe({
+                      next: () => {
+                        this.toastEdit(
+                          'Estado del comodato y artículos actualizados'
+                        );
+                        this.cargarDatosComodatos();
+                      },
+                      error: () => {
+                        this.toastError(
+                          'Error al actualizar estado de los artículos'
+                        );
+                        this.cargarDatosComodatos();
+                      },
+                    });
+                  } else if (result === 'pendiente') {
+                    const actualizaciones = articulos.map(
+                      (idArticulo: Articulo) =>
+                        this.svArticulo
+                          .getArticulo(idArticulo.idArticulo!)
+                          .pipe(
+                            switchMap((arti) => {
+                              const arti2: Articulo = {
+                                Categoria_idCategoria:
+                                  arti.Categoria_idCategoria,
+                                dispArticulo: 'RESERVADO',
+                                estadoArticulo: arti.estadoArticulo,
+                                desArticulo: arti.desArticulo,
+                                Marca_idMarca: arti.Marca_idMarca,
+                                Modelo_idModelo: arti.Modelo_idModelo,
+                                nombreArticulo: arti.nombreArticulo,
+                                numSerieArticulo: arti.numSerieArticulo,
+                                idArticulo: arti.idArticulo,
+                              };
+                              return this.svArticulo.updateArticulo(
+                                idArticulo.idArticulo!,
+                                arti2
+                              );
+                            })
+                          )
+                    );
+                    forkJoin(actualizaciones).subscribe({
+                      next: () => {
+                        this.toastEdit(
+                          'Estado del comodato y artículos actualizados'
+                        );
+                        this.cargarDatosComodatos();
+                      },
+                      error: () => {
+                        this.toastError(
+                          'Error al actualizar estado de los artículos'
+                        );
+                        this.cargarDatosComodatos();
+                      },
+                    });
+                  }
+                },
+                error: (err) => {
+                  this.toastError(
+                    'Error al actualizar el estado del comodato: ' + err.err
                   );
-                  forkJoin(actualizaciones).subscribe({
-                    next: () => {
-                      this.toastEdit(
-                        'Estado del comodato y artículos actualizados'
-                      );
-                      this.cargarDatosComodatos();
-                    },
-                    error: () => {
-                      this.toastError(
-                        'Error al actualizar estado de los artículos'
-                      );
-                      this.cargarDatosComodatos();
-                    },
-                  });
-                } else if (result === 'entregado') {
-                  const actualizaciones = articulos.map(
-                    (idArticulo: Articulo) =>
-                      this.svArticulo.getArticulo(idArticulo.idArticulo!).pipe(
-                        switchMap((arti) => {
-                          const arti2: Articulo = {
-                            Categoria_idCategoria: arti.Categoria_idCategoria,
-                            dispArticulo: 'EN_COMODATO',
-                            estadoArticulo: arti.estadoArticulo,
-                            desArticulo: arti.desArticulo,
-                            Marca_idMarca: arti.Marca_idMarca,
-                            Modelo_idModelo: arti.Modelo_idModelo,
-                            nombreArticulo: arti.nombreArticulo,
-                            numSerieArticulo: arti.numSerieArticulo,
-                            idArticulo: arti.idArticulo,
-                          };
-                          return this.svArticulo.updateArticulo(
-                            idArticulo.idArticulo!,
-                            arti2
-                          );
-                        })
-                      )
-                  );
-                  forkJoin(actualizaciones).subscribe({
-                    next: () => {
-                      this.toastEdit(
-                        'Estado del comodato y artículos actualizados'
-                      );
-                      this.cargarDatosComodatos();
-                    },
-                    error: () => {
-                      this.toastError(
-                        'Error al actualizar estado de los artículos'
-                      );
-                      this.cargarDatosComodatos();
-                    },
-                  });
-                } else if (result === 'pendiente') {
-                  const actualizaciones = articulos.map(
-                    (idArticulo: Articulo) =>
-                      this.svArticulo.getArticulo(idArticulo.idArticulo!).pipe(
-                        switchMap((arti) => {
-                          const arti2: Articulo = {
-                            Categoria_idCategoria: arti.Categoria_idCategoria,
-                            dispArticulo: 'RESERVADO',
-                            estadoArticulo: arti.estadoArticulo,
-                            desArticulo: arti.desArticulo,
-                            Marca_idMarca: arti.Marca_idMarca,
-                            Modelo_idModelo: arti.Modelo_idModelo,
-                            nombreArticulo: arti.nombreArticulo,
-                            numSerieArticulo: arti.numSerieArticulo,
-                            idArticulo: arti.idArticulo,
-                          };
-                          return this.svArticulo.updateArticulo(
-                            idArticulo.idArticulo!,
-                            arti2
-                          );
-                        })
-                      )
-                  );
-                  forkJoin(actualizaciones).subscribe({
-                    next: () => {
-                      this.toastEdit(
-                        'Estado del comodato y artículos actualizados'
-                      );
-                      this.cargarDatosComodatos();
-                    },
-                    error: () => {
-                      this.toastError(
-                        'Error al actualizar estado de los artículos'
-                      );
-                      this.cargarDatosComodatos();
-                    },
-                  });
-                }
-              },
-              error: (err) => {
-                this.toastError(
-                  'Error al actualizar el estado del comodato: ' + err.err
-                );
-              },
-            });
-            }
+                },
+              });
+          }
         });
       },
       error: () => {
@@ -803,10 +809,58 @@ export class ComodatosComponent implements OnInit {
 
             this.svDevolucionComodato.createDevolucion(devolucion).subscribe({
               next: (resp) => {
-                this.toastComplete('Devolución registrada correctamente');
                 this.dialog.closeAll();
-                this.confirmarDescarga(resp.idDevolucion_comodato, comodato);
-                this.cargarDatosComodatos();
+
+                const actualizaciones$ = articulos.map((art, i) => {
+                  const nuevoEstado = result[`estado_a_${i + 1}`];
+
+                  const actualizado: Articulo = {
+                    ...art,
+                    estadoArticulo: nuevoEstado,
+                    dispArticulo:
+                      nuevoEstado === 'FUNCIONAL'
+                        ? 'DISPONIBLE'
+                        : 'NO_DISPONIBLE',
+                  };
+
+                  return this.svArticulo.updateArticulo(
+                    art.idArticulo,
+                    actualizado
+                  );
+                });
+
+                forkJoin(actualizaciones$).subscribe({
+                  next: () => {
+                    const comodatoActualizado: Comodato = {
+                      ...comodato,
+                      estadoComodato: 'devuelto',
+                      fechaInicioComodato: this.formatearFecha(new Date(comodato.fechaInicioComodato)),
+                      fechaTerminoComodatoD: this.formatearFecha(result.fecha_d),
+
+                    };
+
+                    this.svComodato
+                      .updateComodato(comodatoId, comodatoActualizado)
+                      .subscribe({
+                        next: () => {
+                          this.toastComplete('Devolución realizada correctamente');
+                          this.cargarDatosComodatos();
+                          this.confirmarDescarga(
+                            comodatoId,
+                            comodatoActualizado
+                          );
+                        },
+                        error: (err) => {
+                          this.toastError(
+                            'Error: ' + err.err
+                          );
+                        },
+                      });
+                  },
+                  error: (err) => {
+                    this.toastError('Error al actualizar artículos: ' + err);
+                  },
+                });
               },
               error: (err) => {
                 this.toastError('Error al registrar devolución: ' + err);

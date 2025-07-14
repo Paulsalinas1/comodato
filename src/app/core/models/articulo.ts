@@ -3,7 +3,7 @@ export interface Articulo {
   nombreArticulo: string;
   desArticulo?: string;
   estadoArticulo: 'FUNCIONAL' | 'MANTENIMIENTO' | 'DEFECTUOSO';
-  dispArticulo: 'DISPONIBLE' | 'EN_COMODATO' | 'RESERVADO';
+  dispArticulo: 'DISPONIBLE' | 'EN_COMODATO' | 'RESERVADO' | 'NO_DISPONIBLE';
   numSerieArticulo: string;
   Marca_idMarca: string;
   Categoria_idCategoria: string;
