@@ -126,10 +126,6 @@ export class ModalDes2Component implements OnInit {
     this.dialogRef.close();
   }
 
-  eliminar() {
-    this.dialogRef.close({ eliminar: true });
-  }
-
   siguientePaso() {
     if (this.pasoActual < this.data.pasos.length - 1) {
       this.pasoActual++;
