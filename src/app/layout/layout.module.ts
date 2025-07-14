@@ -14,6 +14,7 @@ import { HeaderComponent } from './components/header/header.component';
 import { ModalAddComponent } from './components/modal-add/modal-add.component';
 import { ModalDesComponent } from './components/modal-des/modal-des.component';
 import { ModalDes2Component } from './components/modal-des2/modal-des2.component';
+import { ModalDes3Component } from './components/modal-des3/modal-des3.component';
 import { MatSelectModule } from '@angular/material/select';
 import { ModalComodatoComponent } from './components/modal-comodato/modal-comodato.component';
 
@@ -26,6 +27,8 @@ import { ModalComodatoComponent } from './components/modal-comodato/modal-comoda
     ModalDesComponent,
     ModalComodatoComponent,
     ModalDes2Component,
+    ModalDes3Component,
+    
     
   ],
   imports: [
@@ -47,7 +50,9 @@ import { ModalComodatoComponent } from './components/modal-comodato/modal-comoda
     HeaderComponent,
     ModalAddComponent,
     ModalDesComponent,
-    ModalDes2Component
+    ModalDes2Component,
+    ModalDes3Component,
+    
     
   ],
 })

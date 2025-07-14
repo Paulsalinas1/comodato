@@ -19,6 +19,7 @@ import { DevolucionComodato } from '../../../core/models/Devolucion';
 import { DevolucionComodatoService } from '../../../core/services/devolucion_comodato.service';
 import { EstamentoService } from '../../../core/services/estamento.service';
 import { ModalDes2Component } from '../../components/modal-des2/modal-des2.component';
+import { ModalDes3Component } from '../../components/modal-des3/modal-des3.component';
 
 @Component({
   selector: 'app-comodatos',
@@ -982,5 +983,113 @@ export class ComodatosComponent implements OnInit {
     }
   }
 
-
+  abrirModalVerDevolucionComodato(devo: DevolucionComodato): void {
+  forkJoin({
+    personas: this.svPersona.getPersonas(),
+    articulos: this.svArticulo.getArticulos(),
+  }).subscribe({
+    next: ({ personas, articulos }) => {
+      const dialogRef = this.dialog.open(ModalDes3Component, {
+        width: '1000px',
+        data: {
+          titulo: 'Ver Devolución de Comodato',
+          soloLectura: true,
+          pasos: [
+            'Datos del Responsable',
+            'Artículos Devueltos',
+            'Motivo y Observación',
+            'Recepción y Fecha',
+          ],
+          campos: [
+            {
+              tipo: 'text',
+              nombre: 'nombre_completo_d',
+              etiqueta: 'Nombre Completo',
+              paso: 0,
+            },
+            {
+              tipo: 'text',
+              nombre: 'rut_p_d',
+              etiqueta: 'RUT',
+              paso: 0,
+            },
+            {
+              tipo: 'text',
+              nombre: 'cargo_d',
+              etiqueta: 'Cargo',
+              paso: 0,
+            },
+            {
+              tipo: 'list',
+              nombre: 'articulosDevueltos',
+              etiqueta: 'Artículos Devueltos',
+              paso: 1,
+            },
+            {
+              nombre: 'estadosArticulos',
+            },
+            {
+              tipo: 'textarea',
+              nombre: 'motivo_d',
+              etiqueta: 'Motivo de Devolución',
+              paso: 2,
+              deshabilitado: true,
+            },
+            {
+              tipo: 'textarea',
+              nombre: 'observacion_d',
+              etiqueta: 'Observación',
+              paso: 2,
+              deshabilitado: true,
+            },
+            {
+              tipo: 'text',
+              nombre: 'nombre_r_d',
+              etiqueta: 'Recibido por',
+              paso: 3,
+              deshabilitado: true,
+            },
+            {
+              tipo: 'date',
+              nombre: 'fecha_d',
+              etiqueta: 'Fecha de Devolución',
+              paso: 3,
+              },
+          ],
+          valoresIniciales: {
+            nombre_completo_d: devo.nombre_completo_d,
+            rut_p_d: devo.rut_p_d,
+            cargo_d: devo.cargo_d,
+            articulosDevueltos: [
+              devo.nombre_articulo_1,
+              devo.nombre_articulo_2,
+              devo.nombre_articulo_3,
+              devo.nombre_articulo_4,
+              devo.nombre_articulo_5,
+              devo.nombre_articulo_6,
+            ].filter(Boolean),
+            estadosArticulos: [
+              devo.estado_a_1,
+              devo.estado_a_2,
+              devo.estado_a_3,
+              devo.estado_a_4,
+              devo.estado_a_5,
+              devo.estado_a_6,
+            ].filter(Boolean),
+            motivo_d: devo.motivo_d,
+            observacion_d: devo.obsevacion_d,
+            nombre_r_d: devo.nombre_r_d,
+            fecha_d: this.formatearFecha(devo.fecha_d),
+          },
+        },
+      });
+      dialogRef.afterClosed().subscribe(() => {
+        this.dialog.closeAll();
+      });
+    },
+    error: () => {
+      this.toastError('Error al cargar datos para visualización');
+    },
+  });
+}
 }

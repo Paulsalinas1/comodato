@@ -1,6 +1,6 @@
 export interface Campo {
   soloLectura: boolean;
-  tipo: 'text' | 'textarea' | 'select' | 'checkbox' | 'radio' | 'date' | 'multiselect' |'selectEstado';
+  tipo: 'text' | 'textarea' | 'select' | 'checkbox' | 'radio' | 'date' | 'multiselect' |'selectEstado' | 'list';
   nombre: string;
   etiqueta: string;
   obligatorio: boolean;
