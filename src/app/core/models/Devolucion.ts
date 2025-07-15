@@ -19,6 +19,7 @@ export interface DevolucionComodato {
      estado_a_4?: string;
      estado_a_5?: string;
      estado_a_6?: string;
+     r_establecimiento: string;
      Comodato_idComodato: string;
   
 }

@@ -298,6 +298,14 @@ export class ComodatosComponent implements OnInit {
                 })),
                 permitirCrear: true, // si quieres botón para crear nueva persona desde modal
               },
+              {
+                tipo: 'text',
+                nombre: 'r_establecimiento',
+                etiqueta: 'Nombre Responsable Establecimiento',
+                obligatorio: true,
+                paso: 0,
+                valorInicial: respaldo ? respaldo.r_establecimiento : '',
+              },
               // Paso 1 - Selección múltiple de artículos (checkbox o multiselect)
               {
                 tipo: 'multiselect',
@@ -349,6 +357,7 @@ export class ComodatosComponent implements OnInit {
               fechaTerminoComodatoD: result.fechaTerminoComodato,
               estadoComodato: result.estadoComodato,
               Persona_idPersona: result.Persona_idPersona,
+              r_establecimiento: result.r_establecimiento,
             };
 
             this.svComodato.createComodato(comodatoData).subscribe({
@@ -491,6 +500,15 @@ export class ComodatosComponent implements OnInit {
                 soloLectura: true, // <-- deshabilitado
               },
               {
+                tipo: 'text',
+                nombre: 'r_establecimiento',
+                etiqueta: 'Nombre Responsable Establecimiento',
+                obligatorio: false,
+                paso: 0,
+                valorInicial: comodato.r_establecimiento,
+                soloLectura: true, 
+              },
+              {
                 tipo: 'multiselect',
                 nombre: 'articulosSeleccionados',
                 etiqueta: 'Artículos',
@@ -581,6 +599,7 @@ export class ComodatosComponent implements OnInit {
             fechaTerminoComodatoD: fechaTerminoFormateada,
             estadoComodato: result,
             Persona_idPersona: comodato.Persona_idPersona,
+            r_establecimiento: comodato.r_establecimiento,
           };
 
           if (comodatoActualizado.estadoComodato === 'devuelto') {
@@ -812,6 +831,15 @@ export class ComodatosComponent implements OnInit {
                 soloLectura: true,
                 paso: 0,
               },
+              {
+                tipo: 'text',
+                nombre: 'r_establecimiento',
+                etiqueta: 'Nombre Responsable Establecimiento',
+                obligatorio: false,
+                paso: 0,
+                valorInicial: comodato.r_establecimiento,
+                soloLectura: true, 
+              },
               ...camposArticulos,
               {
                 tipo: 'textarea',
@@ -857,6 +885,7 @@ export class ComodatosComponent implements OnInit {
               obsevacion_d: result.obsevacion_d,
               nombre_r_d: result.nombre_r_d,
               fecha_d: result.fecha_d,
+              r_establecimiento: comodato.r_establecimiento,
               Comodato_idComodato: comodatoId,
               ...Object.fromEntries(
                 articulos.map((art, i) => [
