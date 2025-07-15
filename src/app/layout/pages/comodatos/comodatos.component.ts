@@ -1054,6 +1054,14 @@ export class ComodatosComponent implements OnInit {
                 paso: 0,
               },
               {
+                tipo: 'text',
+                nombre: 'r_establecimiento',
+                etiqueta: 'Nombre Responsable Establecimiento',
+                paso: 0,
+                valorInicial: devo.r_establecimiento,
+                soloLectura: true, 
+              },
+              {
                 tipo: 'list',
                 nombre: 'articulosDevueltos',
                 etiqueta: 'Artículos Devueltos',
