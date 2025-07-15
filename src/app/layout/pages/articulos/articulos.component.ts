@@ -64,6 +64,12 @@ export class ArticulosComponent {
   marcasMap: { [id: string]: string } = {};
   modelosMap: { [id: string]: string } = {};
 
+  // Datos presentacion
+  art_totales: number = 0;
+  art_dispo: number = 0;
+  art_en_comodato: number = 0;
+  art_no_dispo: number = 0;
+
   // Filtros
   filtroCategorias: string = '';
   filtroMarcas: string = '';
@@ -84,8 +90,20 @@ export class ArticulosComponent {
     this.cargarDatosMar();
     this.cargarDatosMod();
     this.cargarDatosArti();
-
     this.cargarNombres();
+  }
+
+  daots_presentacion() {
+    this.art_totales = this.articulos.length;
+    this.art_dispo = this.articulos.filter(
+      (art) => art.dispArticulo === 'DISPONIBLE'
+    ).length;
+    this.art_en_comodato = this.articulos.filter(
+      (art) => art.dispArticulo === 'EN_COMODATO'
+    ).length;
+    this.art_no_dispo = this.articulos.filter(
+      (art) => art.dispArticulo === 'NO_DISPONIBLE'
+    ).length;
   }
 
   cargarNombres(){
@@ -150,6 +168,7 @@ export class ArticulosComponent {
       next: (data) => {
         this.categorias = data;
         this.actualizarLongitudCategorias();
+        this.daots_presentacion();
       },
       error: (err) => {
         console.error('Error al cargar categorías:', err);
@@ -166,6 +185,7 @@ export class ArticulosComponent {
       next: (data) => {
         this.marcas = data;
         this.actualizarLongitudMarcas();
+        this.daots_presentacion();
       },
       error: (err) => {
         console.error('Error al cargar marcas:', err);
@@ -182,6 +202,7 @@ export class ArticulosComponent {
       next: (data) => {
         this.modelos = data;
         this.actualizarLongitudModelos();
+        this.daots_presentacion();
       },
       error: (err) => {
         console.error('Error al cargar modelos:', err);
@@ -198,6 +219,7 @@ export class ArticulosComponent {
       next: (data) => {
         this.articulos = data;
         this.actualizarLongitudArticulos();
+        this.daots_presentacion();
       },
       error: (err) => {
         console.error('Error al cargar articulos:', err);
