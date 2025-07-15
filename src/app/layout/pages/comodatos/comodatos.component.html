@@ -89,30 +89,34 @@
     </div>
     <!-- fin de la seccion de presentacion  -->
     <!-- seccion de comodatos registrados -->
-     
+
     <div class="row">
         <div class="col-lg-12 col-md-12 col-sm-12" id="tabla-Comodatos">
             <div class="card my-5">
                 <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                     <div
-                        class="bg-gradient-dark shadow-dark border-radius-lg pt-2 pb-2 px-3 d-flex justify-content-between align-items-center">
-                        <p class="text-white text-uppercase m-0">Comodatos Registrados</p>
-                        <button type="button"
-                            class="btn btn-secondary btn-lg shadow-sm d-flex align-items-center mt-2 px-2"
-                            (click)="todos_los_comodatos()">
-                            <mat-icon class="me-1">add</mat-icon>Descargar todos los Comodato
-                        </button>
-                        <button type="button"
-                            class="btn btn-secondary btn-lg shadow-sm d-flex align-items-center mt-2 px-2"
-                            (click)="abrirModalNuevoComodatoCompleto()">
-                            <mat-icon class="me-1">add</mat-icon>Nuevo comodato
-                        </button>
-                        
+                        class="bg-gradient-dark shadow-dark border-radius-lg pt-3 pb-2 px-3 d-flex justify-content-between align-items-center flex-wrap">
+                        <p class="text-white text-uppercase m-0 fs-5 fw-bold">
+                            Comodatos Registrados
+                        </p>
+                        <div class="d-flex gap-2">
+                            <button type="button"
+                                class="btn btn-outline-light btn-md shadow-sm d-flex align-items-center px-3"
+                                (click)="todos_los_comodatos()">
+                                <mat-icon class="me-2">download</mat-icon>
+                                Descargar todos los Comodatos
+                            </button>
+                            <button type="button"
+                                class="btn btn-light btn-md shadow-sm d-flex align-items-center px-3"
+                                (click)="abrirModalNuevoComodatoCompleto()">
+                                <mat-icon class="me-2">add</mat-icon>
+                                Nuevo comodato
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <div class="card-body px-0 pb-2 table-responsive"
-                    >
+                <div class="card-body px-0 pb-2 table-responsive">
                     <!-- Filtro -->
                     <input type="text" [(ngModel)]="filtroComodatos" class="form-control mb-3 w-25 mx-3"
                         placeholder="Buscar...">
@@ -136,13 +140,15 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="text-capitalize" *ngFor="let com of comodatosPaginados" 
+                            <tr class="text-capitalize" *ngFor="let com of comodatosPaginados"
                                 (click)="abrirModalEditarComodatoCompleto(com)">
                                 <td>
                                     <div class="px-3 py-1">
                                         <div class="d-flex flex-column justify-content-center">
-                                            <h6 class="mb-0 text-sm">{{ nombresResponsables[com.Persona_idPersona ] }}</h6>
-                                            <p class="text-xs text-secondary mb-0">{{ rutResponsables[com.Persona_idPersona ] }}</p>
+                                            <h6 class="mb-0 text-sm">{{ nombresResponsables[com.Persona_idPersona ] }}
+                                            </h6>
+                                            <p class="text-xs text-secondary mb-0">{{
+                                                rutResponsables[com.Persona_idPersona ] }}</p>
                                         </div>
                                     </div>
                                 </td>
@@ -160,7 +166,7 @@
                                 <td>
                                     <p class="text-xs font-weight-bold mb-0 py-2 text-truncate"
                                         style="max-width: 200px;">
-                                       {{ nombresArticulos[com.idComodato!] }}
+                                        {{ nombresArticulos[com.idComodato!] }}
                                     </p>
                                 </td>
                                 <td class="align-middle text-start text-sm">
@@ -197,8 +203,7 @@
                     </div>
                 </div>
 
-                <div class="card-body px-0 pb-2 table-responsive"
-                    >
+                <div class="card-body px-0 pb-2 table-responsive">
                     <!-- Filtro -->
                     <input type="text" [(ngModel)]="filtroDevoluciones" class="form-control mb-3 w-25 mx-3"
                         placeholder="Buscar...">
@@ -220,13 +225,13 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="text-capitalize" *ngFor="let de of devolucionesPaginados" 
+                            <tr class="text-capitalize" *ngFor="let de of devolucionesPaginados"
                                 (click)="abrirModalVerDevolucionComodato(de)">
                                 <td>
                                     <div class="px-3 py-1">
                                         <div class="d-flex flex-column justify-content-center">
                                             <h6 class="mb-0 text-sm">{{ de.nombre_completo_d}}</h6>
-                                            <p class="text-xs text-secondary mb-0">{{ de.rut_p_d  }}</p>
+                                            <p class="text-xs text-secondary mb-0">{{ de.rut_p_d }}</p>
                                         </div>
                                     </div>
                                 </td>
