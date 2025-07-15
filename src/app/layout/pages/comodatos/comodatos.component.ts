@@ -883,7 +883,8 @@ export class ComodatosComponent implements OnInit {
               ...Object.fromEntries(
                 articulos.map((art, i) => [
                   `nombre_articulo_${i + 1}`,
-                  art.nombreArticulo,
+                  art.nombreArticulo + ' --- ' + (art.numSerieArticulo ? ` ${art.numSerieArticulo}` : '') 
+                  + ' --- ' + (art.desArticulo ? art.desArticulo : ''),
                 ])
               ),
               ...Object.fromEntries(
@@ -938,7 +939,7 @@ export class ComodatosComponent implements OnInit {
                           );
                           this.cargarDatosComodatos();
                           this.confirmarDescarga(
-                            comodatoId,
+                            resp.idDevolucion_comodato,
                             comodatoActualizado
                           );
                         },
@@ -975,8 +976,15 @@ export class ComodatosComponent implements OnInit {
 
   descargarComprobante(idComodato: string): void {
     window.open(
-      `http://10.9.1.28:3000/api/comprobante/descargar/${idComodato}`,
-      '_blank'
+      `http://10.9.1.28:3000/api/descargar/comprobante/${idComodato}`,
+      '_blank' 
+    );
+  }
+
+  descargarDevolucion(idDevolucion: string): void {
+    window.open(
+      `http://10.9.1.28:3000/api/descargar/devolucion/${idDevolucion}`,
+      '_blank' 
     );
   }
 
@@ -1004,7 +1012,7 @@ export class ComodatosComponent implements OnInit {
         cancelButtonText: 'No, gracias',
       }).then((result: any) => {
         if (result.isConfirmed) {
-          this.descargarComprobante(id);
+          this.descargarDevolucion(id);
         }
       });
     }
@@ -1123,6 +1131,7 @@ export class ComodatosComponent implements OnInit {
             this.descargarComprobante(devo.Comodato_idComodato);
             console.log('Descargando comprobante del comodato');
           }else if(resut === 'devolucion'){
+            this.descargarDevolucion(devo.idDevolucion_comodato!);
             console.log('Se descargó el comprobante de devolución');
           }
         });
