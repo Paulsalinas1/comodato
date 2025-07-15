@@ -67,6 +67,11 @@
                                 (click)="actualizarEstado('devuelto')">
                                 Devuelto
                             </button>
+
+                            <button *ngIf="campo.valorA == 'entregado'" class="btn btn-outline-success me-2"
+                                (click)="descar_com()">
+                                Descargar comprobante
+                            </button>
                         
                             <!-- Mostrar solo si el estado actual NO es 'cancelado' -->
                             <button *ngIf="campo.valorA == 'pendiente'" class="btn btn-outline-danger" (click)="actualizarEstado('cancelado')">

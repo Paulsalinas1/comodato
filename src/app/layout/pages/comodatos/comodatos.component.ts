@@ -592,6 +592,10 @@ export class ComodatosComponent implements OnInit {
 
         dialogRef.afterClosed().subscribe((result) => {
           if (!result) return;
+          if(result === 'descargar') {
+            this.confirmarDescarga(comodato.idComodato!, comodato);
+            return;
+          }
           const fechaInicioFormateada = new Date(comodato.fechaInicioComodato)
             .toISOString()
             .split('T')[0];

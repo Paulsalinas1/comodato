@@ -168,5 +168,7 @@ export class ModalComodatoComponent {
   // this.guardarCambios();
     this.dialogRef.close(nuevoEstado);
   }
-
+  descar_com(){
+    this.dialogRef.close('descargar');
+  }
 }
