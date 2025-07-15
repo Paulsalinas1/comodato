@@ -57,6 +57,10 @@ export class ComodatosComponent implements OnInit {
   rutResponsables: { [IdPersona: string]: string } = {};
   nombresArticulos: { [comodatoId: string]: string[] } = {};
   comodatosTotales: number = 0;
+  como_can: number = 0;
+  como_dev: number = 0;
+  como_emp: number = 0;
+
   devoluciones: DevolucionComodato[] = [];
   // Filtros
   filtroComodatos: string = '';
@@ -64,13 +68,14 @@ export class ComodatosComponent implements OnInit {
 
   ngOnInit(): void {
     this.cargarDatosComodatos();
-
-    this.CalcularTotalComodatos();
   }
 
   CalcularTotalComodatos(): void {
     this.svComodato.getComodatos().subscribe((c) => {
       this.comodatosTotales = c.length;
+      this.como_can = c.filter((c) => c.estadoComodato === 'cancelado').length;
+      this.como_dev = c.filter((c) => c.estadoComodato === 'devuelto').length;
+      this.como_emp = c.filter((c) => c.estadoComodato === 'entregado' || c.estadoComodato === 'pendiente').length;
     });
   }
 
@@ -165,6 +170,7 @@ export class ComodatosComponent implements OnInit {
         console.error('Error al cargar las devoluciones:', err);
       },
     });
+    this.CalcularTotalComodatos();
   }
 
   private actualizarLongitudComodatos(): void {
