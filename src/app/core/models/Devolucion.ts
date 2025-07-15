@@ -11,7 +11,6 @@ export interface DevolucionComodato {
      nombre_articulo_6?: string;
      motivo_d: string;
      obsevacion_d: string;
-     nombre_r_d: string;
      fecha_d: Date;
      estado_a_1: string;
      estado_a_2?: string;

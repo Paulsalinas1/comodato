@@ -569,6 +569,7 @@ export class ComodatosComponent implements OnInit {
             respaldo: comodato,
             valoresIniciales: {
               Persona_idPersona: comodato.Persona_idPersona,
+              r_establecimiento: comodato.r_establecimiento,
               fechaInicioComodato: this.formatearFecha(
                 comodato.fechaInicioComodato
               ),
@@ -790,6 +791,7 @@ export class ComodatosComponent implements OnInit {
           nombre_completo_d: `${persona!.nomPersona} ${persona!.apPersona}`,
           rut_p_d: persona!.rutPersona,
           cargo_d: persona!.Estamento_idEstamento,
+          r_establecimiento: comodato.r_establecimiento,
           ...Object.fromEntries(
             articulos.map((art, i) => [
               `nombre_articulo_${i + 1}`,
@@ -837,7 +839,6 @@ export class ComodatosComponent implements OnInit {
                 etiqueta: 'Nombre Responsable Establecimiento',
                 obligatorio: false,
                 paso: 0,
-                valorInicial: comodato.r_establecimiento,
                 soloLectura: true, 
               },
               ...camposArticulos,
@@ -853,13 +854,6 @@ export class ComodatosComponent implements OnInit {
                 nombre: 'obsevacion_d',
                 etiqueta: 'Observaciones generales',
                 obligatorio: false,
-                paso: 2,
-              },
-              {
-                tipo: 'text',
-                nombre: 'nombre_r_d',
-                etiqueta: 'Responsable Recepción',
-                obligatorio: true,
                 paso: 2,
               },
               {
@@ -883,7 +877,6 @@ export class ComodatosComponent implements OnInit {
               cargo_d: cargo,
               motivo_d: result.motivo_d,
               obsevacion_d: result.obsevacion_d,
-              nombre_r_d: result.nombre_r_d,
               fecha_d: result.fecha_d,
               r_establecimiento: comodato.r_establecimiento,
               Comodato_idComodato: comodatoId,
@@ -1085,13 +1078,6 @@ export class ComodatosComponent implements OnInit {
                 deshabilitado: true,
               },
               {
-                tipo: 'text',
-                nombre: 'nombre_r_d',
-                etiqueta: 'Recibido por',
-                paso: 3,
-                deshabilitado: true,
-              },
-              {
                 tipo: 'date',
                 nombre: 'fecha_d',
                 etiqueta: 'Fecha de Devolución',
@@ -1126,7 +1112,7 @@ export class ComodatosComponent implements OnInit {
               ].filter(Boolean),
               motivo_d: devo.motivo_d,
               observacion_d: devo.obsevacion_d,
-              nombre_r_d: devo.nombre_r_d,
+              r_establecimiento: devo.r_establecimiento,
               fecha_d: this.formatearFecha(devo.fecha_d),
             },
           },
