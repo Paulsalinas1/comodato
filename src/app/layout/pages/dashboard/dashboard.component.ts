@@ -123,12 +123,12 @@ export class DashboardComponent implements OnInit {
     });
     this.getComodatosFinCerca();
     this.svUsu.getPersonas().subscribe((personas) => {
-  this.usuarioTotal = personas.length;
-  // Diccionario para acceso rápido por id
-  this.personasPorId = {};
-  personas.forEach(p => {
-    this.personasPorId[p.idPersona] = p;
-  });
+      this.usuarioTotal = personas.length;
+      // Diccionario para acceso rápido por id
+      this.personasPorId = {};
+      personas.forEach((p) => {
+        this.personasPorId[p.idPersona] = p;
+      });
     });
   }
 
@@ -165,53 +165,61 @@ export class DashboardComponent implements OnInit {
     );
   }
 
-  getComodatosFinCerca(){
+  getComodatosFinCerca() {
     //fecha actual
     const fechaActual = new Date();
-    //obtener comodatos que terminen en los proximos 10 dias
+    //obtener comodatos que terminen en los proximos 10 dias y no estén devueltos ni cancelados
     this.svComo.getComodatos().subscribe((comodatos) => {
       const proximosComodatos = comodatos.filter((comodato) => {
         const fechaFin = new Date(comodato.fechaTerminoComodatoD);
         const diferenciaDias = Math.ceil(
           (fechaFin.getTime() - fechaActual.getTime()) / (1000 * 3600 * 24)
         );
-        return diferenciaDias >= 0 && diferenciaDias <= 10;
+        // Excluir devueltos y cancelados
+        return (
+          diferenciaDias >= 0 &&
+          diferenciaDias <= 10 &&
+          comodato.estadoComodato !== 'devuelto' &&
+          comodato.estadoComodato !== 'cancelado'
+        );
       });
-      // Aquí puedes hacer lo que necesites con los comodatos filtrados
       this.como_fin_cerca = proximosComodatos;
-      console.log('Comodatos que terminan en los próximos 10 días:', proximosComodatos);
+      console.log(
+        'Comodatos que terminan en los próximos 10 días:',
+        proximosComodatos
+      );
     });
   }
 
   getDiasRestantes(fechaTermino: string | Date): number {
-  const hoy = new Date();
-  const fin = new Date(fechaTermino);
-  // Limpiar horas para evitar desfases
-  hoy.setHours(0,0,0,0);
-  fin.setHours(0,0,0,0);
-  const diff = fin.getTime() - hoy.getTime();
-  return Math.ceil(diff / (1000 * 60 * 60 * 24));
+    const hoy = new Date();
+    const fin = new Date(fechaTermino);
+    // Limpiar horas para evitar desfases
+    hoy.setHours(0, 0, 0, 0);
+    fin.setHours(0, 0, 0, 0);
+    const diff = fin.getTime() - hoy.getTime();
+    return Math.ceil(diff / (1000 * 60 * 60 * 24));
   }
 
   get Comodato_Fin_Filtrados(): Comodato[] {
-      const texto = this.filtroComo_Fin_C.trim().toLowerCase();
-      if (!texto) return this.como_fin_cerca;
-  
-      return this.como_fin_cerca.filter((como_f) =>
-        Object.values(como_f).some((val) =>
-          String(val).toLowerCase().includes(texto)
-        )
-      );
+    const texto = this.filtroComo_Fin_C.trim().toLowerCase();
+    if (!texto) return this.como_fin_cerca;
+
+    return this.como_fin_cerca.filter((como_f) =>
+      Object.values(como_f).some((val) =>
+        String(val).toLowerCase().includes(texto)
+      )
+    );
   }
 
   get Comodato_F_Paginados(): Comodato[] {
-      this.comodatoFPaginator.length = this.Comodato_Fin_Filtrados.length;
-      const startIndex =
-        this.comodatoFPaginator.pageIndex * this.comodatoFPaginator.pageSize;
-      return this.Comodato_Fin_Filtrados.slice(
-        startIndex,
-        startIndex + this.comodatoFPaginator.pageSize
-      );
+    this.comodatoFPaginator.length = this.Comodato_Fin_Filtrados.length;
+    const startIndex =
+      this.comodatoFPaginator.pageIndex * this.comodatoFPaginator.pageSize;
+    return this.Comodato_Fin_Filtrados.slice(
+      startIndex,
+      startIndex + this.comodatoFPaginator.pageSize
+    );
   }
 
   onPageChangeComo_Fin(event: PageEvent): void {
@@ -225,5 +233,4 @@ export class DashboardComponent implements OnInit {
         ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }, 0);
   }
-
 }

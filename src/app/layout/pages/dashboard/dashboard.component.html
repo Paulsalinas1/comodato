@@ -162,10 +162,13 @@
                                     Fecha termino
                                 </th>
                                 <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">
+                                    Estado 
+                                </th>
+                                <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">
                                     Dias Restantes
                                 </th>
                                 <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">
-                                     Telefono 
+                                    Telefono 
                                 </th>
                                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                 </th>
@@ -182,14 +185,14 @@
                                                 {{ personasPorId[como.Persona_idPersona]?.nomPersona || 'Desconocido' }}
                                                 {{ personasPorId[como.Persona_idPersona]?.apPersona || '' }}
                                             </h6>
-                                            <p class="text-xs text-secondary mb-0">
-                                                {{ personasPorId[como.Persona_idPersona]?.emailPersona || 'No disponible' }}
-                                            </p>
                                         </div>
                                     </div>
                                 </td>
                                 <td>
                                     <p class="text-xs font-weight-bold mb-0 py-2 text-wrap">{{ como.fechaTerminoComodatoD | date:'dd/MM/yyyy' }}</p>
+                                </td>
+                                <td>
+                                    <p class="text-xs font-weight-bold mb-0 py-2 text-wrap">{{ como.estadoComodato }}</p>
                                 </td>
                                 <td>
                                     <p class="text-xs font-weight-bold mb-0 py-2 text-wrap">
