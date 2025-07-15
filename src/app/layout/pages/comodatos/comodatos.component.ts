@@ -999,7 +999,7 @@ export class ComodatosComponent implements OnInit {
   }
 
   confirmarDescarga(id: string, comodato: Comodato): void {
-    if (comodato.estadoComodato === 'entregado') {
+    if (comodato.estadoComodato !== 'devuelto') {
       Swal.fire({
         title: '¿Deseas descargar el comprobante?',
         text: 'El comodato fue entregado correctamente.',
