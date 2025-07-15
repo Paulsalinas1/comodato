@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { ChartType } from 'angular-google-charts';
 import { Estamento } from '../../../core/models/Estamento ';
 import { Persona } from '../../../core/models/Persona ';
 import { PersonaService } from '../../../core/services/persona.service';
@@ -22,6 +21,10 @@ export class UsuariosComponent {
   today = new Date();
 
   pageSizeOptions = [1, 5, 10, 25];
+
+  // datos de presentación
+  u_totales: number = 0;
+  est_total: number = 0;
 
   // Configuración de paginación para estamento
   estamentosPaginator = {
@@ -56,6 +59,23 @@ export class UsuariosComponent {
     this.cargarDatosEst();
     this.cargarDatosPer();
     this.cargarNombres();
+    this.datos_presentacion();
+  }
+
+  datos_presentacion(){
+    forkJoin({
+      totalUsuarios: this.svcPersona.getPersonas().pipe(map((data) => data.length)),
+      totalEstamentos: this.svcEstamento.getEstamentos().pipe(map((data) => data.length)),
+    }).subscribe({
+      next: ({ totalUsuarios, totalEstamentos }) => {
+        this.u_totales = totalUsuarios;
+        this.est_total = totalEstamentos;
+        // Aquí puedes asignar otros datos de presentación si es necesario
+      },
+      error: (err) => {
+        console.error('Error al cargar datos de presentación:', err);
+      },
+    });
   }
 
   cargarNombres() {
@@ -107,6 +127,7 @@ export class UsuariosComponent {
       next: (data) => {
         this.estamentos = data;
         this.actualizarLongitudEstamentos();
+        this.datos_presentacion();
       },
       error: (err) => {
         console.error('Error al cargar los estamentos:', err);
@@ -119,6 +140,7 @@ export class UsuariosComponent {
       next: (data) => {
         this.personas = data;
         this.actualizarLongitudPersonas();
+        this.datos_presentacion();
       },
       error: (err) => {
         console.error('Error al cargar a los usuarios:', err);
