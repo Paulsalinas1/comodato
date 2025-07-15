@@ -1147,4 +1147,11 @@ export class ComodatosComponent implements OnInit {
       },
     });
   }
+
+  todos_los_comodatos(){
+    window.open(
+      `http://10.9.1.28:3000/api/descargar/todoscomprobantes`,
+      '_blank' 
+    );
+  }
 }
