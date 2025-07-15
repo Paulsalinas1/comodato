@@ -138,65 +138,92 @@
 
   <!-- seccion de lista usuarios -->
 
-  <div class="row mb-4">
-    <div class="col-lg-12 col-md-6 mb-md-0 mb-4">
-      <div class="card">
-        <div class="card-header pb-0">
-          <div class="row">
-            <!-- titulo de la seccion -->
-            <div class="col-lg-12 col-7">
-              <h6>Comodatos Por Finalizar</h6>
-              <p class="text-sm mb-0">
-                <span class="font-weight-bold ms-1">Muestra los comodatos que finalizan en 10 dias o menos  </span>
-              </p>
-            </div>
-          </div>
-        </div>
-        <!-- datos de la tabla -->
-        <div class="card-body px-0 pb-2">
-          <div class="table-responsive">
-            <table class="table align-items-center mb-0">
-
-              <thead>
-                <tr>
-                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ">Usuarios</th>
-                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-3">Fecha termino</th>
-                  <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Telefono
-                  </th>
-                  <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Articulos
-                  </th>
-                </tr>
-              </thead>
-
-              <tbody>
-                <tr>
-                  <td>
-                    <div class="d-flex px-2 py-1">
-                      <div>
-                        <i class="material-symbols-rounded opacity-50 sm-2 me-3">person</i>
-                      </div>
-                      <div class="d-flex flex-column justify-content-center">
-                        <h6 class="mb-0 text-sm">Usuario 3 </h6>
-                      </div>
+  <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 " id="tabla-Como_Fin">
+            <div class="card my-5">
+                <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                    <div class="bg-gradient-dark shadow-dark border-radius-lg pt-2 pb-2 px-3 d-flex justify-content-between align-items-center">
+                        <p class="text-white text-uppercase m-0" >Comodatos Por Finalizar</p>
                     </div>
-                  </td>
-                  <td class="align-middle text-center text-sm">
-                    <span class="text-xs font-weight-bold"> 12345678-9 </span>
-                  </td>
-                  <td class="align-middle text-center text-sm">
-                    <span class="text-xs font-weight-bold">9 43219631 </span>
-                  </td>
-                  <td class="align-middle text-center text-sm">
-                    <span class="text-xs font-weight-bold"> Estudiante </span>
-                  </td>
-                </tr>
-              </tbody>
+                </div>
 
-            </table>
-          </div>
+                <div class="card-body px-0 pb-2 table-responsive">
+                    <!-- Filtro -->
+                    <input type="text" [(ngModel)]="filtroComo_Fin_C" class="form-control mb-3 w-25 mx-3"
+                        placeholder="Buscar...">
+
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">
+                                    Persona
+                                </th>
+                                <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">
+                                    Fecha termino
+                                </th>
+                                <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">
+                                    Dias Restantes
+                                </th>
+                                <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">
+                                     Telefono 
+                                </th>
+                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!--Muestra las categorias paginadas -->
+                            <tr class="text-capitalize" *ngFor="let como of Comodato_F_Paginados"
+                                >
+                                <td>
+                                    <div class="px-3 py-1">
+                                        <div class="d-flex flex-column justify-content-center">
+                                            <h6 class="mb-0 text-sm">
+                                                {{ personasPorId[como.Persona_idPersona]?.nomPersona || 'Desconocido' }}
+                                                {{ personasPorId[como.Persona_idPersona]?.apPersona || '' }}
+                                            </h6>
+                                            <p class="text-xs text-secondary mb-0">
+                                                {{ personasPorId[como.Persona_idPersona]?.emailPersona || 'No disponible' }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <p class="text-xs font-weight-bold mb-0 py-2 text-wrap">{{ como.fechaTerminoComodatoD | date:'dd/MM/yyyy' }}</p>
+                                </td>
+                                <td>
+                                    <p class="text-xs font-weight-bold mb-0 py-2 text-wrap">
+                                        {{ getDiasRestantes(como.fechaTerminoComodatoD) }}
+                                    </p>
+                                </td>
+                                <td>
+                                    <p class="text-xs font-weight-bold mb-0 py-2 text-wrap">
+                                        {{ personasPorId[como.Persona_idPersona]?.telefPersona || 'No disponible' }}
+                                    </p>
+                                </td>
+                                <td class="align-middle text-start text-sm">
+                                    <mat-icon>chevron_right</mat-icon>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer px-4 bg-white">
+                    <div class="row">
+                        <div class="col-12 d-flex justify-content-start px-0">
+                            <!-- propiedades del paginador -->
+                            <mat-paginator class="bg-white" [length]="comodatoFPaginator.length"
+                                [pageSize]="comodatoFPaginator.pageSize" [pageIndex]="comodatoFPaginator.pageIndex"
+                                [pageSizeOptions]="pageSizeOptions" showFirstLastButtons
+                                (page)="onPageChangeComo_Fin($event)">
+                            </mat-paginator>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            
         </div>
-      </div>
-    </div>
   </div>
 
 
@@ -206,7 +233,7 @@
       <div class="row align-items-center justify-content-lg-between">
         <div class="col-lg-6 mb-lg-0 mb-4">
           <div class="copyright text-center text-sm text-muted text-lg-start">
-            texto de copyright
+            
           </div>
         </div>
         <div class="col-lg-6">

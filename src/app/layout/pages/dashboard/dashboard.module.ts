@@ -6,6 +6,9 @@ import { DashboardComponent } from './dashboard.component';
 import { GoogleChartsModule } from 'angular-google-charts';
 import {BaseChartDirective} from 'ng2-charts';
 import { FormsModule } from '@angular/forms';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -16,7 +19,11 @@ import { FormsModule } from '@angular/forms';
     DashboardRoutingModule,
     GoogleChartsModule,
     FormsModule,
-    BaseChartDirective
-  ]
+    BaseChartDirective,
+    MatPaginatorModule,
+    MatIconModule,
+    MatSnackBarModule
+  
+]
 })
 export class DashboardModule { }

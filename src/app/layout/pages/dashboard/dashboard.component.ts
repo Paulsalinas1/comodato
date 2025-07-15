@@ -6,6 +6,8 @@ import { ArticulosService } from '../../../core/services/articulos.service';
 import { Articulo } from '../../../core/models/articulo';
 import { CategoriaService } from '../../../core/services/categoria.service';
 import { forkJoin, map, Observable, of } from 'rxjs';
+import { Comodato } from '../../../core/models/Comodato';
+import { PageEvent } from '@angular/material/paginator';
 
 interface CatosChars {
   nombre: string ,
@@ -21,7 +23,6 @@ interface ChartDefinition {
   options: object; 
 }
 
-
 @Component({
   selector: 'app-dashboard',
   standalone: false,
@@ -30,11 +31,11 @@ interface ChartDefinition {
 })
 export class DashboardComponent implements OnInit {
   //inyectando datos
-
   private readonly svComo = inject(ComodatoService);
   private readonly svUsu = inject(PersonaService);
   private readonly svArt = inject(ArticulosService);
   private readonly svCat = inject(CategoriaService);
+
   //datos
   activos: number = 0;
   usuarioTotal: number = 0;
@@ -50,9 +51,25 @@ export class DashboardComponent implements OnInit {
   today = new Date();
   barChart!: ChartDefinition;
   pieChart2D!: ChartDefinition;
-  // o tipo que estés usando
 
+  // Gráfico de barras
   datosBarChar: CatosChars[] = [];
+
+  //paginacion
+  pageSizeOptions = [1, 5, 10, 25];
+
+  // Configuración de paginación para comodato_usuario
+  comodatoFPaginator = {
+    pageIndex: 0,
+    pageSize: 5,
+    length: 0,
+  };
+
+  como_fin_cerca: Comodato[] = [];
+  como_fin_cercaPaginados: Comodato[] = [];
+  personasPorId: { [id: string]: any } = {};
+
+  filtroComo_Fin_C: string = '';
 
   ngOnInit() {
     this.svComo.getComodatos().subscribe((comoD) => {
@@ -104,6 +121,15 @@ export class DashboardComponent implements OnInit {
       this.articulosTotales = cantart;
       this.articulosDispo = artdistotal;
     });
+    this.getComodatosFinCerca();
+    this.svUsu.getPersonas().subscribe((personas) => {
+  this.usuarioTotal = personas.length;
+  // Diccionario para acceso rápido por id
+  this.personasPorId = {};
+  personas.forEach(p => {
+    this.personasPorId[p.idPersona] = p;
+  });
+    });
   }
 
   get totalEstados(): number {
@@ -138,4 +164,66 @@ export class DashboardComponent implements OnInit {
       })
     );
   }
+
+  getComodatosFinCerca(){
+    //fecha actual
+    const fechaActual = new Date();
+    //obtener comodatos que terminen en los proximos 10 dias
+    this.svComo.getComodatos().subscribe((comodatos) => {
+      const proximosComodatos = comodatos.filter((comodato) => {
+        const fechaFin = new Date(comodato.fechaTerminoComodatoD);
+        const diferenciaDias = Math.ceil(
+          (fechaFin.getTime() - fechaActual.getTime()) / (1000 * 3600 * 24)
+        );
+        return diferenciaDias >= 0 && diferenciaDias <= 10;
+      });
+      // Aquí puedes hacer lo que necesites con los comodatos filtrados
+      this.como_fin_cerca = proximosComodatos;
+      console.log('Comodatos que terminan en los próximos 10 días:', proximosComodatos);
+    });
+  }
+
+  getDiasRestantes(fechaTermino: string | Date): number {
+  const hoy = new Date();
+  const fin = new Date(fechaTermino);
+  // Limpiar horas para evitar desfases
+  hoy.setHours(0,0,0,0);
+  fin.setHours(0,0,0,0);
+  const diff = fin.getTime() - hoy.getTime();
+  return Math.ceil(diff / (1000 * 60 * 60 * 24));
+  }
+
+  get Comodato_Fin_Filtrados(): Comodato[] {
+      const texto = this.filtroComo_Fin_C.trim().toLowerCase();
+      if (!texto) return this.como_fin_cerca;
+  
+      return this.como_fin_cerca.filter((como_f) =>
+        Object.values(como_f).some((val) =>
+          String(val).toLowerCase().includes(texto)
+        )
+      );
+  }
+
+  get Comodato_F_Paginados(): Comodato[] {
+      this.comodatoFPaginator.length = this.Comodato_Fin_Filtrados.length;
+      const startIndex =
+        this.comodatoFPaginator.pageIndex * this.comodatoFPaginator.pageSize;
+      return this.Comodato_Fin_Filtrados.slice(
+        startIndex,
+        startIndex + this.comodatoFPaginator.pageSize
+      );
+  }
+
+  onPageChangeComo_Fin(event: PageEvent): void {
+    this.comodatoFPaginator.pageIndex = event.pageIndex;
+    this.comodatoFPaginator.pageSize = event.pageSize;
+
+    // Opcional: scroll al inicio de la tabla
+    setTimeout(() => {
+      document
+        .getElementById('tabla-Como_Fin')
+        ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 0);
+  }
+
 }
