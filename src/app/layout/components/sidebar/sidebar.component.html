@@ -4,9 +4,11 @@
 
   <!-- Header -->
   <div class="sidenav-header px-2 py-2">
-    <a class="navbar-brand d-flex align-items-center px-2 py-1 m-0" routerLink="/dashboard">
-      <img src="assets/img/logo.png" width="24" height="24" alt="logo">
-      <span class="ms-1 text-xs text-dark" >Cebat</span>
+    <a class="navbar-brand d-flex align-items-center px-2 py-1 m-0">
+      <div routerLink="/dashboard">
+        <img src="assets/img/logo.png" width="24" height="24" alt="logo">
+        <span class="ms-1 text-xs text-dark" >Cebat</span>
+      </div>
       
       <button type="button" class="btn position-absolute top-0 end-0 m-1 d-lg-none" aria-label="Close sidebar"
         (click)="onClose()" style="z-index: 1050; font-size: 1.5rem;">
