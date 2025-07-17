@@ -9,7 +9,7 @@ import { forkJoin, map, Observable, of } from 'rxjs';
 import { Comodato } from '../../../core/models/Comodato';
 import { PageEvent } from '@angular/material/paginator';
 import { Router } from '@angular/router';
-import { Categoria } from '../../../core/models/categoria';
+
 
 interface CatosChars {
   nombre: string ,
