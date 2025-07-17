@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 })
 export class ComodatoService {
   /* private readonly apiUrl = 'http://localhost:3000/api/comodatos'; */
-  private readonly apiUrl = 'http://10.9.1.28:3000/api/comodatos';
+  private readonly apiUrl = '/api/comodatos';
 
   constructor(private readonly http: HttpClient) {}
 

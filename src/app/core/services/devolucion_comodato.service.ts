@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class DevolucionComodatoService {
-  private readonly apiUrl = 'http://10.9.1.28:3000/api/devoluciones';
+  private readonly apiUrl = '/api/devoluciones';
 
   constructor(private readonly http: HttpClient) {}
 

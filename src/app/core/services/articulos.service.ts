@@ -8,7 +8,7 @@ import { Articulo } from '../models/articulo';
 })
 export class ArticulosService {
   /* private apiUrl = 'http://localhost:3000/api/articulos';  */
-  private apiUrl = 'http://10.9.1.28:3000/api/articulos'; 
+  private apiUrl = '/api/articulos'; 
 
   constructor(private http: HttpClient) {}
 
