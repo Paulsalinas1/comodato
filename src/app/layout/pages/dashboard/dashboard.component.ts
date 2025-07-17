@@ -8,6 +8,8 @@ import { CategoriaService } from '../../../core/services/categoria.service';
 import { forkJoin, map, Observable, of } from 'rxjs';
 import { Comodato } from '../../../core/models/Comodato';
 import { PageEvent } from '@angular/material/paginator';
+import { Router } from '@angular/router';
+import { Categoria } from '../../../core/models/categoria';
 
 interface CatosChars {
   nombre: string ,
@@ -35,6 +37,7 @@ export class DashboardComponent implements OnInit {
   private readonly svUsu = inject(PersonaService);
   private readonly svArt = inject(ArticulosService);
   private readonly svCat = inject(CategoriaService);
+  private readonly router = inject(Router);
 
   //datos
   activos: number = 0;
@@ -68,7 +71,6 @@ export class DashboardComponent implements OnInit {
   como_fin_cerca: Comodato[] = [];
   como_fin_cercaPaginados: Comodato[] = [];
   personasPorId: { [id: string]: any } = {};
-
   filtroComo_Fin_C: string = '';
 
   ngOnInit() {
@@ -130,6 +132,8 @@ export class DashboardComponent implements OnInit {
         this.personasPorId[p.idPersona] = p;
       });
     });
+    
+
   }
 
   get totalEstados(): number {
@@ -233,4 +237,47 @@ export class DashboardComponent implements OnInit {
         ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }, 0);
   }
+
+  irAComodatosActivos() {
+    this.router.navigate(['/comodatos'], {
+      queryParams: { estado: 'entregado' }
+    });
+  }
+  irAComodatosfinal(nombre: string) {
+    this.router.navigate(['/comodatos'], {
+      queryParams: { persona: nombre }
+    });
+  }
+  irAUsuarios(){
+    this.router.navigate(['/usuarios']);
+  }
+  irAArticulos(){
+    this.router.navigate(['/articulos']);
+  }
+  irAArticulosDisponibles(){
+    this.router.navigate(['/articulos'], {
+      queryParams: { disp: 'DISPONIBLE' }
+    });
+  }
+
+  onPieChartSelect(event: any) {
+  const selectedRow = event?.selection?.[0]?.row;
+  if (selectedRow !== undefined) {
+    const estadoSeleccionado = this.pieChart2D.data[selectedRow][0]; // 
+    console.log('Estado seleccionado:', estadoSeleccionado);
+    this.router.navigate(['/comodatos'], {
+      queryParams: { estado: estadoSeleccionado.toString().toLowerCase() }
+    });
+  }
+}
+onBarChartSelect(event: any) {
+  const selectedRow = event?.selection?.[0]?.row;
+  if (selectedRow !== undefined) {
+    const categoriaSeleccionada = this.barChart.data[selectedRow][0]; 
+    this.router.navigate(['/articulos'], {
+      queryParams: { categoria: categoriaSeleccionada.toString().toLowerCase() }
+    });
+  }
+}
+
 }

@@ -8,7 +8,7 @@
       </p>
     </div>
     <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
-      <div class="card">
+      <div class="card" (click)="irAComodatosActivos()">
         <div class="card-header p-2 ps-3">
           <div class="d-flex justify-content-between">
             <div>
@@ -27,7 +27,7 @@
       </div>
     </div>
     <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
-      <div class="card">
+      <div class="card" (click)="irAUsuarios()">
         <div class="card-header p-2 ps-3">
           <div class="d-flex justify-content-between">
             <div>
@@ -46,7 +46,7 @@
       </div>
     </div>
     <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
-      <div class="card">
+      <div class="card" (click)="irAArticulos()">
         <div class="card-header p-2 ps-3">
           <div class="d-flex justify-content-between">
             <div>
@@ -66,7 +66,7 @@
       </div>
     </div>
     <div class="col-xl-3 col-sm-6">
-      <div class="card">
+      <div class="card" (click)="irAArticulosDisponibles()">
         <div class="card-header p-2 ps-3">
           <div class="d-flex justify-content-between">
             <div>
@@ -100,7 +100,8 @@
           
           <div *ngIf="totalEstados > 0; else sinDatos">
             <google-chart [type]="pieChart2D.type" [data]="pieChart2D.data" [columns]="pieChart2D.columns"
-              [options]="pieChart2D.options" style="width: 100%; height: 300px;">
+              [options]="pieChart2D.options" style="width: 100%; height: 300px;" (select)="onPieChartSelect($event)">
+>
             </google-chart>
           </div>
 
@@ -123,7 +124,8 @@
           <div class="">
             <google-chart [type]="barChart.type" [data]="barChart.data"
               [columns]="barChart.columns" [options]="barChart.options"
-              style="width: 100%; height: 300px;">
+              style="width: 100%; height: 300px;"
+              (select)="onBarChartSelect($event)">
             </google-chart>
           </div>
           <hr class="dark horizontal">
@@ -177,7 +179,7 @@
                         <tbody>
                             <!--Muestra las categorias paginadas -->
                             <tr class="text-capitalize" *ngFor="let como of Comodato_F_Paginados"
-                                >
+                                (click)="irAComodatosfinal( (personasPorId[como.Persona_idPersona]?.nomPersona + ' '  + personasPorId[como.Persona_idPersona]?.apPersona) )"> 
                                 <td>
                                     <div class="px-3 py-1">
                                         <div class="d-flex flex-column justify-content-center">

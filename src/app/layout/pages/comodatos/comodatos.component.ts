@@ -21,6 +21,7 @@ import { EstamentoService } from '../../../core/services/estamento.service';
 import { ModalDes2Component } from '../../components/modal-des2/modal-des2.component';
 import { ModalDes3Component } from '../../components/modal-des3/modal-des3.component';
 import { Estamento } from '../../../core/models/Estamento ';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-comodatos',
@@ -38,6 +39,8 @@ export class ComodatosComponent implements OnInit {
   private readonly svDevolucionComodato = inject(DevolucionComodatoService);
   private readonly svEstamento = inject(EstamentoService);
   private readonly svDevueltos = inject(DevolucionComodatoService);
+  private readonly routeA = inject(ActivatedRoute);
+
   // Configuración de paginación para comodato
   pageSizeOptions = [1, 5, 10, 25];
   comodatoPaginator = {
@@ -73,6 +76,19 @@ export class ComodatosComponent implements OnInit {
 
   ngOnInit(): void {
     this.cargarDatosComodatos();
+    this.routeA.queryParams.subscribe(params => {
+      const estado = params['estado'];
+      const persona = params['persona'];
+      if (estado) {
+        if( estado != 'devuelto') {
+        this.filtroEstadoComodato = estado;
+        }
+      }
+      if (persona) {
+        this.filtroComodatos = persona;
+        this.filtroEstadoComodato = 'entregado';
+      }
+    });
   }
 
   CalcularTotalComodatos(): void {
