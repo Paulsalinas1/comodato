@@ -53,8 +53,9 @@
         <div class="col-lg-12 col-md-12 col-sm-12 " id="tabla-personas">
             <div class="card my-5">
                 <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-                    <div class="bg-gradient-dark shadow-dark border-radius-lg pt-2 pb-2 px-3 d-flex justify-content-between align-items-center">
-                        <p class="text-white text-uppercase m-0" >Usuarios Registrados</p>
+                    <div
+                        class="bg-gradient-dark shadow-dark border-radius-lg pt-2 pb-2 px-3 d-flex justify-content-between align-items-center">
+                        <p class="text-white text-uppercase m-0">Usuarios Registrados</p>
                         <button type="button" class="btn btn-light btn-lg shadow-sm d-flex align-items-center mt-2 px-2"
                             (click)="abrirModalNuevaPersona()">
                             <mat-icon class="me-1">add</mat-icon>Nuevo usuario
@@ -64,8 +65,19 @@
 
                 <div class="card-body px-0 pb-2 table-responsive">
                     <!-- Filtro -->
-                    <input type="text" [(ngModel)]="filtroPersonas" class="form-control mb-3 w-25 mx-3"
-                        placeholder="Buscar...">
+                    <div
+                        class="d-flex flex-column flex-md-row justify-content-between align-items-start gap-2 mb-3 mx-3">
+                        <!-- Campo de búsqueda a la izquierda -->
+                        <input type="text" [(ngModel)]="filtroPersonas" class="form-control w-100 w-md-25"
+                            placeholder="Buscar...">
+
+                        <!-- Filtro de estamento a la derecha -->
+                        <select [(ngModel)]="filtroEstamentoPersona" class="form-select w-100 w-md-25">
+                            <option value="">Todos los estamentos</option>
+                            <option *ngFor="let est of estamentos" [value]="est.idEstamento">{{ est.nombreEstamento }}
+                            </option>
+                        </select>
+                    </div>
 
                     <table class="table table-hover">
                         <thead>
@@ -80,9 +92,10 @@
                                     Direccion
                                 </th>
                                 <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">
-                                     Telefono 
+                                    Telefono
                                 </th>
-                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                <th
+                                    class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                 </th>
                             </tr>
                         </thead>
@@ -99,7 +112,8 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <p class="text-xs font-weight-bold mb-0 py-2 text-wrap">{{ estamentosMap[per.Estamento_idEstamento] }}</p>
+                                    <p class="text-xs font-weight-bold mb-0 py-2 text-wrap">{{
+                                        estamentosMap[per.Estamento_idEstamento] }}</p>
                                 </td>
                                 <td>
                                     <p class="text-xs font-weight-bold mb-0 py-2 text-wrap">{{per.directPersona}}</p>
@@ -128,7 +142,7 @@
                 </div>
 
             </div>
-            
+
         </div>
     </div>
 
@@ -147,8 +161,7 @@
                     <div
                         class="bg-gradient-dark shadow-dark border-radius-lg pt-2 pb-2 px-3 d-flex justify-content-between align-items-center">
                         <p class="text-white text-uppercase m-0">Estamentos Registrados</p>
-                        <button type="button"
-                            class="btn btn-light btn-lg shadow-sm d-flex align-items-center mt-2 px-2"
+                        <button type="button" class="btn btn-light btn-lg shadow-sm d-flex align-items-center mt-2 px-2"
                             (click)="abrirModalNuevaEstamento()">
                             <mat-icon class="me-1">add</mat-icon>Nuevo Estamento
                         </button>

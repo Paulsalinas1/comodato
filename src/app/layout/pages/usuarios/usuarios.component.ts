@@ -47,6 +47,7 @@ export class UsuariosComponent {
   // Filtros
   filtroEstamentos: string = '';
   filtroPersonas: string = '';
+  filtroEstamentoPersona: string = '';
 
   constructor(
     private readonly svcPersona: PersonaService,
@@ -62,10 +63,14 @@ export class UsuariosComponent {
     this.datos_presentacion();
   }
 
-  datos_presentacion(){
+  datos_presentacion() {
     forkJoin({
-      totalUsuarios: this.svcPersona.getPersonas().pipe(map((data) => data.length)),
-      totalEstamentos: this.svcEstamento.getEstamentos().pipe(map((data) => data.length)),
+      totalUsuarios: this.svcPersona
+        .getPersonas()
+        .pipe(map((data) => data.length)),
+      totalEstamentos: this.svcEstamento
+        .getEstamentos()
+        .pipe(map((data) => data.length)),
     }).subscribe({
       next: ({ totalUsuarios, totalEstamentos }) => {
         this.u_totales = totalUsuarios;
@@ -193,9 +198,18 @@ export class UsuariosComponent {
   // Filtrado y paginación de Personas
   get personasFiltrados(): Persona[] {
     const texto = this.filtroPersonas.trim().toLowerCase();
-    if (!texto) return this.personas;
+    let lista = this.personas;
 
-    return this.personas.filter((Persona) =>
+    // Filtrar por estamento si se seleccionó alguno
+    if (this.filtroEstamentoPersona) {
+      lista = lista.filter(
+        (p) => p.Estamento_idEstamento === this.filtroEstamentoPersona
+      );
+    }
+
+    if (!texto) return lista;
+
+    return lista.filter((Persona) =>
       Object.values(Persona).some((val) =>
         String(val).toLowerCase().includes(texto)
       )
@@ -423,49 +437,49 @@ export class UsuariosComponent {
   abrirModalEditarPersona(persona: Persona) {
     this.svcEstamento.getEstamentos().subscribe({
       next: (estamentos) => {
-    const dialogRef = this.dialog.open(ModalDesComponent, {
-      width: '600px',
-      height: '',
-      data: {
-        titulo: 'Editar usuario',
-        pasos: ['Informacion basica', 'Datos de Contacto', 'Complementos'],
-        campos: [
-          {
-            tipo: 'text',
-            nombre: 'nomPersona',
-            etiqueta: 'Nombres',
-            obligatorio: true,
-            paso: 0,
-          },
-          {
-            tipo: 'text',
-            nombre: 'apPersona',
-            etiqueta: 'apellidos',
-            obligatorio: true,
-            paso: 0,
-          },
-          {
-            tipo: 'text',
-            nombre: 'rutPersona',
-            etiqueta: 'Rut',
-            obligatorio: true,
-            paso: 0,
-          },
-          {
-            tipo: 'text',
-            nombre: 'telefPersona',
-            etiqueta: 'telefono',
-            obligatorio: true,
-            paso: 1,
-          },
-          {
-            tipo: 'text',
-            nombre: 'directPersona',
-            etiqueta: 'Direccion',
-            obligatorio: true,
-            paso: 1,
-          },
-          {
+        const dialogRef = this.dialog.open(ModalDesComponent, {
+          width: '600px',
+          height: '',
+          data: {
+            titulo: 'Editar usuario',
+            pasos: ['Informacion basica', 'Datos de Contacto', 'Complementos'],
+            campos: [
+              {
+                tipo: 'text',
+                nombre: 'nomPersona',
+                etiqueta: 'Nombres',
+                obligatorio: true,
+                paso: 0,
+              },
+              {
+                tipo: 'text',
+                nombre: 'apPersona',
+                etiqueta: 'apellidos',
+                obligatorio: true,
+                paso: 0,
+              },
+              {
+                tipo: 'text',
+                nombre: 'rutPersona',
+                etiqueta: 'Rut',
+                obligatorio: true,
+                paso: 0,
+              },
+              {
+                tipo: 'text',
+                nombre: 'telefPersona',
+                etiqueta: 'telefono',
+                obligatorio: true,
+                paso: 1,
+              },
+              {
+                tipo: 'text',
+                nombre: 'directPersona',
+                etiqueta: 'Direccion',
+                obligatorio: true,
+                paso: 1,
+              },
+              {
                 tipo: 'select',
                 nombre: 'Estamento_idEstamento',
                 etiqueta: 'Estamento',
@@ -476,51 +490,50 @@ export class UsuariosComponent {
                   texto: est.nombreEstamento,
                 })),
               },
-          {
-            tipo: 'text',
-            nombre: 'desPersona',
-            etiqueta: 'Descripción',
-            obligatorio: false,
-            paso: 2,
+              {
+                tipo: 'text',
+                nombre: 'desPersona',
+                etiqueta: 'Descripción',
+                obligatorio: false,
+                paso: 2,
+              },
+            ],
+            valoresIniciales: persona,
           },
-        ],
-        valoresIniciales: persona,
-      },
-    });
+        });
 
-    dialogRef.afterClosed().subscribe((resultado) => {
-      if (resultado?.agregarEstamento) {
-        this.abrirModalCrearEstamento(persona, 'Persona2');
-        return;
-      }
-      if (resultado) {
-        if (resultado.eliminar) {
-          this.svcPersona.deletePersona(persona.idPersona).subscribe({
-            next: () => {
-              this.cargarDatosPer();
-              this.toastEliminar(persona.nomPersona);
-            },
-            error: (err) => {
-              this.toastError(err.error.error);
-            },
-          });
-        } else {
-          this.svcPersona.updatePersona(persona.idPersona, resultado)
-            .subscribe({
-              next: () => {
-                this.cargarDatosPer();
-                this.toastComplete(persona.nomPersona);
-              },
-              error: (err) => {
-                this.toastError(err.error.error);
-              },
-            });
-            
-        }
-      }
-      
-    });
-    },
+        dialogRef.afterClosed().subscribe((resultado) => {
+          if (resultado?.agregarEstamento) {
+            this.abrirModalCrearEstamento(persona, 'Persona2');
+            return;
+          }
+          if (resultado) {
+            if (resultado.eliminar) {
+              this.svcPersona.deletePersona(persona.idPersona).subscribe({
+                next: () => {
+                  this.cargarDatosPer();
+                  this.toastEliminar(persona.nomPersona);
+                },
+                error: (err) => {
+                  this.toastError(err.error.error);
+                },
+              });
+            } else {
+              this.svcPersona
+                .updatePersona(persona.idPersona, resultado)
+                .subscribe({
+                  next: () => {
+                    this.cargarDatosPer();
+                    this.toastComplete(persona.nomPersona);
+                  },
+                  error: (err) => {
+                    this.toastError(err.error.error);
+                  },
+                });
+            }
+          }
+        });
+      },
       error: (err) => {
         this.toastError('No se pudieron cargar los estamentos');
       },
@@ -576,5 +589,4 @@ export class UsuariosComponent {
       this.abrirModalEditarPersona(respaldo);
     }
   }
-
 }

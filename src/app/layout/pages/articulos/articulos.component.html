@@ -87,14 +87,15 @@
             </div>
         </div>
     </div>
-    
+
     <!-- segcion de tabla de Articulos  -->
     <div class="row">
         <div class="col-lg-12 col-md-12 col-sm-12 " id="tabla-articulos">
             <div class="card my-5">
                 <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-                    <div class="bg-gradient-dark shadow-dark border-radius-lg pt-2 pb-2 px-3 d-flex justify-content-between align-items-center">
-                        <p class="text-white text-uppercase m-0" >Articulos Registrados</p>
+                    <div
+                        class="bg-gradient-dark shadow-dark border-radius-lg pt-2 pb-2 px-3 d-flex justify-content-between align-items-center">
+                        <p class="text-white text-uppercase m-0">Articulos Registrados</p>
                         <button type="button" class="btn btn-light btn-lg shadow-sm d-flex align-items-center mt-2 px-2"
                             (click)="abrirModalNuevoArticulo()">
                             <mat-icon class="me-1">add</mat-icon>Nuevo Articulo
@@ -102,12 +103,42 @@
                     </div>
                 </div>
 
-                <div class="card-body px-0 pb-2 table-responsive"  style="overflow-y: auto; scrollbar-width: none; -ms-overflow-style: none;">
+                <div class="card-body px-0 pb-2 table-responsive"
+                    style="overflow-y: auto; scrollbar-width: none; -ms-overflow-style: none;">
                     <!-- Filtro -->
-                    <input type="text" [(ngModel)]="filtroArticulos" class="form-control mb-3 w-25 mx-3"
-                        placeholder="Buscar...">
+                    <div class="d-flex flex-column gap-3 mb-3 mx-3">
+                        <!-- Campo de búsqueda arriba -->
+                        <input type="text" [(ngModel)]="filtroArticulos" class="form-control w-100 w-md-25"
+                            placeholder="Buscar...">
 
-                    <table class="table table-hover" >
+                        <!-- Filtros abajo alineados al end -->
+                        <div class="d-flex flex-column flex-md-row flex-wrap justify-content-md-end gap-2">
+                            <select [(ngModel)]="filtroCategoriaArticulo" class="form-select w-100 w-md-25">
+                                <option value="">Todas las categorías</option>
+                                <option *ngFor="let cat of categorias" [value]="cat.idCategoria">{{ cat.nombreCategoria
+                                    }}</option>
+                            </select>
+
+                            <select [(ngModel)]="filtroEstadoArticulo" class="form-select w-100 w-md-25">
+                                <option value="">Todos los estados</option>
+                                <option value="FUNCIONAL">Funcional</option>
+                                <option value="MANTENIMIENTO">Mantenimiento</option>
+                                <option value="DEFECTUOSO">Defectuoso</option>
+                                <option value="PERDIDO">Perdido</option>
+                                <option value="ROBADO">Robado</option>
+                                <option value="DANADO">Dañado</option>
+                            </select>
+
+                            <select [(ngModel)]="filtroDisponibilidadArticulo" class="form-select w-100 w-md-25">
+                                <option value="">Todas las disponibilidades</option>
+                                <option value="DISPONIBLE">Disponible</option>
+                                <option value="EN_COMODATO">En Comodato</option>
+                                <option value="RESERVADO">Reservado</option>
+                                <option value="NO_DISPONIBLE">No Disponible</option>
+                            </select>
+                        </div>
+                    </div>
+                    <table class="table table-hover">
                         <thead>
                             <tr>
                                 <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">
@@ -123,9 +154,10 @@
                                     Estado
                                 </th>
                                 <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">
-                                     Disponibilidad 
+                                    Disponibilidad
                                 </th>
-                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                <th
+                                    class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                 </th>
                             </tr>
                         </thead>
@@ -142,13 +174,16 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <p class="text-xs font-weight-bold mb-0 py-2 text-wrap">{{ categoriasMap[art.Categoria_idCategoria] }}</p>
+                                    <p class="text-xs font-weight-bold mb-0 py-2 text-wrap">{{
+                                        categoriasMap[art.Categoria_idCategoria] }}</p>
                                 </td>
                                 <td>
                                     <div class="d-flex py-1">
                                         <div class="d-flex flex-column justify-content-center me-3">
-                                            <p class="text-xs font-weight-bold mb-0 text-wrap">{{ marcasMap[art.Marca_idMarca] }}</p>
-                                            <p class="text-xs text-secondary mb-0">{{ modelosMap[art.Modelo_idModelo] }}</p>
+                                            <p class="text-xs font-weight-bold mb-0 text-wrap">{{
+                                                marcasMap[art.Marca_idMarca] }}</p>
+                                            <p class="text-xs text-secondary mb-0">{{ modelosMap[art.Modelo_idModelo] }}
+                                            </p>
                                         </div>
                                     </div>
                                 </td>
@@ -179,10 +214,10 @@
                 </div>
 
             </div>
-            
+
         </div>
     </div>
-    
+
     <!-- segcion de tabla complementos de articulos   -->
     <div class="ms-3">
         <h2 class="mb-0 h3 font-weight-bolder text-center">Complementos de los Articulos</h2>
@@ -194,8 +229,9 @@
         <div class="col-lg-12 col-md-12 col-sm-12" id="tabla-categorias">
             <div class="card my-5">
                 <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-                    <div class="bg-gradient-dark shadow-dark border-radius-lg pt-2 pb-2 px-3 d-flex justify-content-between align-items-center">
-                        <p class="text-white text-uppercase m-0" >Categorías Registradas</p>
+                    <div
+                        class="bg-gradient-dark shadow-dark border-radius-lg pt-2 pb-2 px-3 d-flex justify-content-between align-items-center">
+                        <p class="text-white text-uppercase m-0">Categorías Registradas</p>
                         <button type="button" class="btn btn-light btn-lg shadow-sm d-flex align-items-center mt-2 px-2"
                             (click)="abrirModalNuevaCategoria()">
                             <mat-icon class="me-1">add</mat-icon>Nueva Categoría
@@ -203,7 +239,8 @@
                     </div>
                 </div>
 
-                <div class="card-body px-0 pb-2 table-responsive"  style="overflow-y: auto; scrollbar-width: none; -ms-overflow-style: none;">
+                <div class="card-body px-0 pb-2 table-responsive"
+                    style="overflow-y: auto; scrollbar-width: none; -ms-overflow-style: none;">
                     <!-- Filtro -->
                     <input type="text" [(ngModel)]="filtroCategorias" class="form-control mb-3 w-25 mx-3"
                         placeholder="Buscar...">
@@ -217,7 +254,8 @@
                                 <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">
                                     Detalles
                                 </th>
-                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                <th
+                                    class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                 </th>
                             </tr>
                         </thead>
@@ -232,7 +270,7 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td >
+                                <td>
                                     <p class="text-xs font-weight-bold mb-0 py-2 text-wrap">{{cat.desCategoria}}</p>
                                 </td>
                                 <td class="align-middle text-start text-sm">
@@ -255,13 +293,14 @@
                     </div>
                 </div>
             </div>
-            
+
         </div>
 
         <div class="col-lg-6 col-md-6 col-sm-12" id="tabla-marcas">
             <div class="card my-5">
                 <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-                    <div class="bg-gradient-dark shadow-dark border-radius-lg pt-2 pb-2 px-3 d-flex justify-content-between align-items-center">
+                    <div
+                        class="bg-gradient-dark shadow-dark border-radius-lg pt-2 pb-2 px-3 d-flex justify-content-between align-items-center">
                         <p class="text-white text-uppercase m-0">Marcas Registradas</p>
                         <button type="button" class="btn btn-light btn-lg shadow-sm d-flex align-items-center mt-2 px-2"
                             (click)="abrirModalNuevaMarca()">
@@ -269,7 +308,8 @@
                         </button>
                     </div>
                 </div>
-                <div class="card-body px-0 pb-2 table-responsive"  style="overflow-y: auto; scrollbar-width: none; -ms-overflow-style: none;">
+                <div class="card-body px-0 pb-2 table-responsive"
+                    style="overflow-y: auto; scrollbar-width: none; -ms-overflow-style: none;">
                     <!-- Filtro -->
                     <input type="text" [(ngModel)]="filtroMarcas" class="form-control mb-3 w-25 mx-3"
                         placeholder="Buscar...">
@@ -283,7 +323,8 @@
                                 <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">
                                     Detalles
                                 </th>
-                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                <th
+                                    class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                 </th>
                             </tr>
                         </thead>
@@ -298,7 +339,7 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td >
+                                <td>
                                     <p class="text-xs font-weight-bold mb-0 py-2 text-wrap">{{mar.desMarca}}</p>
                                 </td>
                                 <td class="align-middle text-start text-sm">
@@ -321,12 +362,13 @@
                     </div>
                 </div>
             </div>
-        </div> 
+        </div>
 
         <div class="col-lg-6 col-md-6 col-sm-12" id="tabla-modelos">
             <div class="card my-5">
                 <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-                    <div class="bg-gradient-dark shadow-dark border-radius-lg pt-2 pb-2 px-3 d-flex justify-content-between align-items-center">
+                    <div
+                        class="bg-gradient-dark shadow-dark border-radius-lg pt-2 pb-2 px-3 d-flex justify-content-between align-items-center">
                         <p class="text-white text-uppercase m-0">Modelos Registrados</p>
                         <button type="button" class="btn btn-light btn-lg shadow-sm d-flex align-items-center mt-2 px-2"
                             (click)="abrirModalNuevaModelo()">
@@ -334,7 +376,8 @@
                         </button>
                     </div>
                 </div>
-                <div class="card-body px-0 pb-2 table-responsive"  style="overflow-y: auto; scrollbar-width: none; -ms-overflow-style: none;">
+                <div class="card-body px-0 pb-2 table-responsive"
+                    style="overflow-y: auto; scrollbar-width: none; -ms-overflow-style: none;">
                     <!-- Filtro -->
                     <input type="text" [(ngModel)]="filtroModelos" class="form-control mb-3 w-25 mx-3"
                         placeholder="Buscar...">
@@ -348,7 +391,8 @@
                                 <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">
                                     Detalles
                                 </th>
-                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                <th
+                                    class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                 </th>
                             </tr>
                         </thead>
@@ -363,7 +407,7 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td >
+                                <td>
                                     <p class="text-xs font-weight-bold mb-0 py-2 text-wrap">{{mod.desModelo}}</p>
                                 </td>
                                 <td class="align-middle text-start text-sm">
@@ -386,7 +430,7 @@
                     </div>
                 </div>
             </div>
-        </div> 
+        </div>
     </div>
-    
+
 </div>

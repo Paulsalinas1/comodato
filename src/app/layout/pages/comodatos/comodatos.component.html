@@ -106,8 +106,7 @@
                                 <mat-icon class="me-2">download</mat-icon>
                                 Descargar todos los Comodatos
                             </button>
-                            <button type="button"
-                                class="btn btn-light btn-md shadow-sm d-flex align-items-center px-3"
+                            <button type="button" class="btn btn-light btn-md shadow-sm d-flex align-items-center px-3"
                                 (click)="abrirModalNuevoComodatoCompleto()">
                                 <mat-icon class="me-2">add</mat-icon>
                                 Nuevo comodato
@@ -115,11 +114,21 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="card-body px-0 pb-2 table-responsive">
                     <!-- Filtro -->
-                    <input type="text" [(ngModel)]="filtroComodatos" class="form-control mb-3 w-25 mx-3"
-                        placeholder="Buscar...">
+                    <div
+                        class="d-flex flex-column flex-md-row align-items-start justify-content-between mb-3 mx-3 gap-2">
+                        <input type="text" [(ngModel)]="filtroComodatos" class="form-control w-100 w-md-25"
+                            placeholder="Buscar...">
+
+                        <select [(ngModel)]="filtroEstadoComodato" class="form-select w-100 w-md-25">
+                            <option value="">Todos los estados</option>
+                            <option value="pendiente">Pendiente</option>
+                            <option value="entregado">Entregado</option>
+                            <option value="cancelado">Cancelado</option>
+                        </select>
+                    </div>
+
 
                     <table class="table table-hover">
                         <thead>
@@ -200,13 +209,33 @@
                     <div
                         class="bg-gradient-dark shadow-dark border-radius-lg pt-3 pb-2 px-3 d-flex justify-content-between align-items-center">
                         <p class="text-white text-uppercase m-0">Devoluciones Registradas</p>
+                        <button type="button"
+                            class="btn btn-outline-light btn-md shadow-sm d-flex align-items-center px-3"
+                            (click)="todos_las_devoluciones()">
+                            <mat-icon class="me-2">download</mat-icon>
+                            Descargar todas las Devoluciones
+                        </button>
                     </div>
                 </div>
 
                 <div class="card-body px-0 pb-2 table-responsive">
                     <!-- Filtro -->
-                    <input type="text" [(ngModel)]="filtroDevoluciones" class="form-control mb-3 w-25 mx-3"
-                        placeholder="Buscar...">
+                    <div class="card-body px-0 pb-2 table-responsive">
+                        <!-- Filtro -->
+                        <div
+                            class="d-flex flex-column flex-md-row align-items-start justify-content-between mb-3 mx-3 gap-2">
+                            <input type="text" [(ngModel)]="filtroDevoluciones" class="form-control w-100 w-md-25"
+                                placeholder="Buscar...">
+
+                            <select [(ngModel)]="filtroEstamentoDevolucion" class="form-select w-100 w-md-25">
+                                <option value="">Todos los estamentos</option>
+                                <option *ngFor="let est of estamentos" [value]="est.nombreEstamento">
+                                    {{ est.nombreEstamento }}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+
 
                     <table class="table table-hover">
                         <thead>

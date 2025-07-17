@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
-import { ChartType } from 'angular-google-charts';
 import { CategoriaService } from '../../../core/services/categoria.service';
 import { Categoria } from '../../../core/models/categoria';
 import { MatDialog } from '@angular/material/dialog';
@@ -75,6 +74,10 @@ export class ArticulosComponent {
   filtroMarcas: string = '';
   filtroModelos: string = '';
   filtroArticulos: string = '';
+
+  filtroCategoriaArticulo: string = '';
+  filtroEstadoArticulo: string = '';
+  filtroDisponibilidadArticulo: string = '';
 
   constructor(
     private readonly categoriaService: CategoriaService,
@@ -335,15 +338,30 @@ export class ArticulosComponent {
 
   // Filtrado y paginación de Articulos
   get articulosFiltradas(): Articulo[] {
-    const texto = this.filtroArticulos.trim().toLowerCase();
-    if (!texto) return this.articulos;
+  const texto = this.filtroArticulos.trim().toLowerCase();
+  let lista = this.articulos;
 
-    return this.articulos.filter((articulo) =>
-      Object.values(articulo).some((val) =>
-        String(val).toLowerCase().includes(texto)
-      )
-    );
+  // Filtrar por categoría
+  if (this.filtroCategoriaArticulo) {
+    lista = lista.filter(a => a.Categoria_idCategoria === this.filtroCategoriaArticulo);
   }
+  // Filtrar por estado
+  if (this.filtroEstadoArticulo) {
+    lista = lista.filter(a => a.estadoArticulo === this.filtroEstadoArticulo);
+  }
+  // Filtrar por disponibilidad
+  if (this.filtroDisponibilidadArticulo) {
+    lista = lista.filter(a => a.dispArticulo === this.filtroDisponibilidadArticulo);
+  }
+
+  if (!texto) return lista;
+
+  return lista.filter((articulo) =>
+    Object.values(articulo).some((val) =>
+      String(val).toLowerCase().includes(texto)
+    )
+  );
+}
 
   get articulosPaginadas(): Articulo[] {
     this.articulosPaginator.length = this.articulosFiltradas.length;
