@@ -27,6 +27,9 @@ export class LoginComponent {
   ngOnInit(): void { }
 
   onLogin() {
+    // Verifica si el formulario es válido antes de proceder
+    console.log(this.loginForm.invalid);
+    console.log(this.loginForm.value); 
     if (this.loginForm.invalid) return;
 
     const { nombreAdmin, passAdmin, recordar } = this.loginForm.value;
