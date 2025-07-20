@@ -28,6 +28,6 @@ export class AdminService {
   }
 
   login(nombreAdmin: string, passAdmin: string) {
-    return this.http.post('/api/login', { nombreAdmin, passAdmin });
+    return this.http.post('/api/admin/login', { nombreAdmin, passAdmin });
   }
 }

@@ -35,7 +35,10 @@ export class LoginComponent {
         localStorage.setItem('adminActivo', JSON.stringify(res.admin));
         this.router.navigate(['/dashboard']);
       },
-      error: () => alert('Nombre o contraseña incorrectos')
+      error: (err) => {
+        console.error('Error en login:', err); // <-- Agrega esto
+        alert('Nombre o contraseña incorrectos');
+      }
     });
   }
 
