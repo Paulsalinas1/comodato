@@ -8,6 +8,12 @@ import { Component, EventEmitter, Output } from '@angular/core';
 })
 export class HeaderComponent {
   @Output() toggleSidebar = new EventEmitter<void>();
+  adminNombre: string = '';
+
+  ngOnInit() {
+    const admin = JSON.parse(localStorage.getItem('adminActivo') || '{}');
+    this.adminNombre = admin.nombreAdmin || 'Invitado';
+  }
 
   onToggle() {
     this.toggleSidebar.emit();

@@ -1,6 +1,40 @@
-<div>
-  <h2>Administracion de cuentas </h2>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nombre</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let admin of listaAdmins">
+      <td>{{ admin.idAdmin }}</td>
+      <td>{{ admin.nombreAdmin }}</td>
+      <td>
+        <button class="btn btn-sm btn-warning me-2" (click)="editar(admin)">Editar</button>
+        <button class="btn btn-sm btn-danger" (click)="eliminar(admin.idAdmin)">Eliminar</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="modal fade" id="adminModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form [formGroup]="formAdmin" (ngSubmit)="guardarAdmin()">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ modo === 'crear' ? 'Crear' : 'Editar' }} Admin</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <input type="text" class="form-control mb-3" formControlName="idAdmin" placeholder="ID" [disabled]="modo==='editar'">
+          <input type="text" class="form-control mb-3" formControlName="nombreAdmin" placeholder="Nombre">
+          <input type="text" class="form-control" formControlName="passAdmin" placeholder="Contraseña">
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-primary" type="submit">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>
-
-
-

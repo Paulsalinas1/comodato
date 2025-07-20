@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
-
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AdminService } from '../../../core/services/admin.service';
+declare var bootstrap: any;
 interface SystemUser {
   id: string;
   name: string;
@@ -14,29 +16,59 @@ interface SystemUser {
   styleUrl: './vadmin.component.css'
 })
 export class VadminComponent {
-  systemUsers: SystemUser[] = [];
+  listaAdmins: any[] = [];
+  modo: 'crear' | 'editar' = 'crear';
+  formAdmin: FormGroup;
+
+  constructor(
+    private adminService: AdminService,
+    private fb: FormBuilder
+  ) {
+    this.formAdmin = this.fb.group({
+      idAdmin: ['', Validators.required],
+      nombreAdmin: ['', Validators.required],
+      passAdmin: ['', Validators.required]
+    });
+  }
 
   ngOnInit() {
-    this.loadUsers();
+    this.cargarAdmins();
   }
 
-  loadUsers() {
-    // Aquí iría la llamada a tu servicio Firebase u otro backend
-    this.systemUsers = [
-      { id: '1', name: 'Ana Pérez', email: 'ana@ejemplo.com', role: 'Administrador' },
-      { id: '2', name: 'Carlos Ruiz', email: 'carlos@ejemplo.com', role: 'Encargado' }
-    ];
+  cargarAdmins() {
+    this.adminService.obtenerAdmins().subscribe((data: any) => {
+      this.listaAdmins = data as any[];
+    });
   }
 
-  openUserModal() {
-    // Abre un modal o formulario para registrar un nuevo usuario
+  abrirModal(modo: 'crear' | 'editar', admin?: any) {
+    this.modo = modo;
+    if (modo === 'editar' && admin) {
+      this.formAdmin.patchValue(admin);
+    } else {
+      this.formAdmin.reset();
+    }
+    const modal = new bootstrap.Modal(document.getElementById('adminModal')!);
+    modal.show();
   }
 
-  editUser(user: SystemUser) {
-    // Lógica para editar un usuario
+  guardarAdmin() {
+    const admin = this.formAdmin.value;
+    if (this.modo === 'crear') {
+      this.adminService.crearAdmin(admin).subscribe(() => this.cargarAdmins());
+    } else {
+      this.adminService.actualizarAdmin(admin.idAdmin, admin).subscribe(() => this.cargarAdmins());
+    }
+    bootstrap.Modal.getInstance(document.getElementById('adminModal')!)?.hide();
   }
 
-  deleteUser(userId: string) {
-    // Lógica para eliminar un usuario
+  editar(admin: any) {
+    this.abrirModal('editar', admin);
+  }
+
+  eliminar(idAdmin: string) {
+    if (confirm('¿Seguro que deseas eliminar este administrador?')) {
+      this.adminService.eliminarAdmin(idAdmin).subscribe(() => this.cargarAdmins());
+    }
   }
 }
