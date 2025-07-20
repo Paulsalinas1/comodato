@@ -19,7 +19,8 @@ export class LoginComponent {
   ) {
     this.loginForm = this.fb.group({
       nombreAdmin: ['', [Validators.required]],
-      passAdmin: ['', [Validators.required]]
+      passAdmin: ['', [Validators.required]],
+      recordar: [true]
     });
   }
 
@@ -28,18 +29,17 @@ export class LoginComponent {
   onLogin() {
     if (this.loginForm.invalid) return;
 
-    const { nombreAdmin, passAdmin } = this.loginForm.value;
+    const { nombreAdmin, passAdmin, recordar } = this.loginForm.value;
 
     this.adminService.login(nombreAdmin, passAdmin).subscribe({
       next: (res: any) => {
-        localStorage.setItem('adminActivo', JSON.stringify(res.admin));
+        const admin = res.admin;
+        const storage = recordar ? localStorage : sessionStorage;
+
+        storage.setItem('adminActivo', JSON.stringify(admin)); // 👈 ahora guarda en el elegido
         this.router.navigate(['/dashboard']);
       },
-      error: (err) => {
-        console.error('Error en login:', err); // <-- Agrega esto
-        alert('Nombre o contraseña incorrectos');
-      }
+      error: () => alert('Nombre o contraseña incorrectos')
     });
   }
-
 }
