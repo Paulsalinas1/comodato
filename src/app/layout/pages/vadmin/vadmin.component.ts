@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AdminService } from '../../../core/services/admin.service';
 declare var bootstrap: any;
@@ -15,17 +15,18 @@ interface SystemUser {
   templateUrl: './vadmin.component.html',
   styleUrl: './vadmin.component.css'
 })
-export class VadminComponent {
+export class VadminComponent implements OnInit {
   listaAdmins: any[] = [];
-  modo: 'crear' | 'editar' = 'crear';
+  mostrarPassword: boolean = false;
+
   formAdmin: FormGroup;
+  modo: 'crear' | 'editar' = 'crear';
 
   constructor(
     private adminService: AdminService,
     private fb: FormBuilder
   ) {
     this.formAdmin = this.fb.group({
-      idAdmin: ['', Validators.required],
       nombreAdmin: ['', Validators.required],
       passAdmin: ['', Validators.required]
     });
@@ -41,16 +42,7 @@ export class VadminComponent {
     });
   }
 
-  abrirModal(modo: 'crear' | 'editar', admin?: any) {
-    this.modo = modo;
-    if (modo === 'editar' && admin) {
-      this.formAdmin.patchValue(admin);
-    } else {
-      this.formAdmin.reset();
-    }
-    const modal = new bootstrap.Modal(document.getElementById('adminModal')!);
-    modal.show();
-  }
+
 
   guardarAdmin() {
     const admin = this.formAdmin.value;
@@ -62,13 +54,31 @@ export class VadminComponent {
     bootstrap.Modal.getInstance(document.getElementById('adminModal')!)?.hide();
   }
 
-  editar(admin: any) {
-    this.abrirModal('editar', admin);
-  }
 
   eliminar(idAdmin: string) {
     if (confirm('¿Seguro que deseas eliminar este administrador?')) {
       this.adminService.eliminarAdmin(idAdmin).subscribe(() => this.cargarAdmins());
     }
   }
+
+
+
+  abrirModalCrear() {
+    this.modo = 'crear';
+    this.formAdmin.reset(); // limpia el formulario
+    const modal = new bootstrap.Modal(document.getElementById('adminModal')!);
+    modal.show();
+  }
+
+  editar(admin: any) {
+    this.modo = 'editar';
+    this.formAdmin.patchValue(admin);
+    const modal = new bootstrap.Modal(document.getElementById('adminModal')!);
+    modal.show();
+  }
+
+  togglePasswordVisibility() {
+    this.mostrarPassword = !this.mostrarPassword;
+  }
+
 }
