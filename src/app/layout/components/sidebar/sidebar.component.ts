@@ -20,5 +20,4 @@ export class SidebarComponent {
     localStorage.removeItem('adminActivo'); // Elimina al usuario activo
     this.router.navigate(['/login']);       // Redirige al login
   }
-
 }

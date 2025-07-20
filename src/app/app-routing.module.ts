@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { PageNotFoundComponent } from './layout/pages/page-not-found/page-not-found.component';
-
+import { authGuard } from './core/guards/auth.guard';
 
 const routes: Routes = [
   {
@@ -11,6 +11,7 @@ const routes: Routes = [
   },
   {
     path: '',
+    canActivate: [authGuard],  // 🔐 Protege el módulo de layout
     loadChildren: () => import('./layout/layout.module').then(m => m.LayoutModule)
   },
   { path: '', redirectTo: '', pathMatch: 'full' },
@@ -23,4 +24,4 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}
