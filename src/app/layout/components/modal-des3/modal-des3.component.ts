@@ -131,6 +131,10 @@ export class ModalDes3Component implements OnInit {
     this.dialogRef.close(tipodescarga);
   }
 
+  Rcomodato() {
+    this.dialogRef.close('RenovarComodato');
+  }
+
   siguientePaso() {
     if (this.pasoActual < this.data.pasos.length - 1) {
       this.pasoActual++;

@@ -347,7 +347,7 @@ export class ComodatosComponent implements OnInit {
                   valor: per.idPersona,
                   texto: `${per.nomPersona} ${per.apPersona}`,
                 })),
-                permitirCrear: true, // si quieres botón para crear nueva persona desde modal
+                permitirCrear: true, 
               },
               {
                 tipo: 'text',
@@ -368,6 +368,7 @@ export class ComodatosComponent implements OnInit {
                   valor: art.idArticulo,
                   texto: art.nombreArticulo, // ajusta según campo real
                 })),
+                valorInicial: respaldo?.articulosSeleccionados ?? [],
               },
               // Paso 2 - Fechas y estado
               {
@@ -1251,6 +1252,32 @@ export class ComodatosComponent implements OnInit {
             this.descargarDevolucion(devo.idDevolucion_comodato!);
             this.modalService.desactivarModal();
             console.log('Se descargó el comprobante de devolución');
+          }else if (resut === 'RenovarComodato') {
+            this.svComodato
+              .getComodatoById(devo.Comodato_idComodato)
+              .forEach((como) => {
+                
+                this.svArticulo_Comodato
+                  .obtenerArticulosPorComodato(como.idComodato!)
+                  .subscribe((relaciones) => {
+                    const articulosIds = relaciones.map(
+                      (r) => r.idArticulo 
+                    );
+                    console.log(articulosIds);
+
+                    const respaldoExtendido = {
+                      ...como,
+                      articulosSeleccionados: articulosIds,
+                    };
+                    //editar estado de comodato respaldo
+                    respaldoExtendido.estadoComodato = 'entregado';
+                    const hoy = this.formatearFecha(new Date());
+                    respaldoExtendido.fechaInicioComodato = hoy;
+                    respaldoExtendido.fechaTerminoComodatoD = '';
+                    console.log(respaldoExtendido);
+                    this.abrirModalNuevoComodatoCompleto(respaldoExtendido);
+                  });
+              });
           }
           this.modalService.desactivarModal();
         });
