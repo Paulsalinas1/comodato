@@ -9,8 +9,7 @@ import { RelacionArticuloComodato } from '../models/RelacionArticuloComodato ';
 })
 export class ArticuloComodatoService {
 
-  /* private readonly baseUrl = 'http://localhost:3000/api/articulo_has_comodato'; */ // Ajusta si tu ruta cambia
-  private readonly baseUrl = 'http://10.9.1.28:3000/api/articulo_has_comodato'; // Ajusta si tu ruta 2 en cado de querer la ip
+  private readonly baseUrl = '/api/articulo_has_comodato';
 
   constructor(private readonly http: HttpClient) {}
 

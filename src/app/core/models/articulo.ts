@@ -1,5 +1,5 @@
 export interface Articulo {
-  idArticulo?: string;  // Opcional al crear, porque lo genera el backend
+  idArticulo?: string;
   nombreArticulo: string;
   desArticulo?: string;
   estadoArticulo: 'FUNCIONAL' | 'MANTENIMIENTO' | 'DEFECTUOSO' | 'PERDIDO' | 'ROBADO' | 'DANADO';

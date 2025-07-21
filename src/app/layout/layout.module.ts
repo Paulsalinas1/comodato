@@ -18,6 +18,7 @@ import { ModalDes3Component } from './components/modal-des3/modal-des3.component
 import { MatSelectModule } from '@angular/material/select';
 import { ModalComodatoComponent } from './components/modal-comodato/modal-comodato.component';
 
+
 @NgModule({
   declarations: [
     LayoutComponent,
@@ -28,6 +29,7 @@ import { ModalComodatoComponent } from './components/modal-comodato/modal-comoda
     ModalComodatoComponent,
     ModalDes2Component,
     ModalDes3Component,
+    
     
     
   ],
@@ -52,6 +54,7 @@ import { ModalComodatoComponent } from './components/modal-comodato/modal-comoda
     ModalDesComponent,
     ModalDes2Component,
     ModalDes3Component,
+    
     
     
   ],

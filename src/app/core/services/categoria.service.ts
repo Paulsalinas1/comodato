@@ -7,8 +7,7 @@ import { Categoria } from '../models/categoria';
   providedIn: 'root'
 })
 export class CategoriaService {
-  /* apiUrl = 'http://localhost:3000/api/categorias'; */
-  apiUrl = 'http://10.9.1.28:3000/api/categorias';
+  apiUrl = '/api/categorias';
   constructor(private http: HttpClient ) {}
 
   getCategorias(): Observable<Categoria[]> {

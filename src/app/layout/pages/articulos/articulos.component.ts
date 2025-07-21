@@ -14,6 +14,7 @@ import { Modelo } from '../../../core/models/Modelo';
 import { forkJoin, map, Observable } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
+import { ModalService } from '../../../core/services/modal.service';
 
 @Component({
   selector: 'app-articulos',
@@ -23,6 +24,7 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class ArticulosComponent {
   private readonly routeA = inject(ActivatedRoute);
+  private readonly modalService = inject(ModalService);
 
   // Fechas y paginación
   today = new Date();
@@ -142,19 +144,19 @@ export class ArticulosComponent {
 
   toastComplete(result: any) {
     this.snackBar.open(result + ' sea Guardado !', 'Cerrar', {
-      duration: 3000, // tiempo que se muestra en ms
-      panelClass: ['snackbar-exito'], // clase CSS para estilos personalizados
-      horizontalPosition: 'center', // posición horizontal: 'start' | 'center' | 'end' | 'left' | 'right'
-      verticalPosition: 'top', // posición vertical: 'top' | 'bottom'
+      duration: 3000,
+      panelClass: ['snackbar-exito'],
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
     });
   }
 
   toastEdit(result: any) {
     this.snackBar.open(result + ' sea Editado !', 'Cerrar', {
-      duration: 3000, // tiempo que se muestra en ms
-      panelClass: ['snackbar-exito'], // clase CSS para estilos personalizados
-      horizontalPosition: 'center', // posición horizontal: 'start' | 'center' | 'end' | 'left' | 'right'
-      verticalPosition: 'top', // posición vertical: 'top' | 'bottom'
+      duration: 3000,
+      panelClass: ['snackbar-exito'],
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
     });
   }
 
@@ -217,7 +219,7 @@ export class ArticulosComponent {
         this.daots_presentacion();
       },
       error: (err) => {
-        console.error('Error al cargar marcas:', err);
+        this.toastError(err.error.error);
       },
     });
   }
@@ -234,7 +236,7 @@ export class ArticulosComponent {
         this.daots_presentacion();
       },
       error: (err) => {
-        console.error('Error al cargar modelos:', err);
+        this.toastError(err.error.error);
       },
     });
   }
@@ -251,7 +253,7 @@ export class ArticulosComponent {
         this.daots_presentacion();
       },
       error: (err) => {
-        console.error('Error al cargar articulos:', err);
+        this.toastError(err.error.error);
       },
     });
   }
@@ -419,6 +421,7 @@ export class ArticulosComponent {
 
   //modal de agragar categorias
   abrirModalNuevaCategoria() {
+    this.modalService.activarModal();
     const dialogRef = this.dialog.open(ModalAddComponent, {
       width: '400px',
       data: {
@@ -450,18 +453,22 @@ export class ArticulosComponent {
           next: () => {
             this.cargarDatosCat();
             this.cargarNombres();
+            this.modalService.desactivarModal();
             this.toastComplete(result.nombreCategoria);
           },
           error: (err) => {
+            this.modalService.desactivarModal();
             this.toastError(err.error.error);
           },
         });
       }
+      this.modalService.desactivarModal();
     });
   }
 
   //modal de editar y eliminar categorias
   abrirModalEditarCategoria(categoria: any) {
+    this.modalService.activarModal();
     const dialogRef = this.dialog.open(ModalDesComponent, {
       width: '600px',
       height: '',
@@ -496,9 +503,11 @@ export class ArticulosComponent {
             .subscribe({
               next: () => {
                 this.cargarDatosCat();
+                this.modalService.desactivarModal();
                 this.toastEliminar(categoria.nombreCategoria);
               },
               error: (err) => {
+                this.modalService.desactivarModal();
                 this.toastError(err.error.error);
               },
             });
@@ -509,19 +518,23 @@ export class ArticulosComponent {
               next: () => {
                 this.cargarDatosCat();
                 this.cargarNombres();
+                this.modalService.desactivarModal();
                 this.toastComplete(categoria.nombreCategoria);
               },
               error: (err) => {
+                this.modalService.desactivarModal();
                 this.toastError(err.error.error);
               },
             });
         }
       }
+      this.modalService.desactivarModal();
     });
   }
 
   //modal de agregar marcas
   abrirModalNuevaMarca(respaldo?: any) {
+    this.modalService.activarModal();
     this.categoriaService.getCategorias().subscribe({
       next: (categorias) => {
         const dialogRef = this.dialog.open(ModalAddComponent, {
@@ -569,22 +582,25 @@ export class ArticulosComponent {
               next: () => {
                 this.cargarDatosMar();
                 this.cargarNombres();
+                this.modalService.desactivarModal();
                 this.toastComplete(result.nombreMarca);
               },
               error: (err) => {
-                console.error('Error al agregar marca:', err);
+                this.modalService.desactivarModal();
                 this.toastError(err.error.error);
               },
             });
           }
+          this.modalService.desactivarModal();
         });
       },
-      error: (err) => console.error('Error al cargar categorías:', err),
+      error: (err) => this.toastError(err.error.error),
     });
   }
 
   //modal de editar y eliminar marcas
   abrirModalEditarMarca(marca: any) {
+    this.modalService.activarModal();
     this.categoriaService.getCategorias().subscribe((categorias) => {
       const dialogRef = this.dialog.open(ModalDesComponent, {
         width: '600px',
@@ -632,9 +648,11 @@ export class ArticulosComponent {
             this.marcasService.deleteMarca(marca.idMarca).subscribe({
               next: () => {
                 this.cargarDatosMar();
+                this.modalService.desactivarModal();
                 this.toastEliminar(marca.nombreMarca);
               },
               error: (err) => {
+                this.modalService.desactivarModal();
                 this.toastError(err.error.error);
               },
             });
@@ -643,20 +661,24 @@ export class ArticulosComponent {
               next: () => {
                 this.cargarDatosMar();
                 this.cargarNombres();
+                this.modalService.desactivarModal();
                 this.toastEdit(marca.nombreMarca);
               },
               error: (err) => {
+                this.modalService.desactivarModal();
                 this.toastError(err.error.error);
               },
             });
           }
         }
+        this.modalService.desactivarModal();
       });
     });
   }
 
   //modal de agregar modelo
   abrirModalNuevaModelo(respaldo?: any) {
+    this.modalService.activarModal();
     this.categoriaService.getCategorias().subscribe({
       next: (categorias) => {
         const dialogRef = this.dialog.open(ModalAddComponent, {
@@ -705,19 +727,28 @@ export class ArticulosComponent {
               next: () => {
                 this.cargarDatosMod();
                 this.cargarNombres();
+                this.modalService.desactivarModal();
                 this.toastComplete(result.nombreModelo);
               },
-              error: (err) => this.toastError(err.error.error),
+              error: (err) => {
+                this.modalService.desactivarModal();
+                this.toastError(err.error.error)
+              },
             });
           }
+          this.modalService.desactivarModal();
         });
       },
-      error: (err) => this.toastError(err.error.error),
+      error: (err) => {
+        this.modalService.desactivarModal();
+        this.toastError(err.error.error)
+      },
     });
   }
 
   //modal de editar y eliminar modelo
   abrirModalEditarModelo(modelo: any) {
+    this.modalService.activarModal();
     // Primero cargamos las categorías (suponiendo que tienes un servicio para eso)
     this.categoriaService.getCategorias().subscribe((categorias) => {
       const dialogRef = this.dialog.open(ModalDesComponent, {
@@ -766,9 +797,13 @@ export class ArticulosComponent {
             this.modeloService.deleteModelo(modelo.idModelo).subscribe({
               next: () => {
                 this.cargarDatosMod();
+                this.modalService.desactivarModal();
                 this.toastEliminar(modelo.nombreModelo);
               },
-              error: (err) => this.toastError(err.error.error),
+              error: (err) => {
+                this.modalService.desactivarModal();
+                this.toastError(err.error.error)
+              },
             });
           } else {
             this.modeloService
@@ -777,18 +812,24 @@ export class ArticulosComponent {
                 next: () => {
                   this.cargarDatosMod();
                   this.cargarNombres();
+                  this.modalService.desactivarModal();
                   this.toastEdit(modelo.nombreModelo);
                 },
-                error: (err) => this.toastError(err.error.error),
+                error: (err) =>{ 
+                  this.modalService.desactivarModal();
+                  this.toastError(err.error.error)
+                },
               });
           }
         }
+        this.modalService.desactivarModal();
       });
     });
   }
 
   // Modal para agregar un nuevo artículo
   abrirModalNuevoArticulo(respaldo?: any) {
+    this.modalService.activarModal();
     forkJoin({
       categorias: this.categoriaService.getCategorias(),
       marcas: this.marcasService.getMarcas(),
@@ -910,19 +951,28 @@ export class ArticulosComponent {
             this.articuloService.createArticulo(result).subscribe({
               next: () => {
                 this.cargarDatosArti();
+                this.modalService.desactivarModal();
                 this.toastComplete(result.nombreArticulo);
               },
-              error: (err) => this.toastError(err.error.error),
+              error: (err) => {
+                this.modalService.desactivarModal();
+                this.toastError(err.error.error)
+              },
             });
           }
+          this.modalService.desactivarModal();
         });
       },
-      error: (err) => this.toastError(err.error.error),
+      error: (err) => {
+        this.modalService.desactivarModal();
+        this.toastError(err.error.error)
+      },
     });
   }
 
   // Modal para editar y eliminar artículo
   abrirModalEditarArticulo(articulo: any) {
+    this.modalService.activarModal();
     forkJoin({
       categorias: this.categoriaService.getCategorias(),
       marcas: this.marcasService.getMarcas(),
@@ -1034,7 +1084,7 @@ export class ArticulosComponent {
         }
 
         if (resultado?.agregarMarca) {
-          this.abrirModalCrearModelo(articulo, 'articulo');
+          this.abrirModalCrearMarca(articulo, 'articulo');
           return;
         }
 
@@ -1043,9 +1093,13 @@ export class ArticulosComponent {
             this.articuloService.deleteArticulo(articulo.idArticulo).subscribe({
               next: () => {
                 this.cargarDatosArti();
+                this.modalService.desactivarModal();
                 this.toastEliminar(articulo.nombreArticulo);
               },
-              error: (err) => this.toastError(err.error.error),
+              error: (err) => {
+                this.modalService.desactivarModal();
+                this.toastError(err.error.error)
+              },
             });
           } else {
             this.articuloService
@@ -1053,12 +1107,17 @@ export class ArticulosComponent {
               .subscribe({
                 next: () => {
                   this.cargarDatosArti();
+                  this.modalService.desactivarModal();
                   this.toastEdit(articulo.nombreArticulo);
                 },
-                error: (err) => this.toastError(err.error.error),
+                error: (err) => {
+                  this.modalService.desactivarModal();
+                  this.toastError(err.error.error)
+                },
               });
           }
         }
+        this.modalService.desactivarModal();
       });
     });
   }
@@ -1077,6 +1136,7 @@ export class ArticulosComponent {
       | 'modelo4'
       | 'marca4'
   ) {
+    this.modalService.activarModal();
     const dialogRef = this.dialog.open(ModalAddComponent, {
       width: '400px',
       data: {
@@ -1110,7 +1170,10 @@ export class ArticulosComponent {
             this.redirigirSegunOrigen(respaldo, origen);
             this.toastComplete(resultado.nombreCategoria);
           },
-          error: (err) => this.toastError(err.error.error),
+          error: (err) => {
+            this.modalService.desactivarModal();
+            this.toastError(err.error.error)
+          },
         });
       } else {
         this.redirigirSegunOrigen(respaldo, origen);
@@ -1132,6 +1195,7 @@ export class ArticulosComponent {
       | 'modelo4'
       | 'marca4'
   ) {
+    this.modalService.activarModal();
     this.categoriaService.getCategorias().subscribe({
       next: (categorias) => {
         const dialogRef = this.dialog.open(ModalAddComponent, {
@@ -1187,14 +1251,20 @@ export class ArticulosComponent {
                 this.toastComplete(result.nombreModelo);
                 this.redirigirSegunOrigen(respaldo, origen);
               },
-              error: (err) => this.toastError(err.error.error),
+              error: (err) => {
+                this.modalService.desactivarModal();
+                this.toastError(err.error.error)
+              },
             });
           } else {
             this.redirigirSegunOrigen(respaldo, origen);
           }
         });
       },
-      error: (err) => this.toastError(err.error.error),
+      error: (err) => {
+        this.modalService.desactivarModal();
+        this.toastError(err.error.error)
+      },
     });
   }
 
@@ -1212,6 +1282,7 @@ export class ArticulosComponent {
       | 'modelo4'
       | 'marca4'
   ) {
+    this.modalService.activarModal();
     this.categoriaService.getCategorias().subscribe({
       next: (categorias) => {
         const dialogRef = this.dialog.open(ModalAddComponent, {
@@ -1267,14 +1338,20 @@ export class ArticulosComponent {
                 this.toastComplete(result.nombreMarca);
                 this.redirigirSegunOrigen(respaldo, origen);
               },
-              error: (err) => this.toastError(err.error.error),
+              error: (err) => {
+                this.modalService.desactivarModal();
+                this.toastError(err.error.error)
+              },
             });
           } else {
             this.redirigirSegunOrigen(respaldo, origen);
           }
         });
       },
-      error: (err) => this.toastError(err.error.error),
+      error: (err) => {
+        this.modalService.desactivarModal();
+        this.toastError(err.error.error)
+      },
     });
   }
 

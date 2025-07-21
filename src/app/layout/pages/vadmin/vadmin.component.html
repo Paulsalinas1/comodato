@@ -1,6 +1,85 @@
-<div>
-  <h2>Administracion de cuentas </h2>
+<div class="container admin-container my-4">
+  <!-- Header con estilo mejorado -->
+  <div class="d-flex justify-content-between align-items-center mb-4 admin-header">
+    <h3 class="mb-0">
+      <i class="bi bi-people-fill me-2"></i>Lista de Administradores
+    </h3>
+    <button class="btn btn-success btn-create" (click)="abrirModalCrear()">
+      <i class="bi bi-plus-circle me-1"></i>Crear Admin
+    </button>
+  </div>
+
+  <!-- Tabla con mejor estilo -->
+  <div class="table-responsive admin-table-container">
+    <table class="table table-hover align-middle admin-table">
+      <thead class="admin-table-header">
+        <tr>
+          <th scope="col" class="ps-4">Nombre</th>
+          <th scope="col" class="text-end pe-4">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let admin of listaAdmins" class="admin-row">
+          <td class="ps-4">
+            <div class="d-flex align-items-center">
+              <span class="admin-name">{{ admin.nombreAdmin }}</span>
+            </div>
+          </td>
+          <td class="text-end pe-4">
+            <button class="btn btn-sm btn-outline-warning me-2 btn-action" (click)="editar(admin)">
+              <i class="bi bi-pencil-square"></i> Editar
+            </button>
+            <button class="btn btn-sm btn-outline-danger btn-action" (click)="eliminar(admin.idAdmin)">
+              <i class="bi bi-trash"></i> Eliminar
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>
 
+<!-- Modal con estilo mejorado -->
+<div class="modal fade" id="adminModal" tabindex="-1" aria-labelledby="adminModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content admin-modal">
+      <form [formGroup]="formAdmin" (ngSubmit)="guardarAdmin()">
+        <div class="modal-header admin-modal-header">
+          <h5 class="modal-title text-white" id="adminModalLabel">
+            <i class="bi bi-person-plus me-2"></i>
+            {{ modo === 'crear' ? 'Crear Nuevo Admin' : 'Editar Admin' }}
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3 form-group">
+            <label for="nombreAdmin" class="form-label">Nombre del Administrador</label>
+            <input type="text" class="form-control form-control-lg" id="nombreAdmin" formControlName="nombreAdmin"
+              placeholder="Ingrese el nombre completo">
+          </div>
+          <div class="mb-3 form-group">
+            <label for="passAdmin" class="form-label">Contraseña</label>
+            <div class="input-group input-group-lg custom-input-group">
+              <input [type]="mostrarPassword ? 'text' : 'password'" id="passAdmin" formControlName="passAdmin"
+                class="form-control border-end-0" placeholder="Ingrese la contraseña">
 
-
+              <span class="input-group-text bg-white border-start-0">
+                <button type="button" (click)="togglePasswordVisibility()" class="btn btn-link p-0 text-dark">
+                  <mat-icon class="fs-5">
+                    {{ mostrarPassword ? 'visibility_off' : 'visibility' }}
+                  </mat-icon>
+                </button>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer admin-modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary btn-save">
+            <i class="bi bi-save me-1"></i>Guardar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

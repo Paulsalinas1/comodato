@@ -7,9 +7,7 @@ import { Modelo } from '../models/Modelo';
   providedIn: 'root'
 })
 export class ModeloService {
-
-  /* private apiUrl = 'http://localhost:3000/api/modelos';  */
-  private apiUrl = 'http://10.9.1.28:3000/api/modelos'; 
+  private apiUrl = '/api/modelos'; 
 
   constructor(private http: HttpClient) { }
 

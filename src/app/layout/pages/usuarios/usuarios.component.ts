@@ -9,6 +9,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { ModalAddComponent } from '../../components/modal-add/modal-add.component';
 import { ModalDesComponent } from '../../components/modal-des/modal-des.component';
 import { forkJoin, map, Observable } from 'rxjs';
+import { ModalService } from '../../../core/services/modal.service';
 
 @Component({
   selector: 'app-usuarios',
@@ -19,6 +20,7 @@ import { forkJoin, map, Observable } from 'rxjs';
 export class UsuariosComponent {
   // Fechas y paginación
   today = new Date();
+
 
   pageSizeOptions = [1, 5, 10, 25];
 
@@ -53,7 +55,9 @@ export class UsuariosComponent {
     private readonly svcPersona: PersonaService,
     private readonly svcEstamento: EstamentoService,
     private readonly dialog: MatDialog,
-    private readonly snackBar: MatSnackBar
+    private readonly snackBar: MatSnackBar,
+    private readonly modalService: ModalService
+
   ) {}
 
   ngOnInit(): void {
@@ -75,10 +79,9 @@ export class UsuariosComponent {
       next: ({ totalUsuarios, totalEstamentos }) => {
         this.u_totales = totalUsuarios;
         this.est_total = totalEstamentos;
-        // Aquí puedes asignar otros datos de presentación si es necesario
       },
       error: (err) => {
-        console.error('Error al cargar datos de presentación:', err);
+        this.toastError('No se pudieron cargar los datos de presentación' + err);
       },
     });
   }
@@ -93,19 +96,19 @@ export class UsuariosComponent {
 
   toastComplete(result: any) {
     this.snackBar.open(result + ' sea Guardado !', 'Cerrar', {
-      duration: 3000, // tiempo que se muestra en ms
-      panelClass: ['snackbar-exito'], // clase CSS para estilos personalizados
-      horizontalPosition: 'center', // posición horizontal: 'start' | 'center' | 'end' | 'left' | 'right'
-      verticalPosition: 'top', // posición vertical: 'top' | 'bottom'
+      duration: 3000,
+      panelClass: ['snackbar-exito'],
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
     });
   }
 
   toastEdit(result: any) {
     this.snackBar.open(result + ' sea Editado !', 'Cerrar', {
-      duration: 3000, // tiempo que se muestra en ms
-      panelClass: ['snackbar-exito'], // clase CSS para estilos personalizados
-      horizontalPosition: 'center', // posición horizontal: 'start' | 'center' | 'end' | 'left' | 'right'
-      verticalPosition: 'top', // posición vertical: 'top' | 'bottom'
+      duration: 3000,
+      panelClass: ['snackbar-exito'],
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
     });
   }
 
@@ -135,7 +138,7 @@ export class UsuariosComponent {
         this.datos_presentacion();
       },
       error: (err) => {
-        console.error('Error al cargar los estamentos:', err);
+        this.toastError('No se pudieron cargar los estamentos' + err);
       },
     });
   }
@@ -148,7 +151,7 @@ export class UsuariosComponent {
         this.datos_presentacion();
       },
       error: (err) => {
-        console.error('Error al cargar a los usuarios:', err);
+        this.toastError('No se pudieron cargar las personas' + err);
       },
     });
   }
@@ -230,7 +233,6 @@ export class UsuariosComponent {
     this.personasPaginator.pageIndex = event.pageIndex;
     this.personasPaginator.pageSize = event.pageSize;
 
-    // Opcional: scroll al inicio de la tabla
     setTimeout(() => {
       document
         .getElementById('tabla-personas')
@@ -240,6 +242,7 @@ export class UsuariosComponent {
 
   //modal de crear Estamentos
   abrirModalNuevaEstamento() {
+    this.modalService.activarModal();
     const dialogRef = this.dialog.open(ModalAddComponent, {
       width: '400px',
       data: {
@@ -270,19 +273,22 @@ export class UsuariosComponent {
         this.svcEstamento.createEstamento(result).subscribe({
           next: () => {
             this.cargarDatosEst();
-
+            this.modalService.desactivarModal();
             this.toastComplete(result.nombreEstamento);
           },
           error: (err) => {
             this.toastError(err.error.error);
+            this.modalService.desactivarModal();
           },
         });
       }
+      this.modalService.desactivarModal();
     });
   }
 
   //modal de editar y eliminar Estamentos
   abrirModalEditarEstamento(Estamento: Estamento) {
+    this.modalService.activarModal();
     const dialogRef = this.dialog.open(ModalDesComponent, {
       width: '600px',
       height: '',
@@ -315,9 +321,11 @@ export class UsuariosComponent {
           this.svcEstamento.deleteEstamento(Estamento.idEstamento).subscribe({
             next: () => {
               this.cargarDatosEst();
+              this.modalService.desactivarModal();
               this.toastEliminar(Estamento.nombreEstamento);
             },
             error: (err) => {
+              this.modalService.desactivarModal();
               this.toastError(err.error.error);
             },
           });
@@ -327,19 +335,23 @@ export class UsuariosComponent {
             .subscribe({
               next: () => {
                 this.cargarDatosEst();
+                this.modalService.desactivarModal();
                 this.toastComplete(Estamento.nombreEstamento);
               },
               error: (err) => {
+                this.modalService.desactivarModal();
                 this.toastError(err.error.error);
               },
             });
         }
       }
+      this.modalService.desactivarModal();
     });
   }
 
   //modal de crear Persona
   abrirModalNuevaPersona(respaldo?: any): void {
+    this.modalService.activarModal();
     this.svcEstamento.getEstamentos().subscribe({
       next: (estamentos) => {
         const dialogRef = this.dialog.open(ModalAddComponent, {
@@ -417,17 +429,20 @@ export class UsuariosComponent {
               next: () => {
                 this.cargarDatosPer();
                 this.cargarNombres();
+                this.modalService.desactivarModal();
                 this.toastComplete(result.nomPersona);
               },
               error: (err) => {
+                this.modalService.desactivarModal();
                 this.toastError(err.error?.error);
               },
             });
           }
+          this.modalService.desactivarModal();
         });
       },
       error: (err) => {
-        console.error('Error al cargar estamentos:', err);
+        this.modalService.desactivarModal();
         this.toastError('No se pudieron cargar los estamentos');
       },
     });
@@ -435,6 +450,7 @@ export class UsuariosComponent {
 
   //modal de editar y eliminar Persona
   abrirModalEditarPersona(persona: Persona) {
+    this.modalService.activarModal();
     this.svcEstamento.getEstamentos().subscribe({
       next: (estamentos) => {
         const dialogRef = this.dialog.open(ModalDesComponent, {
@@ -507,14 +523,17 @@ export class UsuariosComponent {
             this.abrirModalCrearEstamento(persona, 'Persona2');
             return;
           }
+          
           if (resultado) {
             if (resultado.eliminar) {
               this.svcPersona.deletePersona(persona.idPersona).subscribe({
                 next: () => {
                   this.cargarDatosPer();
+                  this.modalService.desactivarModal();
                   this.toastEliminar(persona.nomPersona);
                 },
                 error: (err) => {
+                  this.modalService.desactivarModal();
                   this.toastError(err.error.error);
                 },
               });
@@ -524,17 +543,21 @@ export class UsuariosComponent {
                 .subscribe({
                   next: () => {
                     this.cargarDatosPer();
+                    this.modalService.desactivarModal();
                     this.toastComplete(persona.nomPersona);
                   },
                   error: (err) => {
+                    this.modalService.desactivarModal();
                     this.toastError(err.error.error);
                   },
                 });
             }
           }
+          this.modalService.desactivarModal();
         });
       },
       error: (err) => {
+        this.modalService.desactivarModal();
         this.toastError('No se pudieron cargar los estamentos');
       },
     });
