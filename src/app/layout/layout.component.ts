@@ -20,7 +20,6 @@ export class LayoutComponent {
 
 constructor(private modalService: ModalService) {
   this.modalService.modalActivo$.subscribe(estado => {
-    console.log('Modal activo:', estado); // ¿Se imprime?
     this.modalActivo = estado;
   });
 }

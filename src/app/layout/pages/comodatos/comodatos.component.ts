@@ -138,25 +138,25 @@ export class ComodatosComponent implements OnInit {
 
   toastComplete(result: any) {
     this.snackBar.open(result + ' sea Guardado !', 'Cerrar', {
-      duration: 3000, // tiempo que se muestra en ms
-      panelClass: ['snackbar-exito'], // clase CSS para estilos personalizados
-      horizontalPosition: 'center', // posición horizontal: 'start' | 'center' | 'end' | 'left' | 'right'
-      verticalPosition: 'top', // posición vertical: 'top' | 'bottom'
+      duration: 3000,
+      panelClass: ['snackbar-exito'],
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
     });
   }
 
   toastEdit(result: any) {
     this.snackBar.open(result + ' sea Editado !', 'Cerrar', {
-      duration: 3000, // tiempo que se muestra en ms
-      panelClass: ['snackbar-exito'], // clase CSS para estilos personalizados
-      horizontalPosition: 'center', // posición horizontal: 'start' | 'center' | 'end' | 'left' | 'right'
-      verticalPosition: 'top', // posición vertical: 'top' | 'bottom'
+      duration: 3000,
+      panelClass: ['snackbar-exito'],
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
     });
   }
 
   toastError(result: any) {
     this.snackBar.open('Error: ' + result, 'Cerrar', {
-      duration: 5000000,
+      duration: 50000,
       panelClass: ['snackbar-error'],
       horizontalPosition: 'center',
       verticalPosition: 'top',
@@ -181,19 +181,18 @@ export class ComodatosComponent implements OnInit {
         this.construirNombresArticulosAgrupados();
       },
       error: (err) => {
-        console.error('Error al cargar los estamentos:', err);
+        this.toastError(err.error.error);
       },
     });
-    // Cargar devoluciones para poder usarlas en el modal de devolución
+
     this.svDevolucionComodato.getDevoluciones().subscribe({
       next: (data) => {
-        // Aquí podrías procesar las devoluciones si es necesario
+        
         this.devoluciones = data;
         this.actualizarLongitudDevolucion();
-        console.log('Devoluciones cargadas:', data);
       },
       error: (err) => {
-        console.error('Error al cargar las devoluciones:', err);
+        this.toastError(err.error.error);
       },
     });
     this.svEstamento.getEstamentos().subscribe({
@@ -201,7 +200,7 @@ export class ComodatosComponent implements OnInit {
         this.estamentos = data;
       },
       error: (err) => {
-        console.error('Error al cargar los estamentos:', err);
+        this.toastError(err.error.error);
       },
     });
     this.CalcularTotalComodatos();
@@ -557,7 +556,7 @@ export class ComodatosComponent implements OnInit {
                   texto: `${per.nomPersona} ${per.apPersona}`,
                 })),
                 valorInicial: comodato.Persona_idPersona,
-                soloLectura: true, // <-- deshabilitado
+                soloLectura: true,
               },
               {
                 tipo: 'text',
@@ -581,7 +580,7 @@ export class ComodatosComponent implements OnInit {
                 valorInicial: articulos.map(
                   (rel: any) => rel.Articulo_idArticulo
                 ),
-                soloLectura: true, // <-- deshabilitado
+                soloLectura: true,
               },
               {
                 tipo: 'date',
@@ -590,7 +589,7 @@ export class ComodatosComponent implements OnInit {
                 obligatorio: false,
                 paso: 0,
                 valorInicial: this.formatearFecha(comodato.fechaInicioComodato),
-                soloLectura: true, // <-- deshabilitado
+                soloLectura: true,
               },
               {
                 tipo: 'date',
@@ -601,7 +600,7 @@ export class ComodatosComponent implements OnInit {
                 valorInicial: this.formatearFecha(
                   comodato.fechaTerminoComodatoD
                 ),
-                soloLectura: true, // <-- deshabilitado
+                soloLectura: true,
               },
               // Paso 1 - Solo editar estado
               {
@@ -731,7 +730,7 @@ export class ComodatosComponent implements OnInit {
                             switchMap((arti) => {
                               const arti2: Articulo = {
                                 Categoria_idCategoria:
-                                  arti.Categoria_idCategoria,
+                                arti.Categoria_idCategoria,
                                 dispArticulo: 'EN_COMODATO',
                                 estadoArticulo: arti.estadoArticulo,
                                 desArticulo: arti.desArticulo,
@@ -829,8 +828,7 @@ export class ComodatosComponent implements OnInit {
     this.modalService.activarModal();
     forkJoin({
       comodato: this.svComodato.getComodatoById(comodatoId),
-      articulos:
-        this.svArticulo_Comodato.obtenerArticulosPorComodato(comodatoId),
+      articulos: this.svArticulo_Comodato.obtenerArticulosPorComodato(comodatoId),
       personas: this.svPersona.getPersonas(),
     }).subscribe({
       next: ({ comodato, articulos, personas }) => {
@@ -1078,7 +1076,6 @@ export class ComodatosComponent implements OnInit {
       })
       .catch((err) => {
         console.error('Fallo en descarga:', err);
-        alert('No se pudo descargar el comprobante');
       });
   }
 
@@ -1099,8 +1096,7 @@ export class ComodatosComponent implements OnInit {
         window.URL.revokeObjectURL(url);
       })
       .catch((err) => {
-        console.error('Fallo en descarga:', err);
-        alert('No se pudo descargar la devolución');
+        this.toastError('Error al descargar comprobante de devolución: ' + err);
       });
   }
 
@@ -1306,8 +1302,7 @@ export class ComodatosComponent implements OnInit {
         window.URL.revokeObjectURL(url);
       })
       .catch((err) => {
-        console.error('Fallo en descarga:', err);
-        alert('No se pudo descargar el archivo');
+        this.toastError('Error al descargar todos los comodatos: ' + err);
       });
   }
 
@@ -1330,8 +1325,7 @@ export class ComodatosComponent implements OnInit {
         window.URL.revokeObjectURL(url); // Limpieza de memoria
       })
       .catch((err) => {
-        console.error('Error en la descarga:', err);
-        alert('Hubo un problema al descargar el archivo');
+        this.toastError('Error al descargar todas las devoluciones: ' + err);
       });
   }
 }

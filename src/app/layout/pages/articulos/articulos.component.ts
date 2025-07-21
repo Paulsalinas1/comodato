@@ -144,19 +144,19 @@ export class ArticulosComponent {
 
   toastComplete(result: any) {
     this.snackBar.open(result + ' sea Guardado !', 'Cerrar', {
-      duration: 3000, // tiempo que se muestra en ms
-      panelClass: ['snackbar-exito'], // clase CSS para estilos personalizados
-      horizontalPosition: 'center', // posición horizontal: 'start' | 'center' | 'end' | 'left' | 'right'
-      verticalPosition: 'top', // posición vertical: 'top' | 'bottom'
+      duration: 3000,
+      panelClass: ['snackbar-exito'],
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
     });
   }
 
   toastEdit(result: any) {
     this.snackBar.open(result + ' sea Editado !', 'Cerrar', {
-      duration: 3000, // tiempo que se muestra en ms
-      panelClass: ['snackbar-exito'], // clase CSS para estilos personalizados
-      horizontalPosition: 'center', // posición horizontal: 'start' | 'center' | 'end' | 'left' | 'right'
-      verticalPosition: 'top', // posición vertical: 'top' | 'bottom'
+      duration: 3000,
+      panelClass: ['snackbar-exito'],
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
     });
   }
 
@@ -219,7 +219,7 @@ export class ArticulosComponent {
         this.daots_presentacion();
       },
       error: (err) => {
-        console.error('Error al cargar marcas:', err);
+        this.toastError(err.error.error);
       },
     });
   }
@@ -236,7 +236,7 @@ export class ArticulosComponent {
         this.daots_presentacion();
       },
       error: (err) => {
-        console.error('Error al cargar modelos:', err);
+        this.toastError(err.error.error);
       },
     });
   }
@@ -253,7 +253,7 @@ export class ArticulosComponent {
         this.daots_presentacion();
       },
       error: (err) => {
-        console.error('Error al cargar articulos:', err);
+        this.toastError(err.error.error);
       },
     });
   }
@@ -594,7 +594,7 @@ export class ArticulosComponent {
           this.modalService.desactivarModal();
         });
       },
-      error: (err) => console.error('Error al cargar categorías:', err),
+      error: (err) => this.toastError(err.error.error),
     });
   }
 

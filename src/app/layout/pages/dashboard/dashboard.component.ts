@@ -188,10 +188,6 @@ export class DashboardComponent implements OnInit {
         );
       });
       this.como_fin_cerca = proximosComodatos;
-      console.log(
-        'Comodatos que terminan en los próximos 10 días:',
-        proximosComodatos
-      );
     });
   }
 
@@ -264,7 +260,6 @@ export class DashboardComponent implements OnInit {
   const selectedRow = event?.selection?.[0]?.row;
   if (selectedRow !== undefined) {
     const estadoSeleccionado = this.pieChart2D.data[selectedRow][0]; // 
-    console.log('Estado seleccionado:', estadoSeleccionado);
     this.router.navigate(['/comodatos'], {
       queryParams: { estado: estadoSeleccionado.toString().toLowerCase() }
     });

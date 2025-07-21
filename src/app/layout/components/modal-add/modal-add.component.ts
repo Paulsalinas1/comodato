@@ -75,7 +75,6 @@ export class ModalAddComponent {
 
   guardar() {
     if (this.form.valid) {
-      console.log('Datos a enviar:', this.form.value);
       this.dialogRef.close(this.form.value);
     }
   }

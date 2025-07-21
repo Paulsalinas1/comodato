@@ -79,10 +79,9 @@ export class UsuariosComponent {
       next: ({ totalUsuarios, totalEstamentos }) => {
         this.u_totales = totalUsuarios;
         this.est_total = totalEstamentos;
-        // Aquí puedes asignar otros datos de presentación si es necesario
       },
       error: (err) => {
-        console.error('Error al cargar datos de presentación:', err);
+        this.toastError('No se pudieron cargar los datos de presentación' + err);
       },
     });
   }
@@ -97,19 +96,19 @@ export class UsuariosComponent {
 
   toastComplete(result: any) {
     this.snackBar.open(result + ' sea Guardado !', 'Cerrar', {
-      duration: 3000, // tiempo que se muestra en ms
-      panelClass: ['snackbar-exito'], // clase CSS para estilos personalizados
-      horizontalPosition: 'center', // posición horizontal: 'start' | 'center' | 'end' | 'left' | 'right'
-      verticalPosition: 'top', // posición vertical: 'top' | 'bottom'
+      duration: 3000,
+      panelClass: ['snackbar-exito'],
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
     });
   }
 
   toastEdit(result: any) {
     this.snackBar.open(result + ' sea Editado !', 'Cerrar', {
-      duration: 3000, // tiempo que se muestra en ms
-      panelClass: ['snackbar-exito'], // clase CSS para estilos personalizados
-      horizontalPosition: 'center', // posición horizontal: 'start' | 'center' | 'end' | 'left' | 'right'
-      verticalPosition: 'top', // posición vertical: 'top' | 'bottom'
+      duration: 3000,
+      panelClass: ['snackbar-exito'],
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
     });
   }
 
@@ -139,7 +138,7 @@ export class UsuariosComponent {
         this.datos_presentacion();
       },
       error: (err) => {
-        console.error('Error al cargar los estamentos:', err);
+        this.toastError('No se pudieron cargar los estamentos' + err);
       },
     });
   }
@@ -152,7 +151,7 @@ export class UsuariosComponent {
         this.datos_presentacion();
       },
       error: (err) => {
-        console.error('Error al cargar a los usuarios:', err);
+        this.toastError('No se pudieron cargar las personas' + err);
       },
     });
   }
@@ -234,7 +233,6 @@ export class UsuariosComponent {
     this.personasPaginator.pageIndex = event.pageIndex;
     this.personasPaginator.pageSize = event.pageSize;
 
-    // Opcional: scroll al inicio de la tabla
     setTimeout(() => {
       document
         .getElementById('tabla-personas')
@@ -444,7 +442,6 @@ export class UsuariosComponent {
         });
       },
       error: (err) => {
-        console.error('Error al cargar estamentos:', err);
         this.modalService.desactivarModal();
         this.toastError('No se pudieron cargar los estamentos');
       },
