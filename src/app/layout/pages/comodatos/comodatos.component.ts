@@ -76,12 +76,12 @@ export class ComodatosComponent implements OnInit {
 
   ngOnInit(): void {
     this.cargarDatosComodatos();
-    this.routeA.queryParams.subscribe(params => {
+    this.routeA.queryParams.subscribe((params) => {
       const estado = params['estado'];
       const persona = params['persona'];
       if (estado) {
-        if( estado != 'devuelto') {
-        this.filtroEstadoComodato = estado;
+        if (estado != 'devuelto') {
+          this.filtroEstadoComodato = estado;
         }
       }
       if (persona) {
@@ -1030,17 +1030,47 @@ export class ComodatosComponent implements OnInit {
   }
 
   descargarComprobante(idComodato: string): void {
-    window.open(
-      `http://10.9.1.28:3000/api/descargar/comprobante/${idComodato}`,
-      '_blank'
-    );
+    fetch(`/api/descargar/comprobante/${idComodato}`)
+      .then((res) => {
+        if (!res.ok) throw new Error('Error al descargar comprobante');
+        return res.blob();
+      })
+      .then((blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `comprobante-${idComodato}.pdf`; // Ajusta la extensión según el archivo
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(url);
+      })
+      .catch((err) => {
+        console.error('Fallo en descarga:', err);
+        alert('No se pudo descargar el comprobante');
+      });
   }
 
   descargarDevolucion(idDevolucion: string): void {
-    window.open(
-      `http://10.9.1.28:3000/api/descargar/devolucion/${idDevolucion}`,
-      '_blank'
-    );
+    fetch(`/api/descargar/devolucion/${idDevolucion}`)
+      .then((res) => {
+        if (!res.ok) throw new Error('Error al descargar devolución');
+        return res.blob();
+      })
+      .then((blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `devolucion-${idDevolucion}.pdf`; // Ajusta la extensión según el archivo
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(url);
+      })
+      .catch((err) => {
+        console.error('Fallo en descarga:', err);
+        alert('No se pudo descargar la devolución');
+      });
   }
 
   confirmarDescarga(id: string, comodato: Comodato): void {
@@ -1198,16 +1228,48 @@ export class ComodatosComponent implements OnInit {
   }
 
   todos_los_comodatos() {
-    window.open(
-      `http://10.9.1.28:3000/api/descargar/todoscomprobantes`,
-      '_blank'
-    );
+    fetch('/api/descargar/todoscomprobantes')
+      .then((response) => {
+        if (!response.ok) throw new Error('Error al descargar');
+        return response.blob();
+      })
+      .then((blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'comprobantes.csv'; // puedes ajustar el nombre aquí
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(url);
+      })
+      .catch((err) => {
+        console.error('Fallo en descarga:', err);
+        alert('No se pudo descargar el archivo');
+      });
   }
 
   todos_las_devoluciones() {
-    window.open(
-      `http://10.9.1.28:3000/api/descargar/todosdevoluciones`,
-      '_blank'
-    );
+    fetch('/api/descargar/todosdevoluciones')
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Error al descargar el archivo');
+        }
+        return response.blob();
+      })
+      .then((blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'devoluciones.csv'; // Cambia el nombre según tu necesidad
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(url); // Limpieza de memoria
+      })
+      .catch((err) => {
+        console.error('Error en la descarga:', err);
+        alert('Hubo un problema al descargar el archivo');
+      });
   }
 }

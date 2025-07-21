@@ -13,7 +13,7 @@ interface SystemUser {
   selector: 'app-vadmin',
   standalone: false,
   templateUrl: './vadmin.component.html',
-  styleUrl: './vadmin.component.css'
+  styleUrl: './vadmin.component.css',
 })
 export class VadminComponent implements OnInit {
   listaAdmins: any[] = [];
@@ -22,13 +22,10 @@ export class VadminComponent implements OnInit {
   formAdmin: FormGroup;
   modo: 'crear' | 'editar' = 'crear';
 
-  constructor(
-    private adminService: AdminService,
-    private fb: FormBuilder
-  ) {
+  constructor(private adminService: AdminService, private fb: FormBuilder) {
     this.formAdmin = this.fb.group({
       nombreAdmin: ['', Validators.required],
-      passAdmin: ['', Validators.required]
+      passAdmin: ['', Validators.required],
     });
   }
 
@@ -42,26 +39,29 @@ export class VadminComponent implements OnInit {
     });
   }
 
-
-
   guardarAdmin() {
     const admin = this.formAdmin.value;
     if (this.modo === 'crear') {
       this.adminService.crearAdmin(admin).subscribe(() => this.cargarAdmins());
     } else {
-      this.adminService.actualizarAdmin(admin.idAdmin, admin).subscribe(() => this.cargarAdmins());
+      this.adminService
+        .actualizarAdmin(admin.idAdmin, admin)
+        .subscribe(() => this.cargarAdmins());
     }
     bootstrap.Modal.getInstance(document.getElementById('adminModal')!)?.hide();
   }
 
-
   eliminar(idAdmin: string) {
+    if (idAdmin === '1') {
+      alert('No se puede eliminar al administrador principal.');
+      return;
+    }
     if (confirm('¿Seguro que deseas eliminar este administrador?')) {
-      this.adminService.eliminarAdmin(idAdmin).subscribe(() => this.cargarAdmins());
+        this.adminService
+          .eliminarAdmin(idAdmin)
+          .subscribe(() => this.cargarAdmins());
     }
   }
-
-
 
   abrirModalCrear() {
     this.modo = 'crear';
@@ -80,5 +80,4 @@ export class VadminComponent implements OnInit {
   togglePasswordVisibility() {
     this.mostrarPassword = !this.mostrarPassword;
   }
-
 }
