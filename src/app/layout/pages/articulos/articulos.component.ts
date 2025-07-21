@@ -1034,7 +1034,7 @@ export class ArticulosComponent {
         }
 
         if (resultado?.agregarMarca) {
-          this.abrirModalCrearModelo(articulo, 'articulo');
+          this.abrirModalCrearMarca(articulo, 'articulo');
           return;
         }
 
