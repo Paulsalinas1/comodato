@@ -22,6 +22,7 @@ import { ModalDes2Component } from '../../components/modal-des2/modal-des2.compo
 import { ModalDes3Component } from '../../components/modal-des3/modal-des3.component';
 import { Estamento } from '../../../core/models/Estamento ';
 import { ActivatedRoute } from '@angular/router';
+import { ModalService } from '../../../core/services/modal.service';
 
 @Component({
   selector: 'app-comodatos',
@@ -40,6 +41,7 @@ export class ComodatosComponent implements OnInit {
   private readonly svEstamento = inject(EstamentoService);
   private readonly svDevueltos = inject(DevolucionComodatoService);
   private readonly routeA = inject(ActivatedRoute);
+  private readonly modalService = inject( ModalService);
 
   // Configuración de paginación para comodato
   pageSizeOptions = [1, 5, 10, 25];
@@ -312,6 +314,7 @@ export class ComodatosComponent implements OnInit {
   }
 
   abrirModalNuevoComodatoCompleto(respaldo?: any): void {
+    this.modalService.activarModal();
     // Primero traes personas y artículos en paralelo
     forkJoin({
       personas: this.svPersona.getPersonas(),
@@ -453,6 +456,7 @@ export class ComodatosComponent implements OnInit {
                         'Comodato y artículos asociados correctamente'
                       );
                       this.dialog.closeAll();
+                      this.modalService.desactivarModal();
                       this.cargarDatosComodatos();
                       if (comodatoData.estadoComodato === 'entregado') {
                         this.confirmarDescarga(idComodato, comodatoData);
@@ -463,6 +467,7 @@ export class ComodatosComponent implements OnInit {
                         'Error al asociar artículos o actualizar estado' + err
                       );
                       this.dialog.closeAll();
+                      this.modalService.desactivarModal();
                       this.cargarDatosComodatos();
                     },
                   });
@@ -494,6 +499,7 @@ export class ComodatosComponent implements OnInit {
                         'Comodato y artículos asociados correctamente'
                       );
                       this.dialog.closeAll();
+                      this.modalService.desactivarModal();
                       this.cargarDatosComodatos();
                     },
                     error: (err) => {
@@ -501,25 +507,30 @@ export class ComodatosComponent implements OnInit {
                         'Error al asociar artículos o actualizar estado' + err
                       );
                       this.dialog.closeAll();
+                      this.modalService.desactivarModal();
                       this.cargarDatosComodatos();
                     },
                   });
                 }
               },
               error: () => {
+                this.modalService.desactivarModal();
                 this.toastError('Error al crear comodato');
               },
             });
           }
+          this.modalService.desactivarModal();
         });
       },
       error: () => {
+        this.modalService.desactivarModal();
         this.toastError('Error al cargar personas o artículos');
       },
     });
   }
 
   abrirModalEditarComodatoCompleto(comodato: Comodato): void {
+    this.modalService.activarModal();
     forkJoin({
       personas: this.svPersona.getPersonas(),
       articulos: this.svArticulo_Comodato.obtenerArticulosPorComodato(
@@ -633,8 +644,12 @@ export class ComodatosComponent implements OnInit {
         });
 
         dialogRef.afterClosed().subscribe((result) => {
-          if (!result) return;
+          if (!result){
+            this.modalService.desactivarModal();
+            return;
+          }
           if (result === 'descargar') {
+            this.modalService.desactivarModal();
             this.confirmarDescarga(comodato.idComodato!, comodato);
             return;
           }
@@ -695,12 +710,14 @@ export class ComodatosComponent implements OnInit {
                         this.toastEdit(
                           'Estado del comodato y artículos actualizados'
                         );
+                        this.modalService.desactivarModal();
                         this.cargarDatosComodatos();
                       },
                       error: () => {
                         this.toastError(
                           'Error al actualizar estado de los artículos'
                         );
+                        this.modalService.desactivarModal();
                         this.cargarDatosComodatos();
                       },
                     });
@@ -735,12 +752,14 @@ export class ComodatosComponent implements OnInit {
                         this.toastEdit(
                           'Estado del comodato y artículos actualizados'
                         );
+                        this.modalService.desactivarModal();
                         this.cargarDatosComodatos();
                       },
                       error: () => {
                         this.toastError(
                           'Error al actualizar estado de los artículos'
                         );
+                        this.modalService.desactivarModal();
                         this.cargarDatosComodatos();
                       },
                     });
@@ -775,18 +794,21 @@ export class ComodatosComponent implements OnInit {
                         this.toastEdit(
                           'Estado del comodato y artículos actualizados'
                         );
+                        this.modalService.desactivarModal();
                         this.cargarDatosComodatos();
                       },
                       error: () => {
                         this.toastError(
                           'Error al actualizar estado de los artículos'
                         );
+                        this.modalService.desactivarModal();
                         this.cargarDatosComodatos();
                       },
                     });
                   }
                 },
                 error: (err) => {
+                  this.modalService.desactivarModal();
                   this.toastError(
                     'Error al actualizar el estado del comodato: ' + err.err
                   );
@@ -796,12 +818,14 @@ export class ComodatosComponent implements OnInit {
         });
       },
       error: () => {
+        this.modalService.desactivarModal();
         this.toastError('Error al cargar datos para edición');
       },
     });
   }
 
   abrirModalNuevaDevolucion(comodatoId: string): void {
+    this.modalService.activarModal();
     forkJoin({
       comodato: this.svComodato.getComodatoById(comodatoId),
       articulos:
@@ -993,29 +1017,35 @@ export class ComodatosComponent implements OnInit {
                             'Devolución realizada correctamente'
                           );
                           this.cargarDatosComodatos();
+                          this.modalService.desactivarModal();
                           this.confirmarDescarga(
                             resp.idDevolucion_comodato,
                             comodatoActualizado
                           );
                         },
                         error: (err) => {
+                          this.modalService.desactivarModal();
                           this.toastError('Error: ' + err.err);
                         },
                       });
                   },
                   error: (err) => {
+                    this.modalService.desactivarModal();
                     this.toastError('Error al actualizar artículos: ' + err);
                   },
                 });
               },
               error: (err) => {
+                this.modalService.desactivarModal();
                 this.toastError('Error al registrar devolución: ' + err);
               },
             });
           }
+          this.modalService.desactivarModal();
         });
       },
       error: () => {
+        this.modalService.desactivarModal();
         this.toastError('Error al cargar datos del comodato');
       },
     });
@@ -1104,6 +1134,7 @@ export class ComodatosComponent implements OnInit {
   }
 
   abrirModalVerDevolucionComodato(devo: DevolucionComodato): void {
+    this.modalService.activarModal();
     forkJoin({
       personas: this.svPersona.getPersonas(),
       articulos: this.svArticulo.getArticulos(),
@@ -1214,14 +1245,18 @@ export class ComodatosComponent implements OnInit {
           console.log(resut);
           if (resut === 'comodato') {
             this.descargarComprobante(devo.Comodato_idComodato);
+            this.modalService.desactivarModal();
             console.log('Descargando comprobante del comodato');
           } else if (resut === 'devolucion') {
             this.descargarDevolucion(devo.idDevolucion_comodato!);
+            this.modalService.desactivarModal();
             console.log('Se descargó el comprobante de devolución');
           }
+          this.modalService.desactivarModal();
         });
       },
       error: () => {
+        this.modalService.desactivarModal();
         this.toastError('Error al cargar datos para visualización');
       },
     });

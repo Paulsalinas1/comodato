@@ -4,3 +4,11 @@
 .z-1020 {
   z-index: 1020;
 }
+
+.sidebar-desactivado {
+  pointer-events: none;
+  opacity: 0.4;
+  transition: opacity 0.3s ease-in-out;
+  user-select: none;
+  overflow: hidden;
+}

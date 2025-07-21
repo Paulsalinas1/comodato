@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AdminService } from '../../../core/services/admin.service';
+import { ModalService } from '../../../core/services/modal.service';
 declare var bootstrap: any;
 interface SystemUser {
   id: string;
@@ -19,6 +20,7 @@ export class VadminComponent implements OnInit {
   listaAdmins: any[] = [];
   mostrarPassword: boolean = false;
 
+  private modalActivo = inject(ModalService)
   formAdmin: FormGroup;
   modo: 'crear' | 'editar' = 'crear';
 
@@ -31,6 +33,19 @@ export class VadminComponent implements OnInit {
 
   ngOnInit() {
     this.cargarAdmins();
+
+     const modalElement = document.getElementById('adminModal');
+
+  if (modalElement) {
+    modalElement.addEventListener('show.bs.modal', () => {
+      this.modalActivo.activarModal();
+    });
+
+    modalElement.addEventListener('hidden.bs.modal', () => {
+      this.modalActivo.desactivarModal();
+    });
+  }
+
   }
 
   cargarAdmins() {
