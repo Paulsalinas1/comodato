@@ -2,7 +2,7 @@
   <!-- Header con estilo mejorado -->
   <div class="d-flex justify-content-between align-items-center mb-4 admin-header">
     <h3 class="mb-0">
-      <i class="bi bi-people-fill me-2"></i>Administradores
+      <i class="bi bi-people-fill me-2"></i>Lista de Administradores
     </h3>
     <button class="btn btn-success btn-create" (click)="abrirModalCrear()">
       <i class="bi bi-plus-circle me-1"></i>Crear Admin
@@ -22,9 +22,6 @@
         <tr *ngFor="let admin of listaAdmins" class="admin-row">
           <td class="ps-4">
             <div class="d-flex align-items-center">
-              <div class="admin-avatar me-3">
-                <i class="bi bi-person-gear"></i>
-              </div>
               <span class="admin-name">{{ admin.nombreAdmin }}</span>
             </div>
           </td>
@@ -48,7 +45,7 @@
     <div class="modal-content admin-modal">
       <form [formGroup]="formAdmin" (ngSubmit)="guardarAdmin()">
         <div class="modal-header admin-modal-header">
-          <h5 class="modal-title" id="adminModalLabel">
+          <h5 class="modal-title text-white" id="adminModalLabel">
             <i class="bi bi-person-plus me-2"></i>
             {{ modo === 'crear' ? 'Crear Nuevo Admin' : 'Editar Admin' }}
           </h5>
@@ -57,18 +54,23 @@
         <div class="modal-body">
           <div class="mb-3 form-group">
             <label for="nombreAdmin" class="form-label">Nombre del Administrador</label>
-            <input type="text" class="form-control form-control-lg" id="nombreAdmin" formControlName="nombreAdmin" placeholder="Ingrese el nombre completo">
+            <input type="text" class="form-control form-control-lg" id="nombreAdmin" formControlName="nombreAdmin"
+              placeholder="Ingrese el nombre completo">
           </div>
           <div class="mb-3 form-group">
             <label for="passAdmin" class="form-label">Contraseña</label>
-            <div class="input-group">
-              <input type="password" [type]="mostrarPassword ? 'text' : 'password'"
- class="form-control form-control-lg" id="passAdmin" formControlName="passAdmin" placeholder="Ingrese la contraseña">
-              <button class="btn btn-outline-secondary" type="button" (click)="togglePasswordVisibility()">
-                <i class="bi bi-eye"></i>
-              </button>
+            <div class="input-group input-group-lg custom-input-group">
+              <input [type]="mostrarPassword ? 'text' : 'password'" id="passAdmin" formControlName="passAdmin"
+                class="form-control border-end-0" placeholder="Ingrese la contraseña">
+
+              <span class="input-group-text bg-white border-start-0">
+                <button type="button" (click)="togglePasswordVisibility()" class="btn btn-link p-0 text-dark">
+                  <mat-icon class="fs-5">
+                    {{ mostrarPassword ? 'visibility_off' : 'visibility' }}
+                  </mat-icon>
+                </button>
+              </span>
             </div>
-            <div class="form-text">Mínimo 8 caracteres, con mayúsculas y números</div>
           </div>
         </div>
         <div class="modal-footer admin-modal-footer">

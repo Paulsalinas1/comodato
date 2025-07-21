@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import { VadminRoutingModule } from './vadmin-routing.module';
 import { VadminComponent } from '../vadmin/vadmin.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MatIconModule } from '@angular/material/icon';
+
 
 @NgModule({
   declarations: [
@@ -12,7 +14,8 @@ import { ReactiveFormsModule } from '@angular/forms';
   imports: [
     CommonModule,
     VadminRoutingModule,
-    ReactiveFormsModule
-  ]
+    ReactiveFormsModule,
+    MatIconModule
+]
 })
 export class VadminModule { }
